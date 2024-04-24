@@ -5,7 +5,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Forum</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            padding: 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline-block;
+            margin-left: 20px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        ul li {
+            margin: 10px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        ul li:hover {
+            transform: translateY(-5px);
+        }
+        ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        footer {
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -22,12 +104,19 @@
     </header>
 
     <main>
-        <h2>Welcome to Study Forum</h2>
-        <p> umm i do know</p>
+        <h2>Welcome to The Study Forum</h2>
+        <p>Explore the different sections.</p>
+        <ul>
+            <li><a href="questions.html">Ask and Answer Questions</a></li>
+            <li><a href="discussion.html">Participate in Discussions</a></li>
+            <li><a href="calendar.html">Manage Your Study Calendar</a></li>
+            <li><a href="flashcards.html">Create and Study Flashcards</a></li>
+            <li><a href="study-groups.html">Join or Create Study Groups</a></li>
+        </ul>
     </main>
 
     <footer>
-        <p>&copy; By Jason, Victor, Rohnan, Ann.</p>
+        <p>&copy; Umm idk.</p>
     </footer>
 </body>
 </html>
