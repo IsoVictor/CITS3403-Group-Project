@@ -1,13 +1,11 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Forum</title>
+    <title>Sign In - Study Forum</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
-    
 </head>
 <body>
     <header>
@@ -22,21 +20,17 @@
                 <li><a href="study-groups.html">Study Groups</a></li>
                 <li><a href="{{ url_for('login') }}">Log In</a></li>
                 <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                
             </ul>
         </nav>
     </header>
 
     <main>
-        <h2>Welcome to Study Forum</h2>
-        <p>Explore the different sections!.</p>
-        <ul>
-            <li><a href="questions.html">Ask and Answer Questions</a></li>
-            <li><a href="discussion.html">Participate in Discussions</a></li>
-            <li><a href="calendar.html">Manage Your Study Calendar</a></li>
-            <li><a href="flashcards.html">Create and Study Flashcards</a></li>
-            <li><a href="study-groups.html">Join or Create Study Groups</a></li>
-        </ul>
+        <h2>Log In</h2>
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Log In</button>
+        </form>
     </main>
 
     <footer>

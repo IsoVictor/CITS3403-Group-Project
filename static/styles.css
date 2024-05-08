@@ -28,7 +28,7 @@ nav ul {
 
 nav ul li {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 nav ul li a {
@@ -90,4 +90,78 @@ footer {
     color: #fff;
     text-align: center;
     font-size: 14px;
+}
+
+/* CSS for sign-in form */
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+/* Submit button styling */
+button[type="submit"] {
+    width: 95%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #555;
+}
+/* Styles for displaying flash messages (error, info) */
+.flashes {
+    padding: 10px;
+    margin: 10px auto;
+    color: red;  /* Typically for error messages */
+}
+
+/* CSS for sign-up forms */
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {  
+    width: 90%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+
+/* Footer styling to ensure consistency across pages */
+footer {
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
