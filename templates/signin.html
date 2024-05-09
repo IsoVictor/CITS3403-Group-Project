@@ -24,40 +24,27 @@
             </nav>
         </header>
         <main>
-            <h2>Sign up</h2>
-            <p>Create an account to find your study group!</p>
-            <form action="/signup" method="POST" class = "signupForm">
+            <h2>Sign In</h2>
+            <p>Making study a little less lonely</p>
+            <form class = "signinForm">
                 <div>
-                    <label for="studentEmail">Email</label>
-                    <input type="email" name = 'email' required>
+                    <label for="studentEmail">Email or Student Number</label>
+                    <input type="text" id="studentEmail">
                 </div>
                 <div>
-                    <label for="studentNumber">Student Number</label>
-                    <input type="text" name = 'studentNumber' required>
-                </div>
-                <div>
-                    <label for="studentName">Username</label>
-                    <input type="text" name="username" required>
-                </div>
-                <div>
-                    <label for="password1">Password</label>
-                    <input type="password" name = "password1" required>
-                </div>
-                <div>
-                    <label for="password2">Confirm Password</label>
-                    <input type="password" name = "password2" required>
+                    <label for="password">Password</label>
+                    <input type="password" id="pssword">
                 </div>
                 <br>
-                <input type='submit' value = "Create Account">
+                <input type='submit' value = 'Log In'>
             </form>
             <button class = 'homepage' href="index.html">Go Back
             </button>
             <br>
-            <a href="{{ url_for('signup') }}">Already have an account?</a>
+            <a href="signin.html">Don't have an account? Sign up!</a>
         </main>
         <footer>
             <p>Jason,Victor, Rohnan, Ann</p>
         </footer>
     </body>
 </html>
-
