@@ -90,36 +90,41 @@ footer {
     color: #fff;
     text-align: center;
     font-size: 14px;
-    bottom: 0; /* Align to the bottom */
-    width: 100%; /* Set the width to 100% */
+    bottom: 0;
+    width: 100%;
 }
 
 .signupForm, .signinForm {
-    width: 300px; /* Set the width of the form */
-    margin: 0 auto; /* Center the form horizontally */
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack elements vertically */
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .signupForm div, .signinForm div {
-    display: flex; /* Use flexbox for layout */
-    align-items: center; /* Align items vertically */
-    margin-bottom: 10px; /* Add some margin between form groups */
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .signupForm div label, .signinForm div label {
-    width: 100px; /* Set a fixed width for the labels */
-    text-align: left; /* Align label text to the left */
-    margin-right: 10px; /* Add some right margin for spacing */
-    margin-left: -10px; /* Adjust margin to the left */
+    width: 100px;
+    text-align: left;
+    margin-right: 10px;
+    margin-left: -10px;
 }
 
-.signupForm div input[type="text"],.signupForm div input[type="password"],
-.signupForm div input[type="email"], .signinForm div input[type="text"], .signinForm div input[type="password"]{
-    flex: 1; /* Make input boxes flexible */
-    padding: 5px; /* Add some padding for appearance */
+.signupForm div input[type="text"],
+.signupForm div input[type="password"],
+.signupForm div input[type="email"],
+.signinForm div input[type="text"],
+.signinForm div input[type="password"] {
+    flex: 1;
+    padding: 5px;
 }
-.signupForm input[type='submit'] , .signinForm input[type='submit']{
+
+.signupForm input[type='submit'],
+.signinForm input[type='submit'] {
     margin: 5px;
     background-color: #333;
     padding: 5px;
@@ -130,6 +135,7 @@ footer {
     text-decoration: none;
     font-size: 20px;
 }
+
 .homepage {
     width: 290px;
     margin: 5px;
@@ -141,14 +147,114 @@ footer {
     font-size: 20px;
 }
 
-/* Submit button styling */
 button[type="submit"]:hover {
     background-color: #555;
 }
-/* Styles for displaying flash messages (error, info) */
+
 .flashes {
     padding: 10px;
     margin: 10px auto;
-    color: red;  /* Typically for error messages */
+    color: red;
 }
 
+/* Flashcard-related styles */
+#flashcards {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.flashcard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 200px;
+    margin: 20px auto;
+    perspective: 1000px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.flashcard-back {
+    transform: rotateY(180deg);
+}
+
+#flashcard-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#create-flashcard {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#flashcard-form div {
+    margin-bottom: 10px;
+}
+
+#flashcard-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#flashcard-form input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    font-size: 16px;
+}
+
+#flashcard-form button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#prev-btn,
+#next-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
