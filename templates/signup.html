@@ -10,30 +10,42 @@
     <body>
         <header>
             <h1>Study Forum</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{url_for('index')}}">Home page</a></li>
+                    <li><a href="questions.html">Questions</a></li>
+                    <li><a href="discussion.html">Discussion Forum</a></li>
+                    <li><a href="calendar.html">Calendar</a></li>
+                    <li><a href="flashcards.html">Flashcards</a></li>
+                    <li><a href="study-groups.html">Study Groups</a></li>
+                    <li><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                </ul>
+            </nav>
         </header>
         <main>
             <h2>Sign up</h2>
             <p>Create an account to find your study group!</p>
-            <form class = "signupForm">
+            <form action="/signup" method="POST" class = "signupForm">
                 <div>
                     <label for="studentEmail">Email</label>
-                    <input type="email" id="studentEmail">
+                    <input type="email" name = 'email' required>
                 </div>
                 <div>
                     <label for="studentNumber">Student Number</label>
-                    <input type="text" id="studentNumber">
+                    <input type="text" name = 'studentNumber' required>
                 </div>
                 <div>
-                    <label for="studentName">Name</label>
-                    <input type="text" id="name">
+                    <label for="studentName">Username</label>
+                    <input type="text" name="username" required>
                 </div>
                 <div>
                     <label for="password1">Password</label>
-                    <input type="password" id="pword1">
+                    <input type="password" name = "password1" required>
                 </div>
                 <div>
                     <label for="password2">Confirm Password</label>
-                    <input type="password" id="pword2">
+                    <input type="password" name = "password2" required>
                 </div>
                 <br>
                 <input type='submit' value = "Create Account">
@@ -41,10 +53,11 @@
             <button class = 'homepage' href="index.html">Go Back
             </button>
             <br>
-            <a href='signin.html'>Already have an account?</a>
+            <a href="{{ url_for('signup') }}">Already have an account?</a>
         </main>
         <footer>
             <p>Jason,Victor, Rohnan, Ann</p>
         </footer>
     </body>
 </html>
+

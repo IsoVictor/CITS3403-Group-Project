@@ -1,9 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from flask_sqlalchemy import SQLAlchemy
-from app import app, db
-from app.models import User
-from werkzeug.security import generate_password_hash, check_password_hash
 
+app = Flask(__name__)
 #Home page route
 @app.route("/")
 def index():
@@ -47,9 +44,10 @@ def signup():
         flash('Successfully Registered!')
         return redirect(url_for('signin'))
     return render_template('signup.html')
-#User sigin route
-@app.route('/sigin', methods=['GET', 'POST'])
-def signin():
+
+#User login route
+@app.route('/signin', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -60,13 +58,11 @@ def signin():
             return redirect(url_for('index'))
 
         flash('Invalid username or password')
-    return render_template('sigin.html')
-
+    return render_template('login.html')
 #User logout route
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     flash('You have been logged out.')
     return redirect(url_for('index'))
-    
 

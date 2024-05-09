@@ -10,6 +10,18 @@
     <body>
         <header>
             <h1>Study Forum</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{url_for('index')}}">Home page</a></li>
+                    <li><a href="questions.html">Questions</a></li>
+                    <li><a href="discussion.html">Discussion Forum</a></li>
+                    <li><a href="calendar.html">Calendar</a></li>
+                    <li><a href="flashcards.html">Flashcards</a></li>
+                    <li><a href="study-groups.html">Study Groups</a></li>
+                    <li><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                </ul>
+            </nav>
         </header>
         <main>
             <h2>Sign In</h2>

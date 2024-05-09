@@ -28,7 +28,7 @@ nav ul {
 
 nav ul li {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 nav ul li a {
@@ -90,10 +90,10 @@ footer {
     color: #fff;
     text-align: center;
     font-size: 14px;
-    position: fixed; /* Fix the footer at the bottom */
     bottom: 0; /* Align to the bottom */
     width: 100%; /* Set the width to 100% */
 }
+
 .signupForm, .signinForm {
     width: 300px; /* Set the width of the form */
     margin: 0 auto; /* Center the form horizontally */
@@ -140,3 +140,15 @@ footer {
     text-decoration: none;
     font-size: 20px;
 }
+
+/* Submit button styling */
+button[type="submit"]:hover {
+    background-color: #555;
+}
+/* Styles for displaying flash messages (error, info) */
+.flashes {
+    padding: 10px;
+    margin: 10px auto;
+    color: red;  /* Typically for error messages */
+}
+
