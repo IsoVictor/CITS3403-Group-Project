@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from app import app
 
-app = Flask(__name__)
+
 #Home page route
 @app.route("/")
 def index():
