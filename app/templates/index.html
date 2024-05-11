@@ -19,10 +19,10 @@
                 <li><a href="discussion.html">Discussion Forum</a></li>
                 <li><a href="calendar.html">Calendar</a></li>
                 <li><a href="flashcards.html">Flashcards</a></li>
-                <li><a href="study-groups.html">Study Groups</a></li>
+                <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
                 <li><a href="{{ url_for('login') }}">Log In</a></li>
                 <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                
+
             </ul>
         </nav>
     </header>
@@ -35,7 +35,7 @@
             <li><a href="discussion.html">Participate in Discussions</a></li>
             <li><a href="calendar.html">Manage Your Study Calendar</a></li>
             <li><a href="flashcards.html">Create and Study Flashcards</a></li>
-            <li><a href="study-groups.html">Join or Create Study Groups</a></li>
+            <li><a href="{{ url_for('study_groups')}}">Join or Create Study Groups</a></li>
         </ul>
     </main>
 
