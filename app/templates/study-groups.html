@@ -5,21 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Groups - Study Forum</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <header>
-        <!-- ... (header content remains the same) -->
+        <h1>Study Forum - Study Groups</h1>
+        <nav>
+            <ul class = 'navList'>
+                <li><a href="{{url_for('index')}}">Home page</a></li>
+                <li><a href="questions.html">Questions</a></li>
+                <li><a href="discussion.html">Discussion Forum</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="flashcards.html">Flashcards</a></li>
+                <li><a href="study-groups.html">Study Groups</a></li>
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
-        <section id="study-groups">
-            <!-- ... (study groups section content remains the same) -->
+        <section id="study-groups" class = 'filter'>
+            <label for="unit_code">Enter Unit Code:</label>
+            <input type="text" id="unit_code">
+            <button onclick="filterGroups()">Filter</button>
         </section>
+        <ul class = "study_groups">
+            <li>
+                three
+            </li>
+            <br>
+            <li>
+                two
+            </li>
+            <br>
+            <li>
+                one
+            </li>
+        </ul>
+    
     </main>
 
     <footer>
-        <!-- ... (footer content remains the same!!) -->
+        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
     </footer>
 </body>
 </html>
