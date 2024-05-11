@@ -263,3 +263,45 @@ button[type="submit"]:hover {
     cursor: pointer;
     margin: 10px;
 }
+
+.study_groups{
+    list-style-type: none;
+}
+
+.study_groups li {
+    margin: 10px;
+    padding: 40px; 
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+}
+
+.filter label{
+    font-size: 20px;
+}
+
+.filter input[type="text"] {
+    height: 20px; 
+}
+
+.filter button{
+    background-color: #333;
+    border-radius: 15px;
+    color: white;
+    width: 100px;
+    height: 40px;
+    font-size: 20px;
+
+}
+
+.study_groups li div {
+    flex-grow: 1;
+    text-align: center;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size:18px
+
+}
