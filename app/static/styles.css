@@ -99,20 +99,20 @@ footer {
     width: 100%;
 }
 
-.signupForm, .loginForm {
+.signupForm, .loginForm, .groupForm{
     width: 300px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
 
-.signupForm div, .loginForm div {
+.signupForm div, .loginForm div, .groupForm div {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.signupForm div label, .loginForm div label {
+.signupForm div label, .loginForm div label, .groupForm div label{
     width: 100px;
     text-align: left;
     margin-right: 10px;
@@ -123,13 +123,17 @@ footer {
 .signupForm div input[type="password"],
 .signupForm div input[type="email"],
 .loginForm div input[type="text"],
-.loginForm div input[type="password"] {
+.loginForm div input[type="password"],
+.groupForm input[type='text'],
+.groupForm input[type='time'],
+.groupForm input[type='date'] {
     flex: 1;
     padding: 5px;
 }
 
 .signupForm input[type='submit'],
-.loginForm input[type='submit'] {
+.loginForm input[type='submit'],
+.groupForm input[type='submit'] {
     margin: 5px;
     background-color: #333;
     padding: 5px;
@@ -300,8 +304,16 @@ button[type="submit"]:hover {
 .study_groups li div {
     flex-grow: 1;
     text-align: center;
-    text-decoration: underline;
     font-weight: bold;
     font-size:18px
 
+}
+.study_groups li div span{
+    text-decoration: underline;
+}
+
+.group-info{
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
 }

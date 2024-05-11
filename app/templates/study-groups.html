@@ -24,7 +24,38 @@
             </ul>
         </nav>
     </header>
-
+    <div  style = 'text-align: center;'>
+        <h2> Make a Study Group!</h2>
+    </div>
+    <main>
+        <form action="/creategroup" method="POST" class = "groupForm">
+            <div>
+                <label for="unitCode">Unit Code</label>
+                <input type="text" name = 'unitcode' required>
+            </div>
+            <div>
+                <label for="location">Location</label>
+                <input type="text" name="location" required>
+            </div>
+            <div>
+                <label for="dateof">Date</label>
+                <input type="date" name = "dateof" required>
+            </div>
+            <div>
+                <label for="time">Time to study</label>
+                <input type="time" name = "password1" required>
+            </div>
+            <div>
+                <label for="description">Description for Group</label>
+                <input type="text" name = "description" required>
+            </div>
+            <br>
+            <input type='submit' value = "Create Study Group">
+        </form>
+    </main>
+    <div  style = 'text-align: center;'>
+        <h2> Look for a Group!</h2>
+    </div>
     <main>
         <section id="study-groups" class = 'filter'>
             <label for="unit_code">Enter Unit Code:</label>
@@ -34,15 +65,51 @@
         <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
         <ul class = "study_groups" id="study_groups">
             <li class="group-item" data-unit-code = 'CITS3403'>
-                <div> username1</div> <div> Location</div> <div> CITS3403</div><div>Time</div>
+                <div class="group-details">
+                    <div class="group-info">
+                        <span>username1</span>
+                        <span>Location: Location</span>
+                        <span>CITS3403</span>
+                        <span>Date</span>
+                        <span>Time: Time</span>
+                    </div>
+                    <div class="group-description">
+                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
+                        <button class="join-button">Join Group</button>
+                    </div>
+                </div>
             </li>
             
             <li class="group-item"  data-unit-code = 'CITS2401'>
-                <div> username2</div> <div> Location</div> <div> CITS2401</div><div>Time</div>
+                <div class="group-details">
+                    <div class="group-info">
+                        <span>username2</span>
+                        <span>Location: Location</span>
+                        <span>CITS2401</span>
+                        <span>Date</span>
+                        <span>Time: Time</span>
+                    </div>
+                    <div class="group-description">
+                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
+                        <button class="join-button">Join Group</button>
+                    </div>
+                </div>
             </li>
             
             <li class="group-item"  data-unit-code = 'CITS3403'>
-                <div> username1</div> <div> Location</div> <div> CITS3403</div><div>Time</div>
+                <div class="group-details">
+                    <div class="group-info">
+                        <span>username</span>
+                        <span>Location: Location</span>
+                        <span>CITS3403</span>
+                        <span>Date</span>
+                        <span>Time: Time</span>
+                    </div>
+                    <div class="group-description">
+                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
+                        <button class="join-button">Join Group</button>
+                    </div>
+                </div>
             </li>
         </ul>
     
