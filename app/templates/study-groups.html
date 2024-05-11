@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Groups - Study Forum</title>
     <link rel="stylesheet" href="../static/styles.css">
+    <script src="../static/studygroup.js"></script>
 </head>
 <body>
     <header>
@@ -30,16 +31,16 @@
             <input type="text" id="unit_code">
             <button onclick="filterGroups()">Filter</button>
         </section>
-        <ul class = "study_groups">
-            <li>
+        <ul class = "study_groups" id="study_groups">
+            <li class="group-item" data-unit-code = 'CITS3403'>
                 <div> username1</div> <div> Location</div> <div> CITS3403</div><div>Time</div>
             </li>
             
-            <li>
+            <li class="group-item"  data-unit-code = 'CITS2401'>
                 <div> username2</div> <div> Location</div> <div> CITS2401</div><div>Time</div>
             </li>
             
-            <li>
+            <li class="group-item"  data-unit-code = 'CITS3403'>
                 <div> username1</div> <div> Location</div> <div> CITS3403</div><div>Time</div>
             </li>
         </ul>
