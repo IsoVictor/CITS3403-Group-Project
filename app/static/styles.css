@@ -94,20 +94,20 @@ footer {
     width: 100%;
 }
 
-.signupForm, .signinForm {
+.signupForm, .loginForm {
     width: 300px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
 
-.signupForm div, .signinForm div {
+.signupForm div, .loginForm div {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.signupForm div label, .signinForm div label {
+.signupForm div label, .loginForm div label {
     width: 100px;
     text-align: left;
     margin-right: 10px;
@@ -117,14 +117,14 @@ footer {
 .signupForm div input[type="text"],
 .signupForm div input[type="password"],
 .signupForm div input[type="email"],
-.signinForm div input[type="text"],
-.signinForm div input[type="password"] {
+.loginForm div input[type="text"],
+.loginForm div input[type="password"] {
     flex: 1;
     padding: 5px;
 }
 
 .signupForm input[type='submit'],
-.signinForm input[type='submit'] {
+.loginForm input[type='submit'] {
     margin: 5px;
     background-color: #333;
     padding: 5px;

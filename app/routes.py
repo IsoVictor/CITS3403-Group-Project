@@ -43,11 +43,11 @@ def signup():
         db.session.commit()
 
         flash('Successfully Registered!')
-        return redirect(url_for('signin'))
+        return redirect(url_for('login'))
     return render_template('signup.html')
 
 #User login route
-@app.route('/signin', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
