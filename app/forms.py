@@ -11,8 +11,8 @@ class LoginForm(FlaskForm):
 
 class SignupForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired])
-    studentNum = StringField("Student Number", validators=[DataRequired])
-    userName = StringField("Username", validators=[DataRequired])
-    password1 = PasswordField("Password", validators=[DataRequired])
-    password2 = PasswordField("Confirm Password", validators=[DataRequired])
+    studentnumber = StringField("Student Number", validators=[DataRequired])
+    username = StringField("Username", validators=[DataRequired])
+    password = PasswordField("Password", validators=[DataRequired])
+    confirmpassword = PasswordField("Confirm Password", validators=[DataRequired])
     submit = SumbitField("Create Account")

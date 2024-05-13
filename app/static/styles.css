@@ -17,7 +17,7 @@ header {
 }
 
 h1 {
-    margin: 0;
+    margin-bottom: 25px;
     font-size: 24px;
 }
 
@@ -38,6 +38,7 @@ nav ul li a {
     font-size: 18px;
 }
 
+
 main {
     max-width: 800px;
     margin: 40px auto;
@@ -57,6 +58,7 @@ p {
     margin-bottom: 30px;
 }
 
+/* Navigation List and Homepage List Styles */
 .navList,
 .homepageList {
     list-style-type: none;
@@ -69,11 +71,10 @@ p {
 
 .navList li,
 .homepageList li {
-    margin: 10px;
+    margin: 5px;
     background-color: #333;
-    padding: 20px;
+    padding: 15px;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
 
@@ -119,21 +120,29 @@ footer {
     margin-left: -10px;
 }
 
-.signupForm div input[type="text"],
-.signupForm div input[type="password"],
-.signupForm div input[type="email"],
+.signupForm input[type="text"],
+.signupForm input[type="password"],
+.signupForm input[type="email"],
 .loginForm div input[type="text"],
 .loginForm div input[type="password"],
 .groupForm input[type='text'],
 .groupForm input[type='time'],
-.groupForm input[type='date'],
-.questionForm  input[type='text'], 
-.questionForm div textarea{
+.groupForm input[type='date'] {
     flex: 1;
     padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    width: 100%;
+    margin-top: 1px;
+ 
+    
+    
 }
 
-.signupForm input[type='submit'],
 .loginForm input[type='submit'],
 .groupForm input[type='submit'],
 .questionForm input[type='submit'],
@@ -149,6 +158,15 @@ footer {
     color: #fff;
     text-decoration: none;
     font-size: 20px;
+    width: 95%;
+    margin-left: 15px;
+    
+    
+}
+.signupForm input[type='submit']:hover,
+.loginForm input[type='submit']:hover,
+.groupForm input[type='submit']:hover {
+    background-color: #555; /* Change color on hover */
 }
 
 .homepage {
@@ -160,6 +178,7 @@ footer {
     transition: transform 0.3s ease;
     text-decoration: none;
     font-size: 20px;
+    cursor: pointer;
 }
 
 button[type="submit"]:hover {
@@ -327,28 +346,4 @@ button[type="submit"]:hover {
     align-items: center;
     justify-content: space-between;
     display: flex;
-}
-
-.answers li div {
-    flex-grow: 1;
-    text-align: center;
-    font-weight: bold;
-    font-size:18px
-}
-.answers li div span{
-    text-decoration: underline;
-}
-
-.answers li{
-    margin: 10px;
-    padding: 10px; 
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    border: 2px solid black;
-    display: flex;
-    align-items: center;
-}
-.answers{
-    list-style-type: none;
 }
