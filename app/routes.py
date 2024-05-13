@@ -1,32 +1,32 @@
+# routes.py
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from app import app, db
 from app.models import User, Post, StudyGroup
+from app.flashcard_routes import flashcard_bp
 
+app.register_blueprint(flashcard_bp)
 
-#Home page route
+# Home page route
 @app.route("/")
 def index():
     return render_template('index.html')
 
-#Calendar page route
+# Calendar page route
 @app.route('/calendar')
 def calendar():
     return render_template('calendar.html')
 
-#Flashcards page route
-@app.route('/flashcards')
-def flashcards():
-    return render_template('flashcards.html')
-
-#Questions and answers page route
+# Questions and answers page route
 @app.route('/questions')
 def questions():
     return render_template('questions.html')
-#Study groups page route
+
+# Study groups page route
 @app.route('/study-groups')
 def study_groups():
     return render_template('study-groups.html')
-#User registration route
+
+# User registration route
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -44,11 +44,11 @@ def signup():
         db.session.commit()
 
         flash('Successfully Registered!')
-        return redirect(url_for('signin'))
+        return redirect(url_for('login'))
     return render_template('signup.html')
 
-#User login route
-@app.route('/signin', methods=['GET', 'POST'])
+# User login route
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -61,10 +61,10 @@ def login():
 
         flash('Invalid username or password')
     return render_template('login.html')
-#User logout route
+
+# User logout route
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     flash('You have been logged out.')
     return redirect(url_for('index'))
-
