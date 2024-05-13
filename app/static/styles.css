@@ -99,20 +99,20 @@ footer {
     width: 100%;
 }
 
-.signupForm, .loginForm, .groupForm{
+.signupForm, .loginForm, .groupForm, .questionForm{
     width: 300px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
 
-.signupForm div, .loginForm div, .groupForm div {
+.signupForm div, .loginForm div, .groupForm div, .questionForm div{
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.signupForm div label, .loginForm div label, .groupForm div label{
+.signupForm div label, .loginForm div label, .groupForm div label, .questionForm div label{
     width: 100px;
     text-align: left;
     margin-right: 10px;
@@ -126,14 +126,18 @@ footer {
 .loginForm div input[type="password"],
 .groupForm input[type='text'],
 .groupForm input[type='time'],
-.groupForm input[type='date'] {
+.groupForm input[type='date'],
+.questionForm  input[type='text'], 
+.questionForm div textarea{
     flex: 1;
     padding: 5px;
 }
 
 .signupForm input[type='submit'],
 .loginForm input[type='submit'],
-.groupForm input[type='submit'] {
+.groupForm input[type='submit'],
+.questionForm input[type='submit'],
+.join-button{
     margin: 5px;
     background-color: #333;
     padding: 5px;
@@ -268,11 +272,13 @@ button[type="submit"]:hover {
     margin: 10px;
 }
 
-.study_groups{
+.study_groups,
+.questions{
     list-style-type: none;
 }
 
-.study_groups li {
+.study_groups li,
+.questions li{
     margin: 10px;
     padding: 40px; 
     border-radius: 5px;
@@ -301,18 +307,21 @@ button[type="submit"]:hover {
 
 }
 
-.study_groups li div {
+.study_groups li div,
+.questions li div {
     flex-grow: 1;
     text-align: center;
     font-weight: bold;
     font-size:18px
 
 }
-.study_groups li div span{
+.study_groups li div span,
+.questions li div span{
     text-decoration: underline;
 }
 
-.group-info{
+.group-info,
+.question-info{
     align-items: center;
     justify-content: space-between;
     display: flex;

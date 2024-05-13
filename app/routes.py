@@ -17,9 +17,9 @@ def calendar():
     return render_template('calendar.html')
 
 # Questions and answers page route
-@app.route('/questions')
-def questions():
-    return render_template('questions.html')
+@app.route('/discussion')
+def discussion():
+    return render_template('discussion.html')
 
 # Study groups page route
 @app.route('/study-groups')
