@@ -12,7 +12,7 @@ class Question:
         self.question = question
 
 
-questions = [
+allquestions = [
     Question('1','Why does coding make me sad?'),
     Question('2','Why does coding make me happy?'),
     Question('3','Why does coding make me angry?'),
@@ -28,6 +28,11 @@ def calendar():
     return render_template('calendar.html')
 
 # Questions and answers page route
+@app.route('/questions')
+def questions():
+    return render_template('questions.html')
+
+#Discussion page route
 @app.route('/discussion')
 def discussion():
     return render_template('discussion.html')
@@ -85,7 +90,7 @@ def logout():
 @app.route('/answer/<question_id>', methods=['GET','POST'])
 def answer(question_id):
     if request.method == 'GET':
-        for question in questions:
+        for question in allquestions:
             if question.question_id == question_id:
                 return render_template('answering.html', c_question = question)
 

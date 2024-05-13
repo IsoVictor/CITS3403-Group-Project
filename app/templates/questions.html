@@ -1,0 +1,108 @@
+<!-- discussion.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum - Study Forum</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="../static/discussion.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Study Forum - Discussion Forum</h1>
+        <nav>
+            <ul class = 'navList'>
+                <li><a href="{{url_for('index')}}">Home page</a></li>
+                <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
+                <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="flashcards.html">Flashcards</a></li>
+                <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div  style = 'text-align: center;'>
+        <h2> Post Your Questions!</h2>
+    </div>
+    <main>
+        <form action="/createquestions" method="POST" class = "questionForm">
+            <div>
+                <label for="unitCode">Unit Code</label>
+                <input type="text" name = 'unitcode' style = 'width:200px' required>
+            </div>
+            <div>
+                <label for="question">Question</label>
+                <textarea name="question" rows="10" cols="70" required></textarea>
+            </div>
+            <br>
+            <input type='submit' value = "Post Question">
+        </form>
+    </main>
+    <div  style = 'text-align: center;'>
+        <h2> Answer Some Questions!</h2>
+    </div>
+    <main>
+        <section id="study-groups" class = 'filter'>
+            <label for="unit_code">Enter Unit Code:</label>
+            <input type="text" id="unit_code">
+            <button onclick=filter()>Filter</button>
+        </section>
+        <p id = 'warning' style="font-size: 20px;color:red;display:none;"> No Questions For Searched Unit!</p>
+        
+        <ul class = "questions" id="questions">
+            <li class="question-item" data-unit-code = 'CITS3403'>
+                <div class="question-details">
+                    <div class="question-info">
+                        <span>username1</span>
+                        <span>CITS3403</span>
+                    </div>
+                    <div class="question-description">
+                        <p>Question: Why does coding make me very sad?</p>
+                        <a href="{{ url_for('answer', question_id=1) }}">
+                            <button class = 'ansButton'>Answer Question</button>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            
+            <li class="question-item" data-unit-code = 'CITS2401'>
+                <div class="question-details">
+                    <div class="question-info">
+                        <span>username1</span>
+                        <span>CITS2401</span>
+                    </div>
+                    <div class="question-description">
+                        <p>Question: Why does coding make me very happy?</p>
+                        <a href="{{ url_for('answer', question_id=2) }}">
+                            <button class = 'ansButton'>Answer Question</button>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            
+            <li class="question-item" data-unit-code = 'CITS3403'>
+                <div class="question-details">
+                    <div class="question-info">
+                        <span>username3</span>
+                        <span>CITS3403</span>
+                    </div>
+                    <div class="question-description">
+                        <p>Question: Why does coding make me very angry?</p>
+                        <a href="{{ url_for('answer', question_id=3) }}">
+                            <button class = 'ansButton'>Answer Question</button>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    
+    </main>
+
+    <footer>
+        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
+    </footer>
+</body>
+</html>
