@@ -25,7 +25,20 @@
     <main>
         <div  style = 'text-align: center;'>
             <h2>Question:</h2>
-            <p> Why does coding make me very sad??</p>
+            <p> {{c_question.question}}</p>
+            <h2>Other People's Answers</h2>
+            <ul class = "answers" id="answers">
+                <li class="answer-item">
+                    <div class="answer-details">
+                        <div class="answer-info">
+                            <span>username1</span>
+                        </div>
+                        <div class="answer">
+                            <p>Because sometimes it works and sometimes it doesn't</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
             <h2>Your Answer:</h2>
             <form action="/answer" method="POST" class = "answerForm">
                 <div>
@@ -34,6 +47,9 @@
                 <br>
                 <input type='submit' value = "Post Answer">
             </form>
+            <a href="{{ url_for('discussion')}}">
+                <button class='homepage' >Go Back</button>
+            </a>
         </div>
     </main>
     <footer>

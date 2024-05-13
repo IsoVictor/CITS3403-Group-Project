@@ -6,6 +6,17 @@ from app.flashcard_routes import flashcard_bp
 
 app.register_blueprint(flashcard_bp)
 
+class Question:
+    def __init__(self, question_id, question):
+        self.question_id = question_id
+        self.question = question
+
+
+questions = [
+    Question('1','Why does coding make me sad?'),
+    Question('2','Why does coding make me happy?'),
+    Question('3','Why does coding make me angry?'),
+]
 # Home page route
 @app.route("/")
 def index():
@@ -68,3 +79,13 @@ def logout():
     session.pop('user_id', None)
     flash('You have been logged out.')
     return redirect(url_for('index'))
+
+
+# User Answering route
+@app.route('/answer/<question_id>', methods=['GET','POST'])
+def answer(question_id):
+    if request.method == 'GET':
+        for question in questions:
+            if question.question_id == question_id:
+                return render_template('answering.html', c_question = question)
+

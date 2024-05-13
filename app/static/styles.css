@@ -138,7 +138,8 @@ footer {
 .groupForm input[type='submit'],
 .questionForm input[type='submit'],
 .join-button,
-.answerForm input[type='submit']{
+.answerForm input[type='submit'],
+.ansButton{
     margin: 5px;
     background-color: #333;
     padding: 5px;
@@ -326,4 +327,28 @@ button[type="submit"]:hover {
     align-items: center;
     justify-content: space-between;
     display: flex;
+}
+
+.answers li div {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size:18px
+}
+.answers li div span{
+    text-decoration: underline;
+}
+
+.answers li{
+    margin: 10px;
+    padding: 10px; 
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+}
+.answers{
+    list-style-type: none;
 }
