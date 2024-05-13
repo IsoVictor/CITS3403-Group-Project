@@ -1,3 +1,4 @@
+
 /* styles.css */
 body {
     font-family: 'Roboto', sans-serif;
@@ -56,7 +57,8 @@ p {
     margin-bottom: 30px;
 }
 
-ul {
+.navList,
+.homepageList {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -65,7 +67,8 @@ ul {
     flex-wrap: wrap;
 }
 
-ul li {
+.navList li,
+.homepageList li {
     margin: 10px;
     background-color: #333;
     padding: 20px;
@@ -74,11 +77,13 @@ ul li {
     transition: transform 0.3s ease;
 }
 
-ul li:hover {
+.navList li:hover,
+.homepageList li:hover {
     transform: translateY(-5px);
 }
 
-ul li a {
+.navList li a,
+.homepageList li a {
     color: #fff;
     text-decoration: none;
     font-size: 20px;
@@ -94,20 +99,20 @@ footer {
     width: 100%;
 }
 
-.signupForm, .loginForm {
+.signupForm, .loginForm, .groupForm{
     width: 300px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
 
-.signupForm div, .loginForm div {
+.signupForm div, .loginForm div, .groupForm div {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.signupForm div label, .loginForm div label {
+.signupForm div label, .loginForm div label, .groupForm div label{
     width: 100px;
     text-align: left;
     margin-right: 10px;
@@ -118,13 +123,17 @@ footer {
 .signupForm div input[type="password"],
 .signupForm div input[type="email"],
 .loginForm div input[type="text"],
-.loginForm div input[type="password"] {
+.loginForm div input[type="password"],
+.groupForm input[type='text'],
+.groupForm input[type='time'],
+.groupForm input[type='date'] {
     flex: 1;
     padding: 5px;
 }
 
 .signupForm input[type='submit'],
-.loginForm input[type='submit'] {
+.loginForm input[type='submit'],
+.groupForm input[type='submit'] {
     margin: 5px;
     background-color: #333;
     padding: 5px;
@@ -257,4 +266,54 @@ button[type="submit"]:hover {
     border: none;
     cursor: pointer;
     margin: 10px;
+}
+
+.study_groups{
+    list-style-type: none;
+}
+
+.study_groups li {
+    margin: 10px;
+    padding: 40px; 
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+}
+
+.filter label{
+    font-size: 20px;
+}
+
+.filter input[type="text"] {
+    height: 20px; 
+}
+
+.filter button{
+    background-color: #333;
+    border-radius: 15px;
+    color: white;
+    width: 100px;
+    height: 40px;
+    font-size: 20px;
+
+}
+
+.study_groups li div {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size:18px
+
+}
+.study_groups li div span{
+    text-decoration: underline;
+}
+
+.group-info{
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
 }

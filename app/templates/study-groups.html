@@ -5,21 +5,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Groups - Study Forum</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="../static/studygroup.js"></script>
 </head>
 <body>
     <header>
-        <!-- ... (header content remains the same) -->
+        <h1>Study Forum - Study Groups</h1>
+        <nav>
+            <ul class = 'navList'>
+                <li><a href="{{url_for('index')}}">Home page</a></li>
+                <li><a href="questions.html">Questions</a></li>
+                <li><a href="discussion.html">Discussion Forum</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="flashcards.html">Flashcards</a></li>
+                <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            </ul>
+        </nav>
     </header>
-
+    <div  style = 'text-align: center;'>
+        <h2> Make a Study Group!</h2>
+    </div>
     <main>
-        <section id="study-groups">
-            <!-- ... (study groups section content remains the same) -->
+        <form action="/creategroup" method="POST" class = "groupForm">
+            <div>
+                <label for="unitCode">Unit Code</label>
+                <input type="text" name = 'unitcode' required>
+            </div>
+            <div>
+                <label for="location">Location</label>
+                <input type="text" name="location" required>
+            </div>
+            <div>
+                <label for="dateof">Date</label>
+                <input type="date" name = "dateof" required>
+            </div>
+            <div>
+                <label for="time">Time to study</label>
+                <input type="time" name = "password1" required>
+            </div>
+            <div>
+                <label for="description">Description for Group</label>
+                <input type="text" name = "description" required>
+            </div>
+            <br>
+            <input type='submit' value = "Create Study Group">
+        </form>
+    </main>
+    <div  style = 'text-align: center;'>
+        <h2> Look for a Group!</h2>
+    </div>
+    <main>
+        <section id="study-groups" class = 'filter'>
+            <label for="unit_code">Enter Unit Code:</label>
+            <input type="text" id="unit_code">
+            <button onclick="filterGroups()">Filter</button>
         </section>
+        <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
+        <ul class = "study_groups" id="study_groups">
+            <li class="group-item" data-unit-code = 'CITS3403'>
+                <div class="group-details">
+                    <div class="group-info">
+                        <span>username1</span>
+                        <span>Location: Location</span>
+                        <span>CITS3403</span>
+                        <span>Date</span>
+                        <span>Time: Time</span>
+                    </div>
+                    <div class="group-description">
+                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
+                        <button class="join-button">Join Group</button>
+                    </div>
+                </div>
+            </li>
+            
+            <li class="group-item"  data-unit-code = 'CITS2401'>
+                <div class="group-details">
+                    <div class="group-info">
+                        <span>username2</span>
+                        <span>Location: Location</span>
+                        <span>CITS2401</span>
+                        <span>Date</span>
+                        <span>Time: Time</span>
+                    </div>
+                    <div class="group-description">
+                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
+                        <button class="join-button">Join Group</button>
+                    </div>
+                </div>
+            </li>
+            
+            <li class="group-item"  data-unit-code = 'CITS3403'>
+                <div class="group-details">
+                    <div class="group-info">
+                        <span>username</span>
+                        <span>Location: Location</span>
+                        <span>CITS3403</span>
+                        <span>Date</span>
+                        <span>Time: Time</span>
+                    </div>
+                    <div class="group-description">
+                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
+                        <button class="join-button">Join Group</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    
     </main>
 
     <footer>
-        <!-- ... (footer content remains the same!!) -->
+        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
     </footer>
 </body>
 </html>
