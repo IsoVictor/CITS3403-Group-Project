@@ -12,6 +12,11 @@ migrate = Migrate(app, db)
 login = LoginManager(flaskApp)
 login.login_view = 'login'
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
 app.debug = True
 
 from app import routes
