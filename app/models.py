@@ -9,10 +9,11 @@ from datetime import datetime
 
 
 class UserGroupRelation(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key = True)
-    group_id = db.Column(db.Integer, db.ForeignKey('StudyGroup.group_id'), primary_key = True)
-    students = db.relationship("Student", back_populates='groups')
-    groups = db.relationship('StudyGroup', back_populates=('students'))
+     __tablename__ = 'user_group_relation'
+     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True) 
+     group_id = db.Column(db.Integer, db.ForeignKey('study_group.group_id'), primary_key=True)
+     user = db.relationship("User", back_populates="group_relations", foreign_keys=[user_id]) 
+     group = db.relationship("StudyGroup", back_populates="user_relations", foreign_keys=[group_id])
 
 
 class User(db.Model, UserMixin):
@@ -23,7 +24,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     flashcard_sets = db.relationship('FlashcardSet', backref='user', lazy='dynamic')
-    groups = db.relationship('StudyGroup', secondary = UserGroupRelation, back_populates='students')
+    group_relations = db.relationship('UserGroupRelation', back_populates='user')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -42,6 +43,7 @@ class Post(db.Model):
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    unit_code = db.Column(db.String(8), nullable=False)
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
@@ -52,7 +54,9 @@ class StudyGroup(db.Model):
     description = db.Column(db.String(200))
     time = db.Column(db.Time)
     date = db.Column(db.Date)
-    students = db.relationship("Student", secondary = UserGroupRelation, back_populates='groups')
+    user_relations = db.relationship("UserGroupRelation", back_populates='group')
+    unit_code = db.Column(db.String(8), nullable=False)
+    
 
     def __repr__(self):
         return '<StudyGroup {}>'.format(self.name)
