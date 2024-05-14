@@ -7,6 +7,14 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
+
+class UserGroupRelation(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key = True)
+    group_id = db.Column(db.Integer, db.ForeignKey('StudyGroup.group_id'), primary_key = True)
+    students = db.relationship("Student", back_populates='groups')
+    groups = db.relationship('StudyGroup', back_populates=('students'))
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -15,6 +23,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     flashcard_sets = db.relationship('FlashcardSet', backref='user', lazy='dynamic')
+    groups = db.relationship('StudyGroup', secondary = UserGroupRelation, back_populates='students')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -38,10 +47,12 @@ class Post(db.Model):
         return '<Post {}>'.format(self.body)
 
 class StudyGroup(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    group_id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200))
-    # Add any other fields as needed
+    time = db.Column(db.Time)
+    date = db.Column(db.Date)
+    students = db.relationship("Student", secondary = UserGroupRelation, back_populates='groups')
 
     def __repr__(self):
         return '<StudyGroup {}>'.format(self.name)

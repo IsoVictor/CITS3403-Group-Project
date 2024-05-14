@@ -1,4 +1,5 @@
 # routes.py
+from flask_login import UserMixin
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup
@@ -128,3 +129,21 @@ def answer(question_id):
             if question.question_id == question_id:
                 return render_template('answering.html', c_question = question)
 
+
+#Joining Group route
+@app.route('/joingroup/<group_id>', methods=['GET'])
+def joingroup(group_id):
+    allrelations = UserGroupRelation.query.get(group_id)
+    if request.method == 'GET':
+        for relation in allreations:
+            if relation.user_id == user_id:
+                flash('You are already in this group', 'error')
+                return redirect(url_for('study_groups'))
+            else:
+                newrelation = UserGroupRelation()
+                newrelation.user_id = user_id
+                newrelation.group_id = group_id
+                db.session.add(newrelation)
+                db.session.commit()
+                return redirect(url_for('study_groups'))
+                

@@ -1,4 +1,5 @@
 from flask import Flask
+from app.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user
@@ -19,4 +20,4 @@ def load_user(user_id):
 
 app.debug = True
 
-from app import routes
+from app import routes, models

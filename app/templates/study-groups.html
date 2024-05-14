@@ -64,7 +64,7 @@
         </section>
         <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
         <ul class = "study_groups" id="study_groups">
-            <li class="group-item" data-unit-code = 'CITS3403'>
+            <li class="group-item" data-unit-code = 'CITS3403' group-id = '1'>
                 <div class="group-details">
                     <div class="group-info">
                         <span>username1</span>
@@ -75,12 +75,14 @@
                     </div>
                     <div class="group-description">
                         <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
-                        <button class="join-button">Join Group</button>
+                        <a href="{{ url_for('joingroup', group_id = 1) }}">
+                            <button class = 'join-button'>Join Group</button>
+                        </a>
                     </div>
                 </div>
             </li>
             
-            <li class="group-item"  data-unit-code = 'CITS2401'>
+            <li class="group-item"  data-unit-code = 'CITS2401' group-id = '2'>
                 <div class="group-details">
                     <div class="group-info">
                         <span>username2</span>
@@ -91,12 +93,14 @@
                     </div>
                     <div class="group-description">
                         <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
-                        <button class="join-button">Join Group</button>
+                        <a href="{{ url_for('joingroup', group_id = 2) }}">
+                            <button class = 'join-button'>Join Group</button>
+                        </a>
                     </div>
                 </div>
             </li>
             
-            <li class="group-item"  data-unit-code = 'CITS3403'>
+            <li class="group-item"  data-unit-code = 'CITS3403' group-id = '3'>
                 <div class="group-details">
                     <div class="group-info">
                         <span>username</span>
@@ -107,7 +111,9 @@
                     </div>
                     <div class="group-description">
                         <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
-                        <button class="join-button">Join Group</button>
+                        <a href="{{ url_for('joingroup', group_id = 1) }}">
+                            <button class = 'join-button'>Join Group</button>
+                        </a>
                     </div>
                 </div>
             </li>
