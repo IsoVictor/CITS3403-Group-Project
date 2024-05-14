@@ -1,10 +1,11 @@
 # routes.py
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from app import app, db
+from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup
 from app.flashcard_routes import flashcard_bp
 import os
 from app.forms import LoginForm, SignupForm
+
 
 
 app.register_blueprint(flashcard_bp)
@@ -107,19 +108,9 @@ def login():
     
     return render_template('login.html', form=form)
 
-    '''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-
-        if user and user.check_password(password):
-            session['username'] = username
-            return redirect(url_for('index'))
-
-        flash('Invalid username or password')
-    return render_template('login.html')
-'''
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # User logout route
 @app.route('/logout')
