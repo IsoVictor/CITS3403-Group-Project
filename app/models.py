@@ -1,8 +1,12 @@
+
+
 # models.py
 from datetime import datetime
 from app import db
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+
 
 class UserGroupRelation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key = True)
@@ -11,7 +15,7 @@ class UserGroupRelation(db.Model):
     groups = db.relationship('StudyGroup', back_populates=('students'))
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -29,6 +33,9 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def is_active(self):
+        return self.active
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -61,3 +68,4 @@ class Flashcard(db.Model):
     question = db.Column(db.String(200), nullable=False)
     answer = db.Column(db.String(200), nullable=False)
     flashcard_set_id = db.Column(db.Integer, db.ForeignKey('flashcard_set.id'), nullable=False)
+
