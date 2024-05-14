@@ -1,56 +1,76 @@
 <!DOCTYPE html>
 <html lang="eng">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Study Forum</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/styles.css">
-    </head>
-    <body>
-        <header>
-            <h1>Study Forum</h1>
-            <nav>
-                <ul class = 'navList'>
-                    <li><a href="{{url_for('index')}}">Home page</a></li>
-                    <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-                    <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
-                    <li><a href="calendar.html">Calendar</a></li>
-                    <li><a href="flashcards.html">Flashcards</a></li>
-                    <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
-                    <li><a href="{{ url_for('login') }}">Log In</a></li>
-                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <h2>Sign up</h2>
-            <p>Create an account to find your study group!</p>
-            <form action="/signup" method="POST" class = "signupForm">
-                <div>
-                    <input type="email" name="email" placeholder="Email" required>
-                </div>
-                <div>
-                    <input type="text" name="studentnumber" placeholder="Student Number" required>
-                </div>
-                <div>
-                    <input type="text" name="username" placeholder="Username" required>
-                </div>
-                <div>
-                    <input type="password" name="password" placeholder="Password" required>
-                </div>
-                <div>
-                    <input type="password" name="confirmpassword" placeholder="Confirm Password" required>
-                </div>
-                <input type="submit" value="Create Account">
-            </form>
-            <br>
-            <a href="{{ url_for('login') }}">Already have an account?</a>
-        </main>
-        <footer>
-            <p>&copy; Jason,Victor, Rohnan, Ann.</p>
-        </footer>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Forum</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+</head>
+<body>
+<header>
+    <h1>Study Forum</h1>
+    <nav>
+        <ul class="navList">
+            <li><a href="{{url_for('index')}}">Home page</a></li>
+            <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
+            <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="flashcards.html">Flashcards</a></li>
+            <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
+            <li><a href="{{ url_for('login') }}">Log In</a></li>
+            <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <h2>Sign up</h2>
+    <p>Create an account to find your study group!</p>
+    <form action="{{ url_for('signup') }}" method="POST" class="signupForm">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email.label }}
+            {{ form.email(class="form-control", placeholder="Email") }}
+            {% for error in form.email.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.studentnumber.label }}
+            {{ form.studentnumber(class="form-control", placeholder="Student Number") }}
+            {% for error in form.studentnumber.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.username.label }}
+            {{ form.username(class="form-control", placeholder="Username") }}
+            {% for error in form.username.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.password.label }}
+            {{ form.password(class="form-control", placeholder="Password") }}
+            {% for error in form.password.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.confirmpassword.label }}
+            {{ form.confirmpassword(class="form-control", placeholder="Confirm Password") }}
+            {% for error in form.confirmpassword.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <input type="submit" value="Create Account">
+    </form>
+    <br>
+    <a href="{{ url_for('login') }}">Already have an account?</a>
+</main>
+<footer>
+    <p>&copy; Jason, Victor, Rohnan, Ann.</p>
+</footer>
+</body>
 </html>
-
