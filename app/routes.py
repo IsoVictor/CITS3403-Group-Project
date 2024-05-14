@@ -3,9 +3,21 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from app import app, db
 from app.models import User, Post, StudyGroup
 from app.flashcard_routes import flashcard_bp
+import os
 
 app.register_blueprint(flashcard_bp)
 
+class Question:
+    def __init__(self, question_id, question):
+        self.question_id = question_id
+        self.question = question
+
+
+allquestions = [
+    Question('1','Why does coding make me sad?'),
+    Question('2','Why does coding make me happy?'),
+    Question('3','Why does coding make me angry?'),
+]
 # Home page route
 @app.route("/")
 def index():
@@ -21,6 +33,11 @@ def calendar():
 def questions():
     return render_template('questions.html')
 
+#Discussion page route
+@app.route('/discussion')
+def discussion():
+    return render_template('discussion.html')
+
 # Study groups page route
 @app.route('/study-groups')
 def study_groups():
@@ -30,21 +47,38 @@ def study_groups():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
         email = request.form['email']
+        studentnumber = request.form['studentnumber']
+        username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if user is not None:
-            flash('Username already exists.')
+        confirmpassword = request.form['confirmpassword']
+        
+        # Check if passwords match
+        if password != confirmpassword:
+            flash('Passwords do not match!', 'error')
             return redirect(url_for('signup'))
         
-        new_user = User(username=username, email=email)
+        # Check if email is already registered
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email is already registered!', 'error')
+            return redirect(url_for('signup'))
+        
+        # Check if student number is already registered
+        existing_student = User.query.filter_by(studentnumber=studentnumber).first()
+        if existing_student:
+            flash('Student number is already registered!', 'error')
+            return redirect(url_for('signup'))
+        
+        # Create new user
+        new_user = User(email=email, studentnumber=studentnumber, username=username)
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
-
-        flash('Successfully Registered!')
+        
+        flash('Account created successfully!', 'success')
         return redirect(url_for('login'))
+    
     return render_template('signup.html')
 
 # User login route
@@ -56,7 +90,7 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
-            session['user_id'] = user.id
+            session['username'] = username
             return redirect(url_for('index'))
 
         flash('Invalid username or password')
@@ -65,6 +99,16 @@ def login():
 # User logout route
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
+    session.pop('username', None)
     flash('You have been logged out.')
     return redirect(url_for('index'))
+
+
+# User Answering route
+@app.route('/answer/<question_id>', methods=['GET','POST'])
+def answer(question_id):
+    if request.method == 'GET':
+        for question in allquestions:
+            if question.question_id == question_id:
+                return render_template('answering.html', c_question = question)
+

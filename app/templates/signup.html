@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Study Forum</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../static/styles.css">
     </head>
     <body>
@@ -13,11 +14,11 @@
             <nav>
                 <ul class = 'navList'>
                     <li><a href="{{url_for('index')}}">Home page</a></li>
-                    <li><a href="questions.html">Questions</a></li>
-                    <li><a href="discussion.html">Discussion Forum</a></li>
+                    <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
+                    <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
                     <li><a href="calendar.html">Calendar</a></li>
                     <li><a href="flashcards.html">Flashcards</a></li>
-                    <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
+                    <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
                     <li><a href="{{ url_for('login') }}">Log In</a></li>
                     <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
                 </ul>
@@ -28,36 +29,27 @@
             <p>Create an account to find your study group!</p>
             <form action="/signup" method="POST" class = "signupForm">
                 <div>
-                    <label for="studentEmail">Email</label>
-                    <input type="email" name = 'email' required>
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
                 <div>
-                    <label for="studentNumber">Student Number</label>
-                    <input type="text" name = 'studentNumber' required>
+                    <input type="text" name="studentnumber" placeholder="Student Number" required>
                 </div>
                 <div>
-                    <label for="studentName">Username</label>
-                    <input type="text" name="username" required>
+                    <input type="text" name="username" placeholder="Username" required>
                 </div>
                 <div>
-                    <label for="password1">Password</label>
-                    <input type="password" name = "password1" required>
+                    <input type="password" name="password" placeholder="Password" required>
                 </div>
                 <div>
-                    <label for="password2">Confirm Password</label>
-                    <input type="password" name = "password2" required>
+                    <input type="password" name="confirmpassword" placeholder="Confirm Password" required>
                 </div>
-                <br>
-                <input type='submit' value = "Create Account">
+                <input type="submit" value="Create Account">
             </form>
-            <a href="{{ url_for('index')}}">
-                <button class='homepage' >Go Back</button>
-            </a>
             <br>
             <a href="{{ url_for('login') }}">Already have an account?</a>
         </main>
         <footer>
-            <p>Jason,Victor, Rohnan, Ann</p>
+            <p>&copy; Jason,Victor, Rohnan, Ann.</p>
         </footer>
     </body>
 </html>

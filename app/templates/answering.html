@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum - Study Forum</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="../static/discussion.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Study Forum - Discussion Forum</h1>
+        <nav>
+            <ul class = 'navList'>
+                <li><a href="{{url_for('index')}}">Home page</a></li>
+                <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
+                <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="flashcards.html">Flashcards</a></li>
+                <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div  style = 'text-align: center;'>
+            <h2>Question:</h2>
+            <p> {{c_question.question}}</p>
+            <h2>Other People's Answers</h2>
+            <ul class = "answers" id="answers">
+                <li class="answer-item">
+                    <div class="answer-details">
+                        <div class="answer-info">
+                            <span>username1</span>
+                        </div>
+                        <div class="answer">
+                            <p>Because sometimes it works and sometimes it doesn't</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <h2>Your Answer:</h2>
+            <form action="/answer" method="POST" class = "answerForm">
+                <div>
+                    <textarea name="Answer" rows="20" cols="70" required></textarea>
+                </div>
+                <br>
+                <input type='submit' value = "Post Answer">
+            </form>
+            <a href="{{url_for('questions')}}">
+                <button class='homepage' >Go Back</button>
+            </a>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
+    </footer>
+</body>
+</html>
