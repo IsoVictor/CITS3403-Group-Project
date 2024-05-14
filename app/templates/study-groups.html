@@ -28,26 +28,27 @@
         <h2> Make a Study Group!</h2>
     </div>
     <main>
-        <form action="/creategroup" method="POST" class = "groupForm">
+        <form action= '{{url_for("study_groups")}}' method="POST" class = "groupForm">
+            {{form.hidden_tag()}}
             <div>
-                <label for="unitCode">Unit Code</label>
-                <input type="text" name = 'unitcode' required>
+                {{ form.unit_code.label }}
+                {{ form.unit_code }}
             </div>
             <div>
-                <label for="location">Location</label>
-                <input type="text" name="location" required>
+                {{ form.location.label }}
+                {{ form.location }}
             </div>
             <div>
-                <label for="dateof">Date</label>
-                <input type="date" name = "dateof" required>
+                {{ form.dateof.label }}
+                {{ form.dateof }}
             </div>
             <div>
-                <label for="time">Time to study</label>
-                <input type="time" name = "password1" required>
+                {{ form.time.label }}
+                {{ form.time }}
             </div>
             <div>
-                <label for="description">Description for Group</label>
-                <input type="text" name = "description" required>
+                {{ form.description.label }}
+                {{ form.description }}
             </div>
             <br>
             <input type='submit' value = "Create Study Group">
