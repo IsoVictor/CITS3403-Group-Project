@@ -6,10 +6,10 @@ user_group_relation1 = UserGroupRelation(user_id=1, group_id=1)
 user_group_relation2 = UserGroupRelation(user_id=2, group_id=1)
 
 # Sample data for User
-user1 = User(id = 1, username='user1', email='user1@example.com', studentnumber='123456789')
+user1 = User(username='user1', email='user1@example.com', studentnumber='123456789')
 user1.set_password('password1')
 
-user2 = User(id = 2, username='user2', email='user2@example.com', studentnumber='987654321')
+user2 = User(username='user2', email='user2@example.com', studentnumber='987654321')
 user2.set_password('password2')
 
 # Sample data for Post
