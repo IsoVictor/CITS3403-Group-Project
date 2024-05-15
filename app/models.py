@@ -49,7 +49,7 @@ class Post(db.Model):
         return '<Post {}>'.format(self.body)
 
 class StudyGroup(db.Model):
-    group_id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200))
     time = db.Column(db.Time)
@@ -59,7 +59,7 @@ class StudyGroup(db.Model):
     
 
     def __repr__(self):
-        return '<StudyGroup {}>'.format(self.name)
+        return '<StudyGroup {}>'.format(self.group_id)
 
 class FlashcardSet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,4 +72,5 @@ class Flashcard(db.Model):
     question = db.Column(db.String(200), nullable=False)
     answer = db.Column(db.String(200), nullable=False)
     flashcard_set_id = db.Column(db.Integer, db.ForeignKey('flashcard_set.id'), nullable=False)
+
 

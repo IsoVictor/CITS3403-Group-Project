@@ -1,12 +1,12 @@
 # routes.py
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user, login_required
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from app import app, db, login_manager, login_user
-from app.models import User, Post, StudyGroup
+from app.models import User, Post, StudyGroup, UserGroupRelation
 from app.flashcard_routes import flashcard_bp
 import os
-from app.forms import LoginForm, SignupForm
-
+from app.forms import LoginForm, SignupForm, groupForm
+from sqlalchemy import func
 
 
 app.register_blueprint(flashcard_bp)
@@ -16,12 +16,6 @@ class Question:
         self.question_id = question_id
         self.question = question
 
-
-allquestions = [
-    Question('1','Why does coding make me sad?'),
-    Question('2','Why does coding make me happy?'),
-    Question('3','Why does coding make me angry?'),
-]
 # Home page route
 @app.route("/")
 def index():
@@ -43,9 +37,32 @@ def discussion():
     return render_template('discussion.html')
 
 # Study groups page route
-@app.route('/study-groups')
+@app.route('/study-groups', methods=["GET",'POST'])
 def study_groups():
-    return render_template('study-groups.html')
+    form = groupForm()
+    allgroups = StudyGroup.query.all()
+
+    if form.validate_on_submit():
+        unit_code = form.unit_code.data
+        location = form.location.data
+        dateof = form.dateof.data
+        time = form.time.data
+        description = form.description.data
+        #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
+        max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
+        new_group_id = (max_group_id or 0) + 1
+        
+        new_group = StudyGroup(group_id=new_group_id, unit_code=unit_code, location=location, date=dateof, time=time, description=description)
+        new_relation = UserGroupRelation(user_id=current_user.id, group_id=new_group_id)
+        
+        db.session.add(new_relation)
+        db.session.add(new_group)
+        db.session.commit()
+        
+        flash('Group created successfully!', 'success')
+        return redirect(url_for('study_groups'))
+    
+    return render_template('study-groups.html', form = form, allgroups = allgroups)
 
 # User registration route
 @app.route('/signup', methods=['GET', 'POST'])
@@ -132,18 +149,19 @@ def answer(question_id):
 
 #Joining Group route
 @app.route('/joingroup/<group_id>', methods=['GET'])
+@login_required
 def joingroup(group_id):
-    allrelations = UserGroupRelation.query.get(group_id)
+    existing_relation = UserGroupRelation.query.filter_by(group_id=group_id, user_id=current_user.id).first()
     if request.method == 'GET':
-        for relation in allreations:
-            if relation.user_id == user_id:
-                flash('You are already in this group', 'error')
-                return redirect(url_for('study_groups'))
-            else:
-                newrelation = UserGroupRelation()
-                newrelation.user_id = user_id
-                newrelation.group_id = group_id
-                db.session.add(newrelation)
-                db.session.commit()
-                return redirect(url_for('study_groups'))
+        if existing_relation:
+            flash('You are already in this group', 'error')
+            return redirect(url_for('study_groups'))
+            
+        new_relation = UserGroupRelation()
+        new_relation.user_id = current_user.id
+        new_relation.group_id = group_id
+        db.session.add(new_relation)
+        db.session.commit()
+        flash('You have successfully joined the group!', 'success')
+        return redirect(url_for('study_groups'))
                 

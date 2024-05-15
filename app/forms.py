@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, DateField, TimeField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -16,3 +16,12 @@ class SignupForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     confirmpassword = PasswordField("Confirm Password", validators=[DataRequired()])
     submit = SubmitField("Create Account")
+
+class groupForm(FlaskForm):
+    unit_code = StringField("Unit Code", validators=[DataRequired()])
+    location = StringField("Location",validators=[DataRequired()])
+    dateof = DateField('Date', validators=[DataRequired()])
+    time = TimeField('Time', validators=[DataRequired()])
+    description = StringField('Purpose of Study Group', validators=[DataRequired()])
+    submit = SubmitField("Create Group")
+    
