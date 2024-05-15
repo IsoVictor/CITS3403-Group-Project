@@ -1,14 +1,13 @@
-from wtforms import PasswordField, StringField, SubmitField, SelectField
+from flask import render_template, flash, redirect, url_for, request
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired, Length
-from wtforms import StringField, TextAreaField, FileField
-
+from wtforms import StringField, PasswordField, SubmitField, DateField, TimeField
+from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Login")
-    
+
 
 class SignupForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
@@ -25,3 +24,11 @@ class ProfileUpdateForm(FlaskForm):
     studentnumber = StringField('Student Number', validators=[DataRequired()])
     bio = TextAreaField('Bio')
     profile_picture = FileField('Profile Picture')
+class groupForm(FlaskForm):
+    unit_code = StringField("Unit Code", validators=[DataRequired()])
+    location = StringField("Location",validators=[DataRequired()])
+    dateof = DateField('Date', validators=[DataRequired()])
+    time = TimeField('Time', validators=[DataRequired()])
+    description = StringField('Purpose of Study Group', validators=[DataRequired()])
+    submit = SubmitField("Create Group")
+    

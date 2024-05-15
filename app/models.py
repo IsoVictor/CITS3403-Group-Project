@@ -1,12 +1,24 @@
+
+
 # models.py
 from datetime import datetime
 from app import db
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 
 
-class User(db.Model):
+
+class UserGroupRelation(db.Model):
+     __tablename__ = 'user_group_relation'
+     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True) 
+     group_id = db.Column(db.Integer, db.ForeignKey('study_group.group_id'), primary_key=True)
+     user = db.relationship("User", back_populates="group_relations", foreign_keys=[user_id]) 
+     group = db.relationship("StudyGroup", back_populates="user_relations", foreign_keys=[group_id])
+
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -15,6 +27,7 @@ class User(db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     flashcard_sets = db.relationship('FlashcardSet', backref='user', lazy='dynamic')
     profilepic = db.Column(db.String(128), nullable=True)
+    group_relations = db.relationship('UserGroupRelation', back_populates='user')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -24,24 +37,32 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def is_active(self):
+        return self.active
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    unit_code = db.Column(db.String(8), nullable=False)
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
 class StudyGroup(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    group_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200))
-    # Add any other fields as needed
+    time = db.Column(db.Time)
+    date = db.Column(db.Date)
+    user_relations = db.relationship("UserGroupRelation", back_populates='group')
+    unit_code = db.Column(db.String(8), nullable=False)
+    
 
     def __repr__(self):
-        return '<StudyGroup {}>'.format(self.name)
+        return '<StudyGroup {}>'.format(self.group_id)
 
 class FlashcardSet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,3 +75,5 @@ class Flashcard(db.Model):
     question = db.Column(db.String(200), nullable=False)
     answer = db.Column(db.String(200), nullable=False)
     flashcard_set_id = db.Column(db.Integer, db.ForeignKey('flashcard_set.id'), nullable=False)
+
+
