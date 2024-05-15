@@ -68,7 +68,7 @@ def study_groups():
         flash('Group created successfully!', 'success')
         return redirect(url_for('study_groups'))
     
-    return render_template('study-groups.html', form = form, group = allgroups)
+    return render_template('study-groups.html', form = form, allgroups = allgroups)
 
 # User registration route
 @app.route('/signup', methods=['GET', 'POST'])

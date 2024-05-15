@@ -60,64 +60,31 @@
     <main>
         <section id="study-groups" class = 'filter'>
             <label for="unit_code">Enter Unit Code:</label>
-            <input type="text" id="unit_code">
-            <button onclick="filterGroups()">Filter</button>
+            <input type="text" id="filter_code">
+            <button id="filterButton">Filter</button>
         </section>
         <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
-        <ul class = "study_groups" id="study_groups">
-            <li class="group-item" data-unit-code = 'CITS3403' group-id = '1'>
+        
+        <ul class="study_groups" id="study_groups">
+            {% for group in allgroups %}
+            <li class="group-item" data-unit-code='{{ group.unit_code }}' group-id='{{ group.group_id }}'>
                 <div class="group-details">
                     <div class="group-info">
-                        <span>username1</span>
-                        <span>Location: Location</span>
-                        <span>CITS3403</span>
-                        <span>Date</span>
-                        <span>Time: Time</span>
+                        <span>{{ group.group_id }}</span>
+                        <span>Location: {{ group.location }}</span>
+                        <span>{{ group.unit_code }}</span>
+                        <span>Date: {{ group.date }}</span>
+                        <span>Time: {{ group.time }}</span>
                     </div>
                     <div class="group-description">
-                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
-                        <a href="{{ url_for('joingroup', group_id = 1) }}">
-                            <button class = 'join-button'>Join Group</button>
+                        <p>Description: {{ group.description }}</p>
+                        <a href="{{ url_for('joingroup', group_id=group.group_id) }}">
+                            <button class='join-button'>Join Group</button>
                         </a>
                     </div>
                 </div>
             </li>
-            
-            <li class="group-item"  data-unit-code = 'CITS2401' group-id = '2'>
-                <div class="group-details">
-                    <div class="group-info">
-                        <span>username2</span>
-                        <span>Location: Location</span>
-                        <span>CITS2401</span>
-                        <span>Date</span>
-                        <span>Time: Time</span>
-                    </div>
-                    <div class="group-description">
-                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
-                        <a href="{{ url_for('joingroup', group_id = 2) }}">
-                            <button class = 'join-button'>Join Group</button>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            
-            <li class="group-item"  data-unit-code = 'CITS3403' group-id = '3'>
-                <div class="group-details">
-                    <div class="group-info">
-                        <span>username</span>
-                        <span>Location: Location</span>
-                        <span>CITS3403</span>
-                        <span>Date</span>
-                        <span>Time: Time</span>
-                    </div>
-                    <div class="group-description">
-                        <p>Description: Description about the study group... like for example i want to study for the upcoming midsemester exam</p>
-                        <a href="{{ url_for('joingroup', group_id = 1) }}">
-                            <button class = 'join-button'>Join Group</button>
-                        </a>
-                    </div>
-                </div>
-            </li>
+            {% endfor %}
         </ul>
     
     </main>
