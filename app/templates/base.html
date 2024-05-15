@@ -1,57 +1,48 @@
-<!-- index.html -->
+<!-- base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Forum</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
-    
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
     <header>
         <h1>Study Forum</h1>
         <nav>
-            <ul class = 'navList'>
-
+            <ul class="navList">
                 <li><a href="{{ url_for('index') }}">Home page</a></li>
                 <li><a href="{{ url_for('discussion') }}">Discussion Forum</a></li>
                 <li><a href="{{ url_for('questions') }}">Questions Forum</a></li>
                 <li><a href="calendar.html">Calendar</a></li>
                 <li><a href="flashcards.html">Flashcards</a></li>
-                <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
-                <li><a href="{{ url_for('login') }}">Log In</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
                 <li>
                     {% if 'username' in session %}
-                    <a href="{{ url_for('profile') }}">Hello, {{ session['username'] }}</a>
+                        <a href="{{ url_for('profile') }}">Hello, {{ session['username'] }}</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">Log In</a>
                     {% endif %}
                 </li>
-                
-
             </ul>
         </nav>
     </header>
 
     <main>
-        <h2>Welcome to Study Forum</h2>
-        <p>Explore the different sections!.</p>
-        <ul class = "homepageList">
-
-            <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-            <li><a href="calendar.html">Manage Your Study Calendar</a></li>
-            <li><a href="flashcards.html">Create and Study Flashcards</a></li>
-            <li><a href="{{ url_for('study_groups')}}">Join or Create Study Groups</a></li>
-        </ul>
+        {% block content %}{% endblock %}
     </main>
 
     <footer>
         <p>&copy; Jason, Victor, Rohnan, Ann.</p>
     </footer>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

@@ -4,6 +4,8 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
+
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -12,6 +14,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     flashcard_sets = db.relationship('FlashcardSet', backref='user', lazy='dynamic')
+    profilepic = db.Column(db.String(128), nullable=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
