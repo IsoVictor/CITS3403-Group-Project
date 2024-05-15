@@ -66,6 +66,13 @@
         <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
         
         <ul class="study_groups" id="study_groups">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message"  style="font-size: larger; font-weight: bold; text-decoration: underline; color: red;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
             {% for group in allgroups %}
             <li class="group-item" data-unit-code='{{ group.unit_code }}' group-id='{{ group.group_id }}'>
                 <div class="group-details">
