@@ -31,10 +31,6 @@ def calendar():
 def questions():
     return render_template('questions.html')
 
-#Discussion page route
-@app.route('/discussion')
-def discussion():
-    return render_template('discussion.html')
 
 # Study groups page route
 @app.route('/study-groups', methods=["GET",'POST'])
