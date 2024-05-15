@@ -26,10 +26,10 @@ def index():
 def calendar():
     return render_template('calendar.html')
 
-# Questions and answers page route
-@app.route('/questions')
-def questions():
-    return render_template('questions.html')
+# discussion and answers page route
+@app.route('/discussion')
+def discussion():
+    return render_template('discussion.html')
 
 # Study groups page route
 @app.route('/study-groups', methods=["GET",'POST'])
@@ -115,6 +115,8 @@ def login():
         if not user.check_password(password):
             flash(f'Invalid password. Please try again.', 'error')
             return redirect(url_for('login'))
+        
+        session['username'] = user.username
         
         login_user(user)
         return redirect(url_for('index'))
