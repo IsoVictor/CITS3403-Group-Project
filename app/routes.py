@@ -31,7 +31,6 @@ def calendar():
 def questions():
     return render_template('questions.html')
 
-
 # Study groups page route
 @app.route('/study-groups', methods=["GET",'POST'])
 def study_groups():
