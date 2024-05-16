@@ -3,77 +3,88 @@
 {% block title %}Discussion Forum - Study Forum{% endblock %}
 
 {% block content %}
-    <div  style = 'text-align: center;'>
-        <h2> Make a Study Group!</h2>
-    </div>
-    <main>
-        <form action= '{{url_for("study_groups")}}' method="POST" class = "groupForm">
-            {{form.hidden_tag()}}
-            <div>
-                {{ form.unit_code.label }}
-                {{ form.unit_code }}
-            </div>
-            <div>
-                {{ form.location.label }}
-                {{ form.location }}
-            </div>
-            <div>
-                {{ form.dateof.label }}
-                {{ form.dateof }}
-            </div>
-            <div>
-                {{ form.time.label }}
-                {{ form.time }}
-            </div>
-            <div>
-                {{ form.description.label }}
-                {{ form.description }}
-            </div>
-            <br>
-            <input type='submit' value = "Create Study Group">
-        </form>
-    </main>
-    <div  style = 'text-align: center;'>
-        <h2> Look for a Group!</h2>
-    </div>
-    <main>
-        <section id="study-groups" class = 'filter'>
-            <label for="unit_code">Enter Unit Code:</label>
-            <input type="text" id="filter_code">
-            <button id="filterButton">Filter</button>
-        </section>
-        <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
-        
-        <ul class="study_groups" id="study_groups">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="flash-message"  style="font-size: larger; font-weight: bold; text-decoration: underline; color: red;">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
+<div style='text-align: center;'>
+    <h2> Make a Study Group!</h2>
+</div>
+<main>
+    <form action='{{url_for("study_groups")}}' method="POST" class="groupForm">
+        {{form.hidden_tag()}}
+        <div>
+            {{ form.unit_code.label }}
+            {{ form.unit_code }}
+        </div>
+        <div>
+            {{ form.location.label }}
+            {{ form.location }}
+        </div>
+        <div>
+            {{ form.dateof.label }}
+            {{ form.dateof }}
+        </div>
+        <div>
+            {{ form.time.label }}
+            {{ form.time }}
+        </div>
+        <div>
+            {{ form.description.label }}
+            {{ form.description }}
+        </div>
+        <br>
+        <input type='submit' value="Create Study Group">
+    </form>
+</main>
+<div style='text-align: center;'>
+    <h2> Look for a Group!</h2>
+</div>
+<main>
+    <section id="study-groups" class='filter'>
+        <label for="unit_code">Enter Unit Code:</label>
+        <input type="text" id="filter_code">
+        <button id="filterButton">Filter</button>
+    </section>
+    <p id='warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
+
+    <ul class="study_groups" id="study_groups">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="flash-message"
+            style="font-size: larger; font-weight: bold; text-decoration: underline; color: red;">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
         {% endwith %}
-            {% for group in allgroups %}
-            <li class="group-item" data-unit-code='{{ group.unit_code }}' group-id='{{ group.group_id }}'>
-                <div class="group-details">
-                    <div class="group-info">
-                        <span>{{ group.group_id }}</span>
-                        <span>Location: {{ group.location }}</span>
-                        <span>{{ group.unit_code }}</span>
-                        <span>Date: {{ group.date }}</span>
-                        <span>Time: {{ group.time }}</span>
-                    </div>
-                    <div class="group-description">
-                        <p>Description: {{ group.description }}</p>
-                        <a href="{{ url_for('joingroup', group_id=group.group_id) }}">
-                            <button class='join-button'>Join Group</button>
-                        </a>
-                    </div>
+        {% for group in allgroups %}
+        <li class="group-item" data-unit-code='{{ group.unit_code }}' group-id='{{ group.group_id }}'>
+            <div class="group-details">
+                <div class="group-info">
+                    <span>{{ group.group_id }}</span>
+                    <span>Location: {{ group.location }}</span>
+                    <span>{{ group.unit_code }}</span>
+                    <span>Date: {{ group.date }}</span>
+                    <span>Time: {{ group.time }}</span>
                 </div>
-            </li>
-            {% endfor %}
-        </ul>
-    
-    </main>
+                <div class="group-description">
+                    <p>Description: {{ group.description }}</p>
+                    <p>Members:</p>
+                    <ul>
+                        {% for relation in group.user_relations %}
+                            <li>{{ relation.user.username }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ url_for('joingroup', group_id=group.group_id) }}">
+                        <button class='join-button'>Join Group</button>
+                    </a>
+                    <form action="{{ url_for('leavegroup', group_id=group.group_id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="leave-button">Leave Group</button>
+                    </form>
+                </div>
+                
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+</main>
 
 
 </body>
