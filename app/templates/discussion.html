@@ -27,6 +27,7 @@
             </ul>
         </nav>
     </header>
+    {% if 'username' in session %}
     <div  style = 'text-align: center;'>
         <h2> Post Your Questions!</h2>
     </div>
@@ -44,6 +45,7 @@
             <input type='submit' value = "Post Question">
         </form>
     </main>
+    {% endif %}
     <div  style = 'text-align: center;'>
         <h2> Answer Some Questions!</h2>
     </div>
