@@ -36,10 +36,10 @@ class groupForm(FlaskForm):
     
 class questionForm(FlaskForm):
     unit_code = StringField("Unit Code", validators=[DataRequired()])
-    question = StringField("Question", validators=[DataRequired()])
+    question = TextAreaField("Question", validators=[DataRequired()])
     submit = SubmitField("Ask Question")
 
 class answerForm(FlaskForm):
-    answer = StringField("Answer", validators=[DataRequired()])
-    submit = SubmitField("Post Question")
+    answer = TextAreaField("Answer", validators=[DataRequired()])
+    submit = SubmitField("Post Answer")
 

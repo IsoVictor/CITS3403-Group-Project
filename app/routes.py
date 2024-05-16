@@ -12,11 +12,6 @@ from sqlalchemy import func
 
 app.register_blueprint(flashcard_bp)
 
-class Question:
-    def __init__(self, question_id, question):
-        self.question_id = question_id
-        self.question = question
-
 # Home page route
 @app.route("/")
 def index():
@@ -28,7 +23,7 @@ def calendar():
     return render_template('calendar.html')
 
 # discussion and answers page route
-@app.route('/discussion')
+@app.route('/discussion', methods=["GET","POST"])
 def discussion():
     form = questionForm()
     allquestions = Question.query.all()
@@ -161,9 +156,9 @@ def answer(question_id):
         new_answer = Answer(answer = answer, user_id = current_user.id, question_id = question_id, answerUsername = current_user.username)
         db.session.add(new_answer)
         db.session.commit()
-        return redirect(url_for('answer', question_id = question_id))
+        return redirect(url_for('answer',question_id = question_id))
         
-    return render_template('answering.html', question= question, answers = answers)
+    return render_template('answering.html', question= question, answers = answers, form = form)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
