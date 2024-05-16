@@ -22,9 +22,11 @@
                 <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
                 <li>
                     {% if 'username' in session %}
-                        <a href="{{ url_for('profile') }}">Hello, {{ session['username'] }}</a>
+                        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for ('profile')}}"> Hello, {{ session['username']}}</a></li>
                     {% else %}
-                        <a href="{{ url_for('login') }}">Log In</a>
+                        <li><a href="{{ url_for('login') }}">Log In</a></li>
+                        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
                     {% endif %}
                 </li>
             </ul>

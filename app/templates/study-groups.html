@@ -1,32 +1,8 @@
-<!-- study-groups.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Groups - Study Forum</title>
-    <link rel="stylesheet" href="../static/styles.css">
-    <script src="../static/studygroup.js"></script>
-</head>
-<body>
-    <header>
-        <h1>Study Forum - Study Groups</h1>
-        <nav>
-            <ul class = 'navList'>
-                <li><a href="{{url_for('index')}}">Home page</a></li>
-                <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="flashcards.html">Flashcards</a></li>
-                <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
-                {% if 'username' in session %}
-                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('login') }}">Log In</a></li>
-                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+{% extends "base.html" %}
+
+{% block title %}Discussion Forum - Study Forum{% endblock %}
+
+{% block content %}
     <div  style = 'text-align: center;'>
         <h2> Make a Study Group!</h2>
     </div>
@@ -99,8 +75,6 @@
     
     </main>
 
-    <footer>
-        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
-    </footer>
+
 </body>
-</html>
+{% endblock %}
