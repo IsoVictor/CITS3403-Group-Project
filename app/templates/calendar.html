@@ -64,10 +64,10 @@
                     var event = info.event;
                     var eventDetails = `
                         <h3>${event.title}</h3>
-                        <p><strong>Location:</strong> ${event.extendedProps.location}</p>
-                        <p><strong>Time:</strong> ${event.extendedProps.time}</p>
+                        <p><strong>Date:</strong> ${event.start.toISOString().slice(0, 10)}</p>
                     `;
                     document.getElementById('event-details').innerHTML = eventDetails;
+                    document.getElementById('delete-event').dataset.eventId = event.id;
                     openModal(event.startStr, event.title, event.id);
                 }
             });
@@ -81,7 +81,7 @@
             function openModal(date, title = '', eventId = null) {
                 document.getElementById('event-title').value = title;
                 document.getElementById('event-date').value = date;
-                deleteEventBtn.dataset.eventId = eventId;
+                document.getElementById('event-form').dataset.eventId = eventId;
                 modal.style.display = 'block';
             }
 
@@ -93,26 +93,53 @@
                 e.preventDefault();
                 var title = document.getElementById('event-title').value;
                 var date = document.getElementById('event-date').value;
-                fetch('/add-event', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ title: title, date: date })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        calendar.refetchEvents();
-                        modal.style.display = 'none';
-                    } else {
-                        alert('Failed to add event. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
-                });
+                var eventId = e.target.dataset.eventId;
+                
+                if (eventId) {
+                    // Update existing event
+                    fetch(`/edit-event/${eventId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ title: title, date: date })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            calendar.refetchEvents();
+                            modal.style.display = 'none';
+                        } else {
+                            alert('Failed to update event. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+                } else {
+                    // Add new event
+                    fetch('/add-event', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ title: title, date: date })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            calendar.refetchEvents();
+                            modal.style.display = 'none';
+                        } else {
+                            alert('Failed to add event. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+                }
             }
 
             deleteEventBtn.onclick = function() {
