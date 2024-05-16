@@ -19,8 +19,27 @@ def index():
 
 # Calendar page route
 @app.route('/calendar')
+@login_required
 def calendar():
-    return render_template('calendar.html')
+    study_group_events = []
+    study_groups = StudyGroup.query.all()
+    for study_group in study_groups:
+        study_group_events.append({
+            'title': f"{study_group.unit_code} - {study_group.description}",
+            'start': study_group.date.isoformat(),
+            'location': study_group.location,
+            'time': study_group.time.strftime("%H:%M")
+        })
+    return render_template('calendar.html', study_group_events=study_group_events)
+
+@app.route('/add-event', methods=['POST'])
+def add_event():
+    title = request.json['title']
+    date = request.json['date']
+    event = Event(title=title, date=date)
+    db.session.add(event)
+    db.session.commit()
+    return jsonify({'message': 'Event added successfully'})
 
 # discussion and answers page route
 @app.route('/discussion', methods=["GET","POST"])
