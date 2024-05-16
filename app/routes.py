@@ -158,12 +158,12 @@ def answer(question_id):
     form = answerForm()
     answers = Answer.query.filter_by(question_id=question_id).all()
     question = Question.query.filter_by(id=question_id).first()
-    if validate_on_submit():
+    if form.validate_on_submit():
         answer = form.answer.data
         new_answer = Answer(answer = answer, user_id = current_user.id, question_id = question_id, answerUsername = current_user.username)
         db.session.add(new_answer)
         db.session.commit()
-        return redirect(url_for('answer'))
+        return redirect(url_for('answer', question_id = question_id))
         
     return render_template('answering.html', question= question, answers = answers)
 
