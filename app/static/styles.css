@@ -120,7 +120,11 @@ footer {
     margin-left: -10px;
 }
 
-
+.signupForm input[type="text"],
+.signupForm input[type="password"],
+.signupForm input[type="email"],
+.loginForm div input[type="text"],
+.loginForm div input[type="password"],
 .groupForm input[type='text'],
 .groupForm input[type='time'],
 .groupForm input[type='date'],
@@ -128,62 +132,10 @@ footer {
 .questionForm div textarea{
     flex: 1;
     padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    text-decoration: none;
-    font-size: 20px;
-    width: 100%;
-    margin-top: 1px;
- 
-    
-    
     border-radius: 10px;    
 }
-.loginForm {
-    display: flex; /* Use Flexbox */
-    flex-direction: column; /* Align items vertically */
-    align-items: center; /* Center items horizontally */
-}
-.signupForm input[type="text"],
-.signupForm input[type="password"],
-.signupForm input[type="email"] {
-    width: 255px;
-    padding: 10px; 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    box-sizing: border-box; 
 
-}
-.loginForm div input[type="text"],
-.loginForm div input[type="password"] {
-    width: 255px;
-    padding: 10px; 
-    margin-right: 100px;
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    box-sizing: border-box; 
-}
-
-.groupForm input[type='text'],
-.groupForm input[type='time'],
-.groupForm input[type='date'],
-.loginForm input[type="submit"],
-.signupForm input[type='submit'] {
-    width: 255px; /* Set width to 100% */
-    padding: 10px; /* Add padding */
-   
-    background-color: #333; /* Background color */
-    color: #fff; /* Text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Add border radius */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    transition: background-color 0.3s ease; /* Smooth transition for background color change */
-}
-
-
-
-
+.loginForm input[type='submit'],
 .groupForm input[type='submit'],
 .questionForm input[type='submit'],
 .join-button,
@@ -389,83 +341,6 @@ button[type="submit"]:hover {
     display: flex;
 }
 
-/* CSS for User Profile Page */
-
-.default-profile-img {
-    background-color: #ccc;
-    border: 2px solid #ddd;
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-    border-radius: 50%;
-    width: 150px; /* Adjust the width and height to match the image size */
-    height: 150px;
-}
-
-.custom-file-input {
-    position: absolute;
-    font-size: 100px;
-    right: 0;
-    top: 0;
-    opacity: 0;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
-    border-radius: 5px;
-    height: 100%;
-}
-
-.card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.card-title {
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0; /* Add margin-bottom to separate from the card text */
-}
-
-.card-text {
-    font-size: 14px;
-    line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    margin-bottom: 0; /* Add margin-bottom to separate from the card text */
-}
-
-.form-control {
-    width: 100%;
-    padding: 0.875rem 1.125rem;
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1;
-    color: #69707a;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #c5ccd6;
-    border-radius: 0.35rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-.btn.btn-primary {
-    padding: 0.375rem 0.75rem; /* Adjust as needed */
-    
-    /* Reduce font size */
-    font-size: 0.875rem; /* Adjust as needed */
-
-    /* Optionally adjust height */
-    height:min-content;
-}
 .answers li div {
     flex-grow: 1;
     text-align: center;
