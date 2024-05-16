@@ -25,3 +25,13 @@ class groupForm(FlaskForm):
     description = StringField('Purpose of Study Group', validators=[DataRequired()])
     submit = SubmitField("Create Group")
     
+class questionForm(FlaskForm):
+    unit_code = StringField("Unit Code", validators=[DataRequired()])
+    question = StringField("Question", validators=[DataRequired()])
+    submit = SubmitField("Ask Question")
+
+class answerForm(FlaskForm):
+    answer = StringField("Answer", validators=[DataRequired()])
+    submit = SubmitField("Post Question")
+
+    

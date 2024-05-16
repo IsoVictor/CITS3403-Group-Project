@@ -73,4 +73,25 @@ class Flashcard(db.Model):
     answer = db.Column(db.String(200), nullable=False)
     flashcard_set_id = db.Column(db.Integer, db.ForeignKey('flashcard_set.id'), nullable=False)
 
+class Question(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(200), nullable=False)
+    unit_code = db.Column(db.String(8), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    posterUsername = db.Column(db.String(100), nullable=False)
+    answers = db.relationship('Answer', backref='question', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Question {}>'.format(self.id)
+
+class Answer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    answer = db.Column(db.Text, nullable=False)  # No limit
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+    answerUsername = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return '<Answer {}>'.format(self.id)
+
 
