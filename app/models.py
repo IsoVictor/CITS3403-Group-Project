@@ -16,6 +16,12 @@ class UserGroupRelation(db.Model):
      group_id = db.Column(db.Integer, db.ForeignKey('study_group.group_id'), primary_key=True)
      user = db.relationship("User", back_populates="group_relations", foreign_keys=[user_id]) 
      group = db.relationship("StudyGroup", back_populates="user_relations", foreign_keys=[group_id])
+     is_active = db.Column(db.Boolean, default=True)  
+
+     def leave_group(self):
+         self.is_active = False
+         db.session.commit()
+
 
 
 class User(db.Model, UserMixin):
