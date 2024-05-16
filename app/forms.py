@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, TimeField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, SubmitField, DateField, TimeField, TextAreaField
+from wtforms.validators import DataRequired, Length
+from flask_wtf.file import FileField
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
@@ -24,6 +25,7 @@ class ProfileUpdateForm(FlaskForm):
     studentnumber = StringField('Student Number', validators=[DataRequired()])
     bio = TextAreaField('Bio')
     profile_picture = FileField('Profile Picture')
+
 class groupForm(FlaskForm):
     unit_code = StringField("Unit Code", validators=[DataRequired()])
     location = StringField("Location",validators=[DataRequired()])
