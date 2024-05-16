@@ -31,17 +31,18 @@
         <h2> Post Your Questions!</h2>
     </div>
     <main>
-        <form action="/createquestions" method="POST" class = "questionForm">
+        <form action="{{url_for('discussion')}}" method="POST" class = "questionForm">
+            {{ form.hidden_tag() }}
             <div>
-                <label for="unitCode">Unit Code</label>
-                <input type="text" name = 'unitcode' style = 'width:200px' required>
+                {{ form.unit_code.label }}
+                {{ form.unit_code(class_='form-control') }}
             </div>
             <div>
-                <label for="question">Question</label>
-                <textarea name="question" rows="10" cols="70" required></textarea>
+                {{ form.question.label }}
+                {{ form.question(rows=7, class_='form-control') }}
             </div>
             <br>
-            <input type='submit' value = "Post Question">
+            {{ form.submit(class_='btn btn-primary') }}
         </form>
     </main>
     <div  style = 'text-align: center;'>
@@ -56,50 +57,22 @@
         <p id = 'warning' style="font-size: 20px;color:red;display:none;"> No Questions For Searched Unit!</p>
         
         <ul class = "questions" id="questions">
-            <li class="question-item" data-unit-code = 'CITS3403'>
+            {% for question in allquestions %}
+            <li class="question-item" data-unit-code='{{ question.unit_code }}'>
                 <div class="question-details">
                     <div class="question-info">
-                        <span>username1</span>
-                        <span>CITS3403</span>
+                        <span>{{ question.posterUsername }}</span>
+                        <span>{{ question.unit_code }}</span>
                     </div>
                     <div class="question-description">
-                        <p>Question: Why does coding make me very sad?</p>
-                        <a href="{{ url_for('answer', question_id=1) }}">
-                            <button class = 'ansButton'>Answer Question</button>
+                        <p>Question: {{ question.question }}</p>
+                        <a href="{{ url_for('answer', question_id=question.id) }}">
+                            <button class='ansButton'>Answer Question</button>
                         </a>
                     </div>
                 </div>
             </li>
-            
-            <li class="question-item" data-unit-code = 'CITS2401'>
-                <div class="question-details">
-                    <div class="question-info">
-                        <span>username1</span>
-                        <span>CITS2401</span>
-                    </div>
-                    <div class="question-description">
-                        <p>Question: Why does coding make me very happy?</p>
-                        <a href="{{ url_for('answer', question_id=2) }}">
-                            <button class = 'ansButton'>Answer Question</button>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            
-            <li class="question-item" data-unit-code = 'CITS3403'>
-                <div class="question-details">
-                    <div class="question-info">
-                        <span>username3</span>
-                        <span>CITS3403</span>
-                    </div>
-                    <div class="question-description">
-                        <p>Question: Why does coding make me very angry?</p>
-                        <a href="{{ url_for('answer', question_id=3) }}">
-                            <button class = 'ansButton'>Answer Question</button>
-                        </a>
-                    </div>
-                </div>
-            </li>
+            {% endfor %}
         </ul>
     
     </main>
