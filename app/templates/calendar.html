@@ -1,26 +1,146 @@
-<!-- calendar.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar - Study Forum</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <header>
-        <!-- ... (header content remains the same) -->
+        <h1>Study Forum - Calendar</h1>
+        <nav>
+            <ul class="navList">
+                <li><a href="{{ url_for('index') }}">Home page</a></li>
+                <li><a href="{{ url_for('discussion') }}">Discussion Forum</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
+                {% if 'username' in session %}
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
     </header>
 
     <main>
-        <section id="calendar">
-            <!-- ... (calendar section content remains the same) -->
-        </section>
+        <div id="calendar"></div>
+
+        <div id="event-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Event Details</h2>
+                <div id="event-details"></div>
+                <form id="event-form">
+                    <label for="event-title">Title:</label>
+                    <input type="text" id="event-title" required>
+                    <label for="event-date">Date:</label>
+                    <input type="date" id="event-date" required>
+                    <button type="submit">Save</button>
+                </form>
+                <button id="delete-event">Delete Event</button>
+            </div>
+        </div>
     </main>
 
     <footer>
-        <!-- ... (footer content remains the same) -->
+        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
     </footer>
-    <p> This is a test</p>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: {{ study_group_events|tojson|safe }},
+                dateClick: function(info) {
+                    openModal(info.dateStr);
+                },
+                eventClick: function(info) {
+                    var event = info.event;
+                    var eventDetails = `
+                        <h3>${event.title}</h3>
+                        <p><strong>Location:</strong> ${event.extendedProps.location}</p>
+                        <p><strong>Time:</strong> ${event.extendedProps.time}</p>
+                    `;
+                    document.getElementById('event-details').innerHTML = eventDetails;
+                    openModal(event.startStr, event.title, event.id);
+                }
+            });
+            calendar.render();
+
+            var modal = document.getElementById('event-modal');
+            var closeBtn = document.getElementsByClassName('close')[0];
+            var eventForm = document.getElementById('event-form');
+            var deleteEventBtn = document.getElementById('delete-event');
+
+            function openModal(date, title = '', eventId = null) {
+                document.getElementById('event-title').value = title;
+                document.getElementById('event-date').value = date;
+                deleteEventBtn.dataset.eventId = eventId;
+                modal.style.display = 'block';
+            }
+
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            eventForm.onsubmit = function(e) {
+                e.preventDefault();
+                var title = document.getElementById('event-title').value;
+                var date = document.getElementById('event-date').value;
+                fetch('/add-event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title: title, date: date })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        calendar.refetchEvents();
+                        modal.style.display = 'none';
+                    } else {
+                        alert('Failed to add event. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+
+            deleteEventBtn.onclick = function() {
+                var eventId = deleteEventBtn.dataset.eventId;
+                if (eventId) {
+                    fetch('/delete-event', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ eventId: eventId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            calendar.refetchEvents();
+                            modal.style.display = 'none';
+                        } else {
+                            alert('Failed to delete event. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
