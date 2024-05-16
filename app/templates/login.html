@@ -1,66 +1,77 @@
 <!DOCTYPE html>
 <html lang="eng">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Study Forum</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/styles.css">
-    </head>
-    <body>
-        <header>
-            <h1>Study Forum</h1>
-            <nav>
-                <ul class='navList'>
-                    <li><a href="{{url_for('index')}}">Home page</a></li>
-                    <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-                    <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
-                    <li><a href="calendar.html">Calendar</a></li>
-                    <li><a href="flashcards.html">Flashcards</a></li>
-                    <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Forum</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+</head>
+<body>
+<header>
+    <h1>Study Forum - Login</h1>
+    <nav>
+        <ul class='navList'>
+            <li><a href="{{url_for('index')}}">Home page</a></li>
+            <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="flashcards.html">Flashcards</a></li>
+            <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
+            {% if 'username' in session %}
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+            {% else %}
                     <li><a href="{{ url_for('login') }}">Log In</a></li>
                     <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <h2>Log In</h2>
-            <p>Making study a little less lonely</p>
-            <form class="loginForm" method="POST" action="{{ url_for('login') }}">
-                {{ form.hidden_tag() }}  <!-- CSRF Token -->
-                <div>
-                    {{ form.username.label }}  <!-- Username Label -->
-                    {{ form.username(class="form-control", placeholder="Username") }}  <!-- Username Input -->
-                    {% if form.username.errors %}  <!-- Username Errors -->
-                        <ul class="errors">
-                            {% for error in form.username.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-                <div>
-                    {{ form.password.label }}  <!-- Password Label -->
-                    {{ form.password(class="form-control", placeholder="Password") }}  <!-- Password Input -->
-                    {% if form.password.errors %}  <!-- Password Errors -->
-                        <ul class="errors">
-                            {% for error in form.password.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-                <br>
-                {{ form.submit(class="btn btn-primary") }}  <!-- Submit Button -->
-            </form>
-            <br>
-            <a href="{{ url_for('signup')}}" class="signup-link">Don't have an account? Sign up!</a>
-        </main>
-        <footer>
-            <p>&copy; Jason,Victor, Rohnan, Ann.</p>
-        </footer>
-    </body>
-</html>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+<main>
+    <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message[1] }}">{{ message[0] }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
-    
+    <h2>Log In</h2>
+    <p>Making study a little less lonely</p>
+    <form class="loginForm" method="POST" action="{{ url_for('login') }}">
+        {{ form.hidden_tag() }}  <!-- CSRF Token -->
+        <div>
+            {{ form.username.label }}  <!-- Username Label -->
+            {{ form.username(class="form-control", placeholder="Username") }}  <!-- Username Input -->
+            {% if form.username.errors %}  <!-- Username Errors -->
+                <ul class="errors">
+                    {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.password.label }}  <!-- Password Label -->
+            {{ form.password(class="form-control", placeholder="Password") }}  <!-- Password Input -->
+            {% if form.password.errors %}  <!-- Password Errors -->
+                <ul class="errors">
+                    {% for error in form.password.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <br>
+        {{ form.submit(class="btn btn-primary") }}  <!-- Submit Button -->
+    </form>
+    <a href="{{ url_for('signup')}}" class="signup-link">Don't have an account? Sign up!</a>
+</main>
+<footer>
+    <p>&copy; Jason,Victor, Rohnan, Ann.</p>
+</footer>
+</body>
+</html>

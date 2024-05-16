@@ -10,21 +10,35 @@
 </head>
 <body>
 <header>
-    <h1>Study Forum</h1>
+    <h1>Study Forum - Signup</h1>
     <nav>
         <ul class="navList">
             <li><a href="{{url_for('index')}}">Home page</a></li>
             <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-            <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
             <li><a href="calendar.html">Calendar</a></li>
             <li><a href="flashcards.html">Flashcards</a></li>
             <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
-            <li><a href="{{ url_for('login') }}">Log In</a></li>
-            <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            {% if 'username' in session %}
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+            {% else %}
+                    <li><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            {% endif %}
         </ul>
     </nav>
 </header>
 <main>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message[1] }}">{{ message[0] }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <h2>Sign up</h2>
     <p>Create an account to find your study group!</p>
     <form action="{{ url_for('signup') }}" method="POST" class="signupForm">
