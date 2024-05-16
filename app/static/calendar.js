@@ -1,98 +1,66 @@
-// calendar.js
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar-container');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        events: [],
-        eventClick: function(info) {
-            // Handle event click if needed
-        }
-    });
-    calendar.render();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - Study Forum</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Study Forum</h1>
+        <nav>
+            <ul class="navList">
+                <li><a href="{{ url_for('index') }}">Home page</a></li>
+                <li><a href="{{ url_for('discussion') }}">Discussion Forum</a></li>
+                <li><a href="{{ url_for('questions') }}">Questions Forum</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('flashcards') }}">Flashcards</a></li>
+                <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    var eventForm = document.getElementById('event-form');
-    var eventList = document.getElementById('event-list');
+    <main>
+        <section id="calendar">
+            <h2>Calendar</h2>
+            <div id="calendar-container"></div>
 
-    // Load events from the server
-    loadEvents();
-
-    eventForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var title = document.getElementById('event-title').value;
-        var date = document.getElementById('event-date').value;
-
-        // Send event data to the server
-        saveEvent(title, date);
-    });
-
-    function loadEvents() {
-        // Make an AJAX request to load events from the server
-        fetch('/events')
-            .then(response => response.json())
-            .then(data => {
-                // Clear the event list
-                eventList.innerHTML = '';
-
-                // Add events to the calendar and event list
-                data.events.forEach(event => {
-                    calendar.addEvent({
-                        title: event.title,
-                        start: event.date
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var calendarEl = document.getElementById('calendar-container');
+                    var calendar = new FullCalendar.Calendar(calendarEl, {
+                        initialView: 'dayGridMonth',
+                        events: [],
+                        // Add any additional calendar configuration options here
                     });
-                    addEventToList(event);
+                    calendar.render();
                 });
-            })
-            .catch(error => {
-                console.error('Error loading events:', error);
-            });
-    }
+            </script>
 
-    function saveEvent(title, date) {
-        // Make an AJAX request to save the event to the server
-        fetch('/events', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ title, date })
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Add the event to the calendar and event list
-                calendar.addEvent({
-                    title: data.title,
-                    start: data.date
-                });
-                addEventToList(data);
-            })
-            .catch(error => {
-                console.error('Error saving event:', error);
-            });
-    }
+            <form id="event-form">
+                <input type="text" id="event-title" placeholder="Event Title" required>
+                <input type="date" id="event-date" required>
+                <button type="submit">Add Event</button>
+            </form>
 
-    function deleteEvent(eventId) {
-        // Make an AJAX request to delete the event from the server
-        fetch(`/events/${eventId}`, {
-            method: 'DELETE'
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Remove the event from the calendar
-                calendar.getEventById(eventId).remove();
+            <h2>Events</h2>
+            <ul id="event-list">
+                <!-- Event items will be added dynamically -->
+            </ul>
+        </section>
+    </main>
 
-                // Remove the event from the event list
-                var listItem = eventList.querySelector(`li button[onclick="deleteEvent(${eventId})"]`).parentNode;
-                eventList.removeChild(listItem);
-            })
-            .catch(error => {
-                console.error('Error deleting event:', error);
-            });
-    }
-});
+    <footer>
+        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
+    </footer>
 
-    function addEventToList(event) {
-        var listItem = document.createElement('li');
-        listItem.textContent = event.title + ' - ' + event.date;
-        eventList.appendChild(listItem);
-    }
-});
+    <script src="{{ url_for('static', filename='calendar.js') }}"></script>
+</body>
+</html>
