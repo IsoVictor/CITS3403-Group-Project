@@ -10,17 +10,21 @@
 </head>
 <body>
     <header>
-        <h1>Study Forum</h1>
+        <h1>Study Forum - Flashcards</h1>
         <nav>
             <ul>
                 <li><a href="{{url_for('index')}}">Home page</a></li>
                 <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-                <li><a href="{{url_for('questions')}}">Questions Forum</a></li>
+
                 <li><a href="calendar.html">Calendar</a></li>
                 <li><a href="flashcards.html">Flashcards</a></li>
                 <li><a href="study-groups.html">Study Groups</a></li>
-                <li><a href="{{ url_for('login') }}">Log In</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% if 'username' in session %}
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Log In</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

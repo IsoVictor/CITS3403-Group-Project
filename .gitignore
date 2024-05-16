@@ -2,4 +2,5 @@
 env/
 **/__pycache__/
 *.db
+db
 3403/

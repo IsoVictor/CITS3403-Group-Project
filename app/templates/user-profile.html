@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block head %}
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="card-header">User Profile</div>
+                    <br>
+                    {% if user.profile_picture %}
+                    <img src="{{ url_for('static', filename='profile_pictures/' + user.profile_picture) }}"
+                        class="card-img-top rounded-circle mx-auto d-block" alt="Profile Picture"
+                        style="width: 150px; height: 150px;">
+                    {% else %}
+                    <div class="default-profile-img rounded-circle mx-auto d-block"
+                        style="width: 150px; height: 150px;"></div>
+                    {% endif %}
+                    <div>
+                        <button type="submit" class="btn btn-primary">Update Profile Picture</button>
+                    </div>
+                    <h5 class="card-title">{{ user.username }}</h5>
+                    <p class="card-text">{{ user.email }}</p>
+                    <p class="card-text">{{ user.bio }}</p>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h2 class="mb-4">Update Profile</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputUsername">
+                        {{ form.username.label }}
+                    </label>
+                    {{ form.username(class="form-control", placeholder="Enter username", value=user.username) }}
+                    {% for error in form.username.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="row gx-3 mb-3">
+                    
+                    <div class="col-md-6">
+                        <label class="small mb-1" for="inputFirstName">First name</label>
+                        <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="small mb-1" for="inputLastName">Last name</label>
+                        <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputEmail">
+                        {{ form.email.label }}
+                    </label>
+                    {{ form.email(class="form-control", placeholder="Enter email", value=user.email) }}
+                    {% for error in form.email.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+
+                </div>
+                <div class="ml-3">
+                    <label class="small mb-1" for="inputBio">
+                        {{ form.bio.label }}
+                    </label>
+                    {{ form.bio(class="form-control", placeholder="Enter bio", value=user.bio) }}
+                </div>
+                <div class="form-group">
+
+                    {% for error in form.profile_picture.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
 from app.flashcard_routes import flashcard_bp
+from app.forms import ProfileUpdateForm
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm
 from sqlalchemy import func
@@ -26,9 +27,9 @@ def index():
 def calendar():
     return render_template('calendar.html')
 
-# Questions and answers page route
-@app.route('/questions', methods=["GET","POST"])
-def questions():
+# discussion and answers page route
+@app.route('/discussion')
+def discussion():
     form = questionForm()
     allquestions = Question.query.all()
     
@@ -40,14 +41,9 @@ def questions():
         new_question = Question(unit_code = unit_code, question= question, user_id = user_id, posterUsername = current_user.username)
         db.session.add(new_question)
         db.session.commit()
-        return redirect(url_for('questions'))
+        return redirect(url_for('discussion'))
 
-    return render_template('questions.html', form=form, allquestions=allquestions)
-
-#Discussion page route
-@app.route('/discussion')
-def discussion():
-    return render_template('discussion.html')
+    return render_template('discussion.html', form=form, allquestions=allquestions)
 
 # Study groups page route
 @app.route('/study-groups', methods=["GET",'POST'])
@@ -134,6 +130,8 @@ def login():
             flash(f'Invalid password. Please try again.', 'error')
             return redirect(url_for('login'))
         
+        session['username'] = user.username
+        
         login_user(user)
         return redirect(url_for('index'))
     
@@ -168,6 +166,35 @@ def answer(question_id):
     return render_template('answering.html', question= question, answers = answers)
 
 
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    form = ProfileUpdateForm()
+    user = User.query.filter_by(username=session['username']).first() 
+    if form.validate_on_submit():
+        # Extract form data
+        user = User.query.filter_by(username=session['username']).first()
+        user.username = form.username.data
+        user.email = form.email.data
+        user.studentnumber = form.studentnumber.data
+        profile_pic = form.profile_pic.data
+
+        # Save profile picture if uploaded
+        if profile_pic:
+            filename = secure_filename(profile_pic.filename)
+            photos.save(profile_pic, name=filename)
+            user.profile_pic = filename
+
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    # Pre-populate form fields with current user data
+    user = User.query.filter_by(username=session['username']).first()
+    form.username.data = user.username
+    form.email.data = user.email
+    form.studentnumber.data = user.studentnumber
+
+    return render_template('user-profile.html', form=form, user=user)
 
 #Joining Group route
 @app.route('/joingroup/<group_id>', methods=['GET'])
