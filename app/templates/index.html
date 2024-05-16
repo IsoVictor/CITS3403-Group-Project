@@ -18,8 +18,7 @@
 
                 <li><a href="{{url_for('index')}}">Home page</a></li>
                 <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="flashcards.html">Flashcards</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
                 <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
                 {% if 'username' in session %}
                     <li><a href="{{ url_for('logout') }}">Log Out</a></li>
