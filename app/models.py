@@ -8,6 +8,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 
+
+
 class UserGroupRelation(db.Model):
      __tablename__ = 'user_group_relation'
      user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True) 
@@ -24,6 +26,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     flashcard_sets = db.relationship('FlashcardSet', backref='user', lazy='dynamic')
+    profilepic = db.Column(db.String(128), nullable=True)
     group_relations = db.relationship('UserGroupRelation', back_populates='user')
 
     def __repr__(self):

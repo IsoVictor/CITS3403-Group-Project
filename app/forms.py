@@ -17,6 +17,13 @@ class SignupForm(FlaskForm):
     confirmpassword = PasswordField("Confirm Password", validators=[DataRequired()])
     submit = SubmitField("Create Account")
 
+
+class ProfileUpdateForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=50)])
+    email = StringField('Email', validators=[DataRequired()])
+    studentnumber = StringField('Student Number', validators=[DataRequired()])
+    bio = TextAreaField('Bio')
+    profile_picture = FileField('Profile Picture')
 class groupForm(FlaskForm):
     unit_code = StringField("Unit Code", validators=[DataRequired()])
     location = StringField("Location",validators=[DataRequired()])

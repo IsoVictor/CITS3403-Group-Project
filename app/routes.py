@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup, UserGroupRelation
 from app.flashcard_routes import flashcard_bp
+from app.forms import ProfileUpdateForm
 import os
 from app.forms import LoginForm, SignupForm, groupForm
 from sqlalchemy import func
@@ -143,6 +144,35 @@ def answer(question_id):
             if question.question_id == question_id:
                 return render_template('answering.html', c_question = question)
 
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    form = ProfileUpdateForm()
+    user = User.query.filter_by(username=session['username']).first() 
+    if form.validate_on_submit():
+        # Extract form data
+        user = User.query.filter_by(username=session['username']).first()
+        user.username = form.username.data
+        user.email = form.email.data
+        user.studentnumber = form.studentnumber.data
+        profile_pic = form.profile_pic.data
+
+        # Save profile picture if uploaded
+        if profile_pic:
+            filename = secure_filename(profile_pic.filename)
+            photos.save(profile_pic, name=filename)
+            user.profile_pic = filename
+
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    # Pre-populate form fields with current user data
+    user = User.query.filter_by(username=session['username']).first()
+    form.username.data = user.username
+    form.email.data = user.email
+    form.studentnumber.data = user.studentnumber
+
+    return render_template('user-profile.html', form=form, user=user)
 
 #Joining Group route
 @app.route('/joingroup/<group_id>', methods=['GET'])
