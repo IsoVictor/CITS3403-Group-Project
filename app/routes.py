@@ -28,17 +28,18 @@ def discussion():
     form = questionForm()
     allquestions = Question.query.all()
     
-    if form.validate_on_submit():
-        unit_code = form.unit_code.data
-        question = form.question.data
-        user_id = current_user.id
+    if not form.validate_on_submit():
+        return render_template('discussion.html', form=form, allquestions=allquestions)
+    
+    unit_code = form.unit_code.data
+    question = form.question.data
+    user_id = current_user.id
 
-        new_question = Question(unit_code = unit_code, question= question, user_id = user_id, posterUsername = current_user.username)
-        db.session.add(new_question)
-        db.session.commit()
-        return redirect(url_for('discussion'))
+    new_question = Question(unit_code = unit_code, question= question, user_id = user_id, posterUsername = current_user.username)
+    db.session.add(new_question)
+    db.session.commit()
+    return redirect(url_for('discussion'))
 
-    return render_template('discussion.html', form=form, allquestions=allquestions)
 
 # Study groups page route
 @app.route('/study-groups', methods=["GET",'POST'])
@@ -47,90 +48,95 @@ def study_groups():
     allgroups = StudyGroup.query.all()
 
     if form.validate_on_submit():
-        unit_code = form.unit_code.data
-        location = form.location.data
-        dateof = form.dateof.data
-        time = form.time.data
-        description = form.description.data
-        #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
-        max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
-        new_group_id = (max_group_id or 0) + 1
-        
-        new_group = StudyGroup(group_id=new_group_id, unit_code=unit_code, location=location, date=dateof, time=time, description=description)
-        new_relation = UserGroupRelation(user_id=current_user.id, group_id=new_group_id)
-        
-        db.session.add(new_relation)
-        db.session.add(new_group)
-        db.session.commit()
-        
-        flash('Group created successfully!', 'success')
-        return redirect(url_for('study_groups'))
+        return render_template('study-groups.html', form = form, allgroups = allgroups)
     
-    return render_template('study-groups.html', form = form, allgroups = allgroups)
+    unit_code = form.unit_code.data
+    location = form.location.data
+    dateof = form.dateof.data
+    time = form.time.data
+    description = form.description.data
+    #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
+    max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
+    new_group_id = (max_group_id or 0) + 1
+        
+    new_group = StudyGroup(group_id=new_group_id, unit_code=unit_code, location=location, date=dateof, time=time, description=description)
+    new_relation = UserGroupRelation(user_id=current_user.id, group_id=new_group_id)
+        
+    db.session.add(new_relation)
+    db.session.add(new_group)
+    db.session.commit()
+        
+    flash('Group created successfully!', 'success')
+    return redirect(url_for('study_groups'))
+    
 
 # User registration route
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignupForm()  # Create an instance of the SignupForm
 
-    if form.validate_on_submit():  # Check if the form is submitted and valid
-        email = form.email.data
-        studentnumber = form.studentnumber.data
-        username = form.username.data
-        password = form.password.data
-        confirmpassword = form.confirmpassword.data
+    if not form.validate_on_submit(): 
+        return render_template('signup.html', form=form)
         
-        # Check if passwords match
-        if password != confirmpassword:
-            flash('Passwords do not match!', 'error')
-            return redirect(url_for('signup'))
+    email = form.email.data
+    studentnumber = form.studentnumber.data
+    username = form.username.data
+    password = form.password.data
+    confirmpassword = form.confirmpassword.data
         
-        # Check if email is already registered
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            flash('Email is already registered!', 'error')
-            return redirect(url_for('signup'))
+    # Check if passwords match
+    if password != confirmpassword:
+        flash('Passwords do not match!', 'error')
+        return redirect(url_for('signup'))
         
-        # Check if student number is already registered
-        existing_student = User.query.filter_by(studentnumber=studentnumber).first()
-        if existing_student:
-            flash('Student number is already registered!', 'error')
-            return redirect(url_for('signup'))
-        
-        # Create new user
-        new_user = User(email=email, studentnumber=studentnumber, username=username)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
-        
-        flash('Account created successfully!', 'success')
-        return redirect(url_for('login'))
+    # Check if email is already registered
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user:
+        flash('Email is already registered!', 'error')
+        return redirect(url_for('signup'))
     
-    return render_template('signup.html', form=form)  # Pass the form to the template
+    # Check if student number is already registered
+    existing_student = User.query.filter_by(studentnumber=studentnumber).first()
+    if existing_student:
+        flash('Student number is already registered!', 'error')
+        return redirect(url_for('signup'))
+    
+    # Create new user
+    new_user = User(email=email, studentnumber=studentnumber, username=username)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+        
+    flash('Account created successfully!', 'success')
+    return redirect(url_for('login'))
+    
+      # Pass the form to the template
 
 
 # User login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        user = User.query.filter_by(username=username).first()
-        if not user:
-            flash(f'No account found with username {username}', 'error')
-            return redirect(url_for('login'))
+    if not form.validate_on_submit():
+        return  render_template('login.html', form=form)
+    
+    username = form.username.data
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash(f'No account found with username {username}', 'error')
+        return redirect(url_for('login'))
         
         password = form.password.data
-        if not user.check_password(password):
-            flash(f'Invalid password. Please try again.', 'error')
-            return redirect(url_for('login'))
+    if not user.check_password(password):
+        flash(f'Invalid password. Please try again.', 'error')
+        return redirect(url_for('login'))
         
-        session['username'] = user.username
+    session['username'] = user.username
         
-        login_user(user)
-        return redirect(url_for('index'))
+    login_user(user)
+    return redirect(url_for('index'))
     
-    return render_template('login.html', form=form)
+    
 
 @login_manager.user_loader
 def load_user(user_id):
