@@ -1,11 +1,12 @@
-<!-- discussion.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discussion Forum - Study Forum</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../static/discussion.js"></script>
 </head>
 <body>
@@ -27,10 +28,13 @@
             </ul>
         </nav>
     </header>
-    <div  style = 'text-align: center;'>
-        <h2> Post Your Questions!</h2>
-    </div>
     <main>
+        <div  style = 'text-align: center;'>
+            <h2 style ='font-weight: bold; text-decoration: underline;'> Post Your Questions!</h2>
+        </div>
+        <div class= 'container'>
+            <ul id="errorList" style="color: red; list-style-type: none;"></ul>
+        </div>
         <form action="{{url_for('discussion')}}" method="POST" class = "questionForm">
             {{ form.hidden_tag() }}
             <div>
@@ -41,24 +45,26 @@
                 {{ form.question.label }}
                 {{ form.question(rows=7, class_='form-control') }}
             </div>
-            <br>
-            {{ form.submit(class_='btn btn-primary') }}
+            {{ form.submit(class_='btn btn-primary', id="submitBtn") }}
         </form>
-    </main>
     <div  style = 'text-align: center;'>
-        <h2> Answer Some Questions!</h2>
+        <h2 style ='font-weight: bold; text-decoration: underline;' > Answer Some Questions!</h2>
+        <br>
     </div>
-    <main>
-        <section id="study-groups" class = 'filter'>
-            <label for="unit_code">Enter Unit Code:</label>
-            <input type="text" id="unit_code">
-            <button onclick=filter()>Filter</button>
-        </section>
+        <div id="study-groups" class = 'filter'>
+            <label for="filter_code">Enter Unit Code:</label>
+            <input type="text" id="filter_code">
+            <br>
+            <label for="keywords">Enter Keywords:</label>
+            <input type="text" id="keywords">
+            <br>
+            <button id="filterButton">Filter</button>
+        </div>
         <p id = 'warning' style="font-size: 20px;color:red;display:none;"> No Questions For Searched Unit!</p>
-        
+
         <ul class = "questions" id="questions">
             {% for question in allquestions %}
-            <li class="question-item" data-unit-code='{{ question.unit_code }}'>
+            <li class="question-item" data-unit-code='{{ question.unit_code }}' data-question="{{ question.question}}" data-question-id = '{{question.id}}'>
                 <div class="question-details">
                     <div class="question-info">
                         <span>{{ question.posterUsername }}</span>
@@ -66,9 +72,7 @@
                     </div>
                     <div class="question-description">
                         <p>Question: {{ question.question }}</p>
-                        <a href="{{ url_for('answer', question_id=question.id) }}">
-                            <button class='ansButton'>Answer Question</button>
-                        </a>
+                        <a href="{{ url_for('answer', question_id=question.id) }}" class='btn btn-primary ansButton'>Answer Question</a>
                     </div>
                 </div>
             </li>

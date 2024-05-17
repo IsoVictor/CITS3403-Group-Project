@@ -8,6 +8,7 @@ from app.forms import ProfileUpdateForm
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm
 from sqlalchemy import func
+from datetime import datetime
 
 
 app.register_blueprint(flashcard_bp)
@@ -52,6 +53,12 @@ def study_groups():
         dateof = form.dateof.data
         time = form.time.data
         description = form.description.data
+
+        # Check if dateof is before the current date
+        if dateof < datetime.today().date():
+            flash('Date cannot be before the current date.', 'error')
+            return redirect(url_for('study_groups'))
+
         #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
         max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
         new_group_id = (max_group_id or 0) + 1

@@ -104,6 +104,7 @@ footer {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    margin-bottom: 5px;
 }
 
 .signupForm div, .loginForm div, .groupForm div, .questionForm div{
@@ -307,7 +308,9 @@ button[type="submit"]:hover {
 }
 
 .filter input[type="text"] {
-    height: 20px; 
+    height: 30px;
+    border-radius: 5px;
+ 
 }
 
 .filter button{
@@ -338,6 +341,11 @@ button[type="submit"]:hover {
     align-items: center;
     justify-content: space-between;
     display: flex;
+}
+
+.group-info span {
+    display: block; /* Make each span element appear on a new line */
+    margin-bottom: 5px; /* Add some space between each span element */
 }
 
 .answers li div {
@@ -441,4 +449,10 @@ button[type="submit"]:hover {
 
     /* Optionally adjust height */
     height:min-content;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
 }
