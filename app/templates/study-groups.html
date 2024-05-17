@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Discussion Forum - Study Forum{% endblock %}
+{% block extra_head %} <script src="../static/studygroup.js"></script> {% endblock %}
 
 {% block content %}
 <div style='text-align: center;'>
@@ -77,8 +78,7 @@
                     <form action="{{ url_for('leavegroup', group_id=group.group_id) }}" method="POST" style="display: inline;">
                         <button type="submit" class="leave-button">Leave Group</button>
                     </form>
-                </div>
-                
+                </div>                
             </div>
         </li>
         {% endfor %}

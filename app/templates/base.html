@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
+
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -28,7 +29,6 @@
                         <li><a href="{{ url_for('login') }}">Log In</a></li>
                         <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
                     {% endif %}
-                </li>
             </ul>
         </nav>
     </header>
