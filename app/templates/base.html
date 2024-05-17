@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
+
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -22,11 +23,12 @@
                 <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
                 <li>
                     {% if 'username' in session %}
-                        <a href="{{ url_for('profile') }}">Hello, {{ session['username'] }}</a>
+                        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for ('profile')}}"> Hello, {{ session['username']}}</a></li>
                     {% else %}
-                        <a href="{{ url_for('login') }}">Log In</a>
+                        <li><a href="{{ url_for('login') }}">Log In</a></li>
+                        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
                     {% endif %}
-                </li>
             </ul>
         </nav>
     </header>
