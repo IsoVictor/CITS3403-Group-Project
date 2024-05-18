@@ -1,26 +1,31 @@
-<!-- calendar.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar - Study Forum</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <!-- ... (header content remains the same) -->
-    </header>
+{% extends "base.html" %}
 
-    <main>
-        <section id="calendar">
-            <!-- ... (calendar section content remains the same) -->
-        </section>
-    </main>
+{% block title %}Calendar - Study Forum{% endblock %}
 
-    <footer>
-        <!-- ... (footer content remains the same) -->
-    </footer>
-    <p> This is a test</p>
-</body>
-</html>
+{% block extra_head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
+    <link rel="stylesheet" href="../static/styles.css">
+{% endblock %}
+
+{% block content %}
+        <div id="calendar"></div>
+        <p class="event-instructions">Click on an event to view details</p>
+
+        <div id="event-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Event Details</h2>
+                <div id="event-details"></div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        var studyGroupEvents = {{ study_group_events|safe }};
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+    <script src="../static/calendar.js"></script>
+
+{% endblock %}

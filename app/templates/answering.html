@@ -3,41 +3,34 @@
 {% block title %}Discussion Forum - Study Forum{% endblock %}
 
 {% block content %}
-    <main>
-        <div  style = 'text-align: center;'>
-            <h2>Question:</h2>
-            <p> {{question.question}}</p>
-            <h2>Other People's Answers</h2>
-            <ul class = "answers" id="answers">
-                {% for answer in answers %}
-                <li class="answer-item">
-                    <div class="answer-details">
-                        <div class="answer-info">
-                            <span>{{ answer.answerUsername }}</span>
-                        </div>
-                        <div class="answer">
-                            <p>{{ answer.answer }}</p>
-                        </div>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-            <h2>Your Answer:</h2>
-            <form action="{{ url_for('answer', question_id=question.id) }}" method="POST" class="answerForm">
-                {{ form.hidden_tag() }}
-                <div>
-                    {{ form.answer(size=20, rows=20, cols=70, required=True) }}
-                </div>
-                <br>
-                {{ form.submit() }}
-            </form>
-            <a href="{{url_for('discussion')}}">
-                <button class='homepage' >Go Back</button>
-            </a>
+
+<div  style = 'text-align: center;'>
+    <h2>Question:</h2>
+</div> 
+<p> {{question.question}}</p>
+<h2>Other People's Answers</h2>
+<ul class = "answers" id="answers">
+    {% for answer in answers %}
+    <li class="answer-item">
+        <div class="answer-details">
+            <div class="answer-info">
+                <span>{{ answer.answerUsername }}</span>
+            </div>
+            <div class="answer">
+                <p>{{ answer.answer }}</p>
+            </div>
         </div>
-    </main>
-    <footer>
-        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
-    </footer>
-</body>
+    </li>
+    {% endfor %}
+</ul>
+<h2>Your Answer:</h2>
+<form action="{{ url_for('main.answer', question_id=question.id) }}" method="POST" class="answerForm">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.answer(rows=20, cols=70, required=True) }}
+    </div>
+    <br>
+    {{ form.submit() }}
+</form>
+<a href="{{url_for('main.discussion')}}" class='btn btn-primary returnBtn'>Back To Discussion</a>
 {% endblock %}

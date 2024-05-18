@@ -1,6 +1,6 @@
 # routes.py
-from flask_login import UserMixin, current_user, login_required, login_user
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_login import UserMixin, current_user, login_required, login_user, logout_user
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
 from app.flashcard_routes import flashcard_bp
 import os
@@ -8,6 +8,7 @@ from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm
 from sqlalchemy import func
 from app.blueprints import main
 from app.controllers import UserCreationError, create_user
+from datetime import datetime
 
 
 # Home page route
@@ -17,8 +18,52 @@ def index():
 
 # Calendar page route
 @main.route('/calendar')
+@login_required
 def calendar():
-    return render_template('calendar.html')
+    user_id = current_user.id
+    study_group_events = []
+    user_groups = UserGroupRelation.query.filter_by(user_id=user_id).all()
+    for user_group in user_groups:
+        study_group = StudyGroup.query.filter_by(group_id=user_group.group_id).first()
+        if study_group:
+            study_group_events.append({
+                'title': f"{study_group.unit_code} - {study_group.description}",
+                'start': study_group.date.isoformat(),
+                'extendedProps': {
+                    'location': study_group.location,
+                    'time': study_group.time.strftime("%H:%M")
+                }
+            })
+    return render_template('calendar.html', study_group_events=study_group_events)
+
+@app.route('/add-event', methods=['POST'])
+def add_event():
+    title = request.json['title']
+    date = request.json['date']
+    event = Event(title=title, date=date, user_id=current_user.id)
+    db.session.add(event)
+    db.session.commit()
+    return jsonify({'message': 'Event added successfully'})
+
+@app.route('/delete-event', methods=['POST'])
+def delete_event():
+    event_id = request.json['eventId']
+    event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
+    if event:
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify({'message': 'Event deleted successfully'})
+    return jsonify({'error': 'Event not found'})
+
+@app.route('/edit-event/<int:event_id>', methods=['PUT'])
+def edit_event(event_id):
+    event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
+    if event:
+        event.title = request.json['title']
+        event.date = request.json['date']
+        db.session.commit()
+        return jsonify({'message': 'Event updated successfully'})
+    return jsonify({'error': 'Event not found'})
 
 # discussion and answers page route
 @main.route('/discussion', methods=["GET","POST"])
@@ -53,6 +98,11 @@ def study_groups():
     dateof = form.dateof.data
     time = form.time.data
     description = form.description.data
+
+    if dateof < datetime.today().date():
+            flash('Date cannot be before the current date.', 'error')
+            return redirect(url_for('study_groups'))
+
     #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
     max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
     new_group_id = (max_group_id or 0) + 1
@@ -66,6 +116,7 @@ def study_groups():
         
     flash('Group created successfully!', 'success')
     return redirect(url_for('main.study_groups'))
+
     
 
 @main.route('/signup', methods=['GET', 'POST'])
@@ -118,7 +169,8 @@ def login():
 # User logout route
 @main.route('/logout')
 def logout():
-    session.pop('username', None)
+    logout_user()
+    session.clear()
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
 
@@ -141,35 +193,32 @@ def answer(question_id):
 
 
 @main.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
     form = ProfileUpdateForm()
-    user = User.query.filter_by(username=session['username']).first() 
-    if form.validate_on_submit():
-        # Extract form data
-        user = User.query.filter_by(username=session['username']).first()
-        user.username = form.username.data
-        user.email = form.email.data
-        user.studentnumber = form.studentnumber.data
-        profile_pic = form.profile_pic.data
 
+    if form.validate_on_submit():
+        # Update user data with form data
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.studentnumber = form.studentnumber.data
         # Save profile picture if uploaded
         if profile_pic:
             filename = secure_filename(profile_pic.filename)
             photos.save(profile_pic, name=filename)
             user.profile_pic = filename
-
+        # Commit changes to the database
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('main.profile'))
 
     # Pre-populate form fields with current user data
-    user = User.query.filter_by(username=session['username']).first()
-    form.username.data = user.username
-    form.email.data = user.email
-    form.studentnumber.data = user.studentnumber
+    form.username.data = current_user.username
+    form.email.data = current_user.email
+    form.studentnumber.data = current_user.studentnumber
 
-    return render_template('user-profile.html', form=form, user=user)
-
+    return render_template('user-profile.html', form=form, user=current_user)
+    
 #Joining Group route
 @main.route('/joingroup/<group_id>', methods=['GET'])
 @login_required

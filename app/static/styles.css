@@ -104,6 +104,7 @@ footer {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    margin-bottom: 5px;
 }
 
 .signupForm div, .loginForm div, .groupForm div, .questionForm div{
@@ -155,6 +156,19 @@ footer {
     
     
 }
+.returnBtn{
+    margin: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    width: 95%;
+    margin-left: 15px;
+}
+
 .signupForm input[type='submit']:hover,
 .loginForm input[type='submit']:hover,
 .groupForm input[type='submit']:hover {
@@ -183,97 +197,6 @@ button[type="submit"]:hover {
     color: red;
 }
 
-/* Flashcard-related styles */
-#flashcards {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.flashcard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 300px;
-    height: 200px;
-    margin: 20px auto;
-    perspective: 1000px;
-    cursor: pointer;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.flashcard-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
-
-.flashcard.flipped .flashcard-inner {
-    transform: rotateY(180deg);
-}
-
-.flashcard-front,
-.flashcard-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.flashcard-back {
-    transform: rotateY(180deg);
-}
-
-#flashcard-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-#create-flashcard {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#flashcard-form div {
-    margin-bottom: 10px;
-}
-
-#flashcard-form label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-#flashcard-form input[type="text"] {
-    width: 100%;
-    padding: 5px;
-    font-size: 16px;
-}
-
-#flashcard-form button[type="submit"] {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
 #prev-btn,
 #next-btn {
     padding: 10px 20px;
@@ -288,6 +211,18 @@ button[type="submit"]:hover {
 .study_groups,
 .questions{
     list-style-type: none;
+    padding: 0; /* Remove default padding */
+    justify-content: center; /* Center items horizontally */
+
+}
+
+.studentMembers {
+    justify-content: center  !important;
+    border: 1px solid black !important; /* Set border thickness */
+    padding: 5px !important; /* Adjust padding to your preference */
+    margin: 5px 0 !important; /* Add some margin between each student member */
+    
+    align-items: center !important;
 }
 
 .study_groups li,
@@ -307,7 +242,9 @@ button[type="submit"]:hover {
 }
 
 .filter input[type="text"] {
-    height: 20px; 
+    height: 30px;
+    border-radius: 5px;
+ 
 }
 
 .filter button{
@@ -338,6 +275,11 @@ button[type="submit"]:hover {
     align-items: center;
     justify-content: space-between;
     display: flex;
+}
+
+.group-info span {
+    display: block; /* Make each span element appear on a new line */
+    margin-bottom: 5px; /* Add some space between each span element */
 }
 
 .answers li div {
@@ -442,3 +384,70 @@ button[type="submit"]:hover {
     /* Optionally adjust height */
     height:min-content;
 }
+
+.error {
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* CSS For Calendar*/
+
+#calendar {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.event-tooltip {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.event-tooltip h3 {
+    margin-top: 0;
+}
+
