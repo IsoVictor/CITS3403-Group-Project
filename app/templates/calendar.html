@@ -1,33 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar - Study Forum</title>
+{% extends "base.html" %}
+
+{% block title %}Calendar - Study Forum{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
     <link rel="stylesheet" href="../static/styles.css">
-</head>
-<body>
-    <header>
-        <h1>Study Forum - Calendar</h1>
-        <nav>
-            <ul class="navList">
-                <li><a href="{{ url_for('index') }}">Home page</a></li>
-                <li><a href="{{ url_for('discussion') }}">Discussion Forum</a></li>
-                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
-                <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
-                {% if 'username' in session %}
-                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('login') }}">Log In</a></li>
-                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+{% endblock %}
 
-    <main>
+{% block content %}
         <div id="calendar"></div>
+        <p class="event-instructions">Click on an event to view details</p>
 
         <div id="event-modal" class="modal">
             <div class="modal-content">
@@ -36,16 +18,13 @@
                 <div id="event-details"></div>
             </div>
         </div>
-    </main>
 
-    <footer>
-        <p>&copy; Jason, Victor, Rohnan, Ann.</p>
-    </footer>
+{% endblock %}
 
+{% block extra_scripts %}
     <script>
         var studyGroupEvents = {{ study_group_events|safe }};
     </script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
     <script src="../static/calendar.js"></script>
-</body>
-</html>
+{% endblock %}
