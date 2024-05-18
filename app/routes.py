@@ -10,12 +10,6 @@ from sqlalchemy import func
 from datetime import datetime
 
 
-
-class Question:
-    def __init__(self, question_id, question):
-        self.question_id = question_id
-        self.question = question
-
 # Home page route
 @app.route("/")
 def index():
