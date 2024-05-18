@@ -1,22 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}Discussion Forum - Study Forum{% endblock %}
+{% block title %}Calendar - Study Forum{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
+    <link rel="stylesheet" href="../static/styles.css">
+{% endblock %}
 
 {% block content %}
-<div id="calendar"></div>
-<div id="event-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Event Details</h2>
-        <div id="event-details"></div>
-    </div>
-</div>
+        <div id="calendar"></div>
+        <p class="event-instructions">Click on an event to view details</p>
+
+        <div id="event-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Event Details</h2>
+                <div id="event-details"></div>
+            </div>
+        </div>
+
 {% endblock %}
 
 {% block extra_scripts %}
-<script> var studyGroupEvents = {{ study_group_events|safe }}; </script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="../static/styles.css">
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
-<script src="../static/calendar.js"></script>
+    <script>
+        var studyGroupEvents = {{ study_group_events|safe }};
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+    <script src="../static/calendar.js"></script>
+
 {% endblock %}

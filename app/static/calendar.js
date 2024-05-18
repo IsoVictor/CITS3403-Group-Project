@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p><strong>Time:</strong> ${event.extendedProps.time}</p>
             `;
             document.getElementById('event-details').innerHTML = eventDetails;
-            document.getElementById('delete-event').dataset.eventId = event.id;
             openModal();
         },
         eventMouseEnter: function (info) {
@@ -64,87 +63,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     closeBtn.onclick = function () {
         modal.style.display = 'none';
-    };
-
-    var eventForm = document.getElementById('event-form');
-    var deleteEventBtn = document.getElementById('delete-event');
-
-    eventForm.onsubmit = function (e) {
-        e.preventDefault();
-        var title = document.getElementById('event-title').value;
-        var date = document.getElementById('event-date').value;
-        var eventId = e.target.dataset.eventId;
-
-        if (eventId) {
-            // Update existing event
-            fetch(`/edit-event/${eventId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title: title, date: date })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        calendar.refetchEvents();
-                        modal.style.display = 'none';
-                    } else {
-                        alert('Failed to update event. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
-                });
-        } else {
-            // Add new event
-            fetch('/add-event', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title: title, date: date })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        calendar.refetchEvents();
-                        modal.style.display = 'none';
-                    } else {
-                        alert('Failed to add event. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
-                });
-        }
-    };
-
-    deleteEventBtn.onclick = function () {
-        var eventId = deleteEventBtn.dataset.eventId;
-        if (eventId) {
-            fetch('/delete-event', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ eventId: eventId })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        calendar.refetchEvents();
-                        modal.style.display = 'none';
-                    } else {
-                        alert('Failed to delete event. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
-                });
-        }
     };
 });
