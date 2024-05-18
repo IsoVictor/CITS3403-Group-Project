@@ -8,22 +8,24 @@ from app.forms import ProfileUpdateForm
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm
 from sqlalchemy import func
+from app.blueprints import main
+from app.controllers import GroupCreationError, create_group
 
 
 app.register_blueprint(flashcard_bp)
 
 # Home page route
-@app.route("/")
+@main.route("/")
 def index():
     return render_template('index.html')
 
 # Calendar page route
-@app.route('/calendar')
+@main.route('/calendar')
 def calendar():
     return render_template('calendar.html')
 
 # discussion and answers page route
-@app.route('/discussion', methods=["GET","POST"])
+@main.route('/discussion', methods=["GET","POST"])
 def discussion():
     form = questionForm()
     allquestions = Question.query.all()
@@ -42,7 +44,7 @@ def discussion():
 
 
 # Study groups page route
-@app.route('/study-groups', methods=["GET",'POST'])
+@main.route('/study-groups', methods=["GET",'POST'])
 def study_groups():
     form = groupForm()
     allgroups = StudyGroup.query.all()
@@ -71,7 +73,7 @@ def study_groups():
     
 
 # User registration route
-@app.route('/signup', methods=['GET', 'POST'])
+@main.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignupForm()  # Create an instance of the SignupForm
 
