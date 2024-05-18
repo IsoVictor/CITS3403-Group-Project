@@ -9,7 +9,8 @@ import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm
 from sqlalchemy import func
 from app.blueprints import main
-from app.controllers import GroupCreationError, create_group
+from app.controllers import UserCreationError, create_user
+
 
 
 app.register_blueprint(flashcard_bp)
@@ -72,51 +73,32 @@ def study_groups():
     return redirect(url_for('study_groups'))
     
 
-# User registration route
 @main.route('/signup', methods=['GET', 'POST'])
 def signup():
-    form = SignupForm()  # Create an instance of the SignupForm
+    form = SignupForm()
 
-    if not form.validate_on_submit(): 
+    if not form.validate_on_submit():
         return render_template('signup.html', form=form)
-        
+
     email = form.email.data
     studentnumber = form.studentnumber.data
     username = form.username.data
     password = form.password.data
     confirmpassword = form.confirmpassword.data
-        
-    # Check if passwords match
-    if password != confirmpassword:
-        flash('Passwords do not match!', 'error')
+
+    try:
+        create_user(email, studentnumber, username, password, confirmpassword)
+    except UserCreationError as e:
+        flash(str(e), 'error')
         return redirect(url_for('signup'))
-        
-    # Check if email is already registered
-    existing_user = User.query.filter_by(email=email).first()
-    if existing_user:
-        flash('Email is already registered!', 'error')
-        return redirect(url_for('signup'))
-    
-    # Check if student number is already registered
-    existing_student = User.query.filter_by(studentnumber=studentnumber).first()
-    if existing_student:
-        flash('Student number is already registered!', 'error')
-        return redirect(url_for('signup'))
-    
-    # Create new user
-    new_user = User(email=email, studentnumber=studentnumber, username=username)
-    new_user.set_password(password)
-    db.session.add(new_user)
-    db.session.commit()
-        
+
     flash('Account created successfully!', 'success')
     return redirect(url_for('login'))
-    
       # Pass the form to the template
 
 
 # User login route
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if not form.validate_on_submit():
