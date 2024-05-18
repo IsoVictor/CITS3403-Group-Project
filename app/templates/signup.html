@@ -3,62 +3,59 @@
 {% block title %}Discussion Forum - Study Forum{% endblock %}
 
 {% block content %}
-<main>
-    
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message[1] }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
 
-    <h2>Sign up</h2>
-    <p>Create an account to find your study group!</p>
-    <form action="{{ url_for('signup') }}" method="POST" class="signupForm">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.email.label }}
-            {{ form.email(class="form-control", placeholder="Email") }}
-            {% for error in form.email.errors %}
-                <span class="error">{{ error }}</span>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message[1] }}">{{ message }}</div>
             {% endfor %}
         </div>
-        <div>
-            {{ form.studentnumber.label }}
-            {{ form.studentnumber(class="form-control", placeholder="Student Number") }}
-            {% for error in form.studentnumber.errors %}
-                <span class="error">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.username.label }}
-            {{ form.username(class="form-control", placeholder="Username") }}
-            {% for error in form.username.errors %}
-                <span class="error">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.password.label }}
-            {{ form.password(class="form-control", placeholder="Password") }}
-            {% for error in form.password.errors %}
-                <span class="error">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.confirmpassword.label }}
-            {{ form.confirmpassword(class="form-control", placeholder="Confirm Password") }}
-            {% for error in form.confirmpassword.errors %}
-                <span class="error">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <input type="submit" value="Create Account">
-    </form>
-    <br>
-    <a href="{{ url_for('login') }}">Already have an account?</a>
-</main>
+    {% endif %}
+{% endwith %}
 
-</body>
+<h2>Sign up</h2>
+<p>Create an account to find your study group!</p>
+<form action="{{ url_for('signup') }}" method="POST" class="signupForm">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.email.label }}
+        {{ form.email(class="form-control", placeholder="Email") }}
+        {% for error in form.email.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.studentnumber.label }}
+        {{ form.studentnumber(class="form-control", placeholder="Student Number") }}
+        {% for error in form.studentnumber.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.username.label }}
+        {{ form.username(class="form-control", placeholder="Username") }}
+        {% for error in form.username.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.password.label }}
+        {{ form.password(class="form-control", placeholder="Password") }}
+        {% for error in form.password.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.confirmpassword.label }}
+        {{ form.confirmpassword(class="form-control", placeholder="Confirm Password") }}
+        {% for error in form.confirmpassword.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <input type="submit" value="Create Account">
+</form>
+<br>
+<a href="{{ url_for('login') }}">Already have an account?</a>
+
 {% endblock %}

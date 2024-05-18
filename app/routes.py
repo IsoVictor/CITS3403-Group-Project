@@ -169,6 +169,7 @@ def answer(question_id):
 
 
 @app.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
     form = ProfileUpdateForm()
     user = User.query.filter_by(username=session['username']).first() 
