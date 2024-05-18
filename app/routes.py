@@ -6,7 +6,7 @@ import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 from sqlalchemy import func
 from app.blueprints import main
-from app.controllers import UserCreationError, create_user
+from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError
 from datetime import datetime
 
 
@@ -64,59 +64,52 @@ def edit_event(event_id):
         return jsonify({'message': 'Event updated successfully'})
     return jsonify({'error': 'Event not found'})
 
-# discussion and answers page route
-@main.route('/discussion', methods=["GET","POST"])
+@main.route('/discussion', methods=["GET", "POST"])
 def discussion():
     form = questionForm()
     allquestions = Question.query.all()
     
-    if not form.validate_on_submit():
-        return render_template('discussion.html', form=form, allquestions=allquestions)
-    
-    unit_code = form.unit_code.data
-    question = form.question.data
-    user_id = current_user.id
+    if request.method == "POST" and form.validate_on_submit():
+        unit_code = form.unit_code.data
+        question = form.question.data
+        user_id = current_user.id
 
-    new_question = Question(unit_code = unit_code, question= question, user_id = user_id, posterUsername = current_user.username)
-    db.session.add(new_question)
-    db.session.commit()
-    return redirect(url_for('main.discussion'))
+        try:
+            create_discussion(unit_code, question, user_id, current_user.username)
+            flash('Discussion created successfully!', 'success')
+            return redirect(url_for('main.discussion'))
+        except DiscussionCreationError as e:
+            flash(str(e), 'error')
+
+    return render_template('discussion.html', form=form, allquestions=allquestions)
 
 
-# Study groups page route
-@main.route('/study-groups', methods=["GET",'POST'])
+
+@main.route('/study-groups', methods=["GET", 'POST'])
 def study_groups():
     form = groupForm()
     allgroups = StudyGroup.query.all()
 
-    if form.validate_on_submit():
-        return render_template('study-groups.html', form = form, allgroups = allgroups)
-    
-    unit_code = form.unit_code.data
-    location = form.location.data
-    dateof = form.dateof.data
-    time = form.time.data
-    description = form.description.data
-
-    if not dateof or dateof < datetime.today().date():
-            flash('Invalid date. Please select a valid date.', 'error')
+    if request.method == 'POST':
+        if not form.validate_on_submit():
+            flash('Please fill out the form correctly.', 'error')
             return render_template('study-groups.html', form=form, allgroups=allgroups)
 
-    #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
-    max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
-    new_group_id = (max_group_id or 0) + 1
-        
-    new_group = StudyGroup(group_id=new_group_id, unit_code=unit_code, location=location, date=dateof, time=time, description=description)
-    new_relation = UserGroupRelation(user_id=current_user.id, group_id=new_group_id)
-        
-    db.session.add(new_relation)
-    db.session.add(new_group)
-    db.session.commit()
-        
-    flash('Group created successfully!', 'success')
-    return redirect(url_for('main.study_groups'))
+        unit_code = form.unit_code.data
+        location = form.location.data
+        dateof = form.dateof.data
+        time = form.time.data
+        description = form.description.data
 
-    
+        try:
+            create_study_group(unit_code, location, dateof, time, description, current_user.id)
+            flash('Group created successfully!', 'success')
+            return redirect(url_for('main.study_groups'))
+        except StudyGroupCreationError as e:
+            flash(str(e), 'error')
+
+    return render_template('study-groups.html', form=form, allgroups=allgroups)
+
 
 @main.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -142,7 +135,6 @@ def signup():
       # Pass the form to the template
 
 
-# User login route
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -155,7 +147,7 @@ def login():
         flash(f'No account found with username {username}', 'error')
         return redirect(url_for('main.login'))
         
-        password = form.password.data
+    password = form.password.data
     if not user.check_password(password):
         flash(f'Invalid password. Please try again.', 'error')
         return redirect(url_for('main.login'))
@@ -218,33 +210,25 @@ def profile():
 
     return render_template('user-profile.html', form=form, user=current_user)
     
-#Joining Group route
 @main.route('/joingroup/<group_id>', methods=['GET'])
 @login_required
 def joingroup(group_id):
-    existing_relation = UserGroupRelation.query.filter_by(group_id=group_id, user_id=current_user.id).first()
-    if request.method == 'GET':
-        if existing_relation:
-            flash('You are already in this group', 'error')
-            return redirect(url_for('main.study_groups'))
-            
-        new_relation = UserGroupRelation()
-        new_relation.user_id = current_user.id
-        new_relation.group_id = group_id
-        db.session.add(new_relation)
-        db.session.commit()
+    try:
+        join_group(current_user.id, group_id)
         flash('You have successfully joined the group!', 'success')
-        return redirect(url_for('main.study_groups'))
+    except GroupJoiningError as e:
+        flash(str(e), 'error')
+
+    return redirect(url_for('main.study_groups'))
                 
-# Leave Group route
+
 @main.route('/leavegroup/<group_id>', methods=['POST'])
 @login_required
 def leavegroup(group_id):
-    relation = UserGroupRelation.query.filter_by(group_id=group_id, user_id=current_user.id).first()
-    if relation:
-        db.session.delete(relation)
-        db.session.commit()
+    try:
+        leave_group(current_user.id, group_id)
         flash('You have successfully left the group!', 'success')
-    else:
-        flash('You are not a member of this group!', 'error')
+    except GroupLeavingError as e:
+        flash(str(e), 'error')
+
     return redirect(url_for('main.study_groups'))
