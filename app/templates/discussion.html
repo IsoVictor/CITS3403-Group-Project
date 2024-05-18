@@ -29,6 +29,7 @@
         </nav>
     </header>
     <main>
+        {% if 'username' in session %}
         <div  style = 'text-align: center;'>
             <h2 style ='font-weight: bold; text-decoration: underline;'> Post Your Questions!</h2>
         </div>
@@ -47,6 +48,7 @@
             </div>
             {{ form.submit(class_='btn btn-primary', id="submitBtn") }}
         </form>
+        {% endif %}
     <div  style = 'text-align: center;'>
         <h2 style ='font-weight: bold; text-decoration: underline;' > Answer Some Questions!</h2>
         <br>

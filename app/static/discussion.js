@@ -17,32 +17,32 @@ $(document).ready(function() {
 
 function filterQuestions(){
     var unitCodeInput = $('#filter_code').val().toUpperCase();
-        var keywordsInput = $('#keywords').val().toUpperCase();
-        var questions = $('.question-item');
-        var warning = $('#warning');
-        var found = false;
+    var keywordsInput = $('#keywords').val().toUpperCase();
+    var questions = $('.question-item');
+    var warning = $('#warning');
+    var found = false;
 
-        console.log("Filtering Unit Code:", unitCodeInput);
-        console.log("Filtering Keywords:", keywordsInput);
+    console.log("Filtering Unit Code:", unitCodeInput);
+    console.log("Filtering Keywords:", keywordsInput);
 
-        questions.each(function() {
-            var unitCode = String($(this).data('unit-code')).toUpperCase();
-            var description = String($(this).data('question')).toUpperCase();
-            if (unitCode.indexOf(unitCodeInput) > -1 && description.indexOf(keywordsInput) > -1) {
-                $(this).show();
-                found = true;
-                console.log("Group:", $(this).data('question-id'));
-            } else {
-                $(this).hide();
-            }
-        });
-
-        if (!found) {
-            warning.show();
+    questions.each(function() {
+        var unitCode = String($(this).data('unit-code')).toUpperCase();
+        var description = String($(this).data('question')).toUpperCase();
+        if (unitCode.indexOf(unitCodeInput) > -1 && description.indexOf(keywordsInput) > -1) {
+            $(this).show();
+            found = true;
+            console.log("Group:", $(this).data('question-id'));
         } else {
-            warning.hide();
+            $(this).hide();
         }
+    });
+
+    if (!found) {
+        warning.show();
+    } else {
+        warning.hide();
     }
+}
 
 function validateQuestionForm() {
     var unitCode = $('#unit_code').val().trim();

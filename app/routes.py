@@ -1,12 +1,12 @@
 # routes.py
-from flask_login import UserMixin, current_user, login_required
+from flask_login import UserMixin, current_user, login_required, logout_user
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
 from app.flashcard_routes import flashcard_bp
 from app.forms import ProfileUpdateForm
 import os
-from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm
+from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 from sqlalchemy import func
 from datetime import datetime
 
@@ -146,7 +146,8 @@ def load_user(user_id):
 # User logout route
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    logout_user()
+    session.clear()
     flash('You have been logged out.')
     return redirect(url_for('index'))
 
@@ -172,33 +173,29 @@ def answer(question_id):
 @login_required
 def profile():
     form = ProfileUpdateForm()
-    user = User.query.filter_by(username=session['username']).first() 
-    if form.validate_on_submit():
-        # Extract form data
-        user = User.query.filter_by(username=session['username']).first()
-        user.username = form.username.data
-        user.email = form.email.data
-        user.studentnumber = form.studentnumber.data
-        profile_pic = form.profile_pic.data
 
+    if form.validate_on_submit():
+        # Update user data with form data
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.studentnumber = form.studentnumber.data
         # Save profile picture if uploaded
         if profile_pic:
             filename = secure_filename(profile_pic.filename)
             photos.save(profile_pic, name=filename)
             user.profile_pic = filename
-
+        # Commit changes to the database
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile'))
 
     # Pre-populate form fields with current user data
-    user = User.query.filter_by(username=session['username']).first()
-    form.username.data = user.username
-    form.email.data = user.email
-    form.studentnumber.data = user.studentnumber
+    form.username.data = current_user.username
+    form.email.data = current_user.email
+    form.studentnumber.data = current_user.studentnumber
 
-    return render_template('user-profile.html', form=form, user=user)
-
+    return render_template('user-profile.html', form=form, user=current_user)
+    
 #Joining Group route
 @app.route('/joingroup/<group_id>', methods=['GET'])
 @login_required

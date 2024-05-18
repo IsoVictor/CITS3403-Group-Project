@@ -1,26 +1,28 @@
-<!-- calendar.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar - Study Forum</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <!-- ... (header content remains the same) -->
-    </header>
+{% extends "base.html" %}
 
-    <main>
-        <section id="calendar">
-            <!-- ... (calendar section content remains the same) -->
-        </section>
-    </main>
+{% block title %}Discussion Forum - Study Forum{% endblock %}
+{% block extra_head %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/styles.css">
+<script src="../static/studygroup.js" defer></script> {% endblock %}
 
-    <footer>
-        <!-- ... (footer content remains the same) -->
-    </footer>
-    <p> This is a test</p>
-</body>
-</html>
+{% block content %}
+    
+<div id="calendar"></div>
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Event Details</h2>
+        <div id="event-details"></div>
+            <form id="event-form">
+                <label for="event-title">Title:</label>
+                <input type="text" id="event-title" required>
+                <label for="event-date">Date:</label>
+                <input type="date" id="event-date" required>
+                <button type="submit">Save</button>
+            </form>
+            <button id="delete-event">Delete Event</button>
+        </div>
+    </div>
+
+{% endblock %}

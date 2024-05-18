@@ -23,6 +23,7 @@ class ProfileUpdateForm(FlaskForm):
     studentnumber = StringField('Student Number', validators=[DataRequired()])
     bio = TextAreaField('Bio')
     profile_picture = FileField('Profile Picture')
+    submit = SubmitField("Update Profile")
 
 class groupForm(FlaskForm):
     unit_code = StringField("Unit Code", validators=[DataRequired(), Length(min = 8, max = 8)])
