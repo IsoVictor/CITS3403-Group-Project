@@ -2,7 +2,6 @@
 from flask_login import UserMixin, current_user, login_required, login_user, logout_user
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
-from app.flashcard_routes import flashcard_bp
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 from sqlalchemy import func
@@ -36,7 +35,7 @@ def calendar():
             })
     return render_template('calendar.html', study_group_events=study_group_events)
 
-@app.route('/add-event', methods=['POST'])
+@main.route('/add-event', methods=['POST'])
 def add_event():
     title = request.json['title']
     date = request.json['date']
@@ -45,7 +44,7 @@ def add_event():
     db.session.commit()
     return jsonify({'message': 'Event added successfully'})
 
-@app.route('/delete-event', methods=['POST'])
+@main.route('/delete-event', methods=['POST'])
 def delete_event():
     event_id = request.json['eventId']
     event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
@@ -55,7 +54,7 @@ def delete_event():
         return jsonify({'message': 'Event deleted successfully'})
     return jsonify({'error': 'Event not found'})
 
-@app.route('/edit-event/<int:event_id>', methods=['PUT'])
+@main.route('/edit-event/<int:event_id>', methods=['PUT'])
 def edit_event(event_id):
     event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
     if event:
