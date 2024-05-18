@@ -130,7 +130,7 @@ def signup():
     username = form.username.data
     password = form.password.data
     confirmpassword = form.confirmpassword.data
-
+    #testing blueprint
     try:
         create_user(email, studentnumber, username, password, confirmpassword)
     except UserCreationError as e:
