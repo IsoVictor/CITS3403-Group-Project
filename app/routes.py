@@ -6,7 +6,7 @@ import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 from sqlalchemy import func
 from app.blueprints import main
-from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError
+from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, create_answer, get_answers, get_question, AnswerCreationError
 from datetime import datetime
 
 
@@ -171,16 +171,23 @@ def logout():
 @login_required
 def answer(question_id):
     form = answerForm()
-    answers = Answer.query.filter_by(question_id=question_id).all()
-    question = Question.query.filter_by(id=question_id).first()
+    answers = get_answers(question_id)
+    question = get_question(question_id)
+
+    if not question:
+        flash('Question not found', 'error')
+        return redirect(url_for('main.discussion'))
+
     if form.validate_on_submit():
-        answer = form.answer.data
-        new_answer = Answer(answer = answer, user_id = current_user.id, question_id = question_id, answerUsername = current_user.username)
-        db.session.add(new_answer)
-        db.session.commit()
-        return redirect(url_for('main.answer',question_id = question_id))
-        
-    return render_template('answering.html', question= question, answers = answers, form = form)
+        answer_text = form.answer.data
+        try:
+            create_answer(question_id, answer_text)
+            return redirect(url_for('main.answer', question_id=question_id))
+        except AnswerCreationError as e:
+            flash(str(e), 'error')
+            return redirect(url_for('main.discussion'))
+
+    return render_template('answering.html', question=question, answers=answers, form=form)
 
 
 @main.route('/profile', methods=['GET', 'POST'])
