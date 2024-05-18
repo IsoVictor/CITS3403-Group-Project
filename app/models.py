@@ -27,7 +27,6 @@ class User(db.Model, UserMixin):
     studentnumber = db.Column(db.String(10), index=True, unique=True) 
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    flashcard_sets = db.relationship('FlashcardSet', backref='user', lazy='dynamic')
     profilepic = db.Column(db.String(128), nullable=True)
     group_relations = db.relationship('UserGroupRelation', back_populates='user')
 
@@ -61,22 +60,10 @@ class StudyGroup(db.Model):
     date = db.Column(db.Date)
     user_relations = db.relationship("UserGroupRelation", back_populates='group')
     unit_code = db.Column(db.String(8), nullable=False)
-    
+
 
     def __repr__(self):
         return '<StudyGroup {}>'.format(self.group_id)
-
-class FlashcardSet(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    flashcards = db.relationship('Flashcard', backref='flashcard_set', lazy='dynamic')
-
-class Flashcard(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    question = db.Column(db.String(200), nullable=False)
-    answer = db.Column(db.String(200), nullable=False)
-    flashcard_set_id = db.Column(db.Integer, db.ForeignKey('flashcard_set.id'), nullable=False)
 
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -98,5 +85,10 @@ class Answer(db.Model):
 
     def __repr__(self):
         return '<Answer {}>'.format(self.id)
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.Date, nullable=False)
 
 

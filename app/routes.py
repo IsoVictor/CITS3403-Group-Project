@@ -1,9 +1,8 @@
-# routes.py
+
 from flask_login import UserMixin, current_user, login_required, logout_user
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
-from app.flashcard_routes import flashcard_bp
 from app.forms import ProfileUpdateForm
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
@@ -11,7 +10,11 @@ from sqlalchemy import func
 from datetime import datetime
 
 
-app.register_blueprint(flashcard_bp)
+
+class Question:
+    def __init__(self, question_id, question):
+        self.question_id = question_id
+        self.question = question
 
 # Home page route
 @app.route("/")
@@ -20,15 +23,59 @@ def index():
 
 # Calendar page route
 @app.route('/calendar')
+@login_required
 def calendar():
-    return render_template('calendar.html')
+    user_id = current_user.id
+    study_group_events = []
+    user_groups = UserGroupRelation.query.filter_by(user_id=user_id).all()
+    for user_group in user_groups:
+        study_group = StudyGroup.query.filter_by(group_id=user_group.group_id).first()
+        if study_group:
+            study_group_events.append({
+                'title': f"{study_group.unit_code} - {study_group.description}",
+                'start': study_group.date.isoformat(),
+                'extendedProps': {
+                    'location': study_group.location,
+                    'time': study_group.time.strftime("%H:%M")
+                }
+            })
+    return render_template('calendar.html', study_group_events=study_group_events)
+
+@app.route('/add-event', methods=['POST'])
+def add_event():
+    title = request.json['title']
+    date = request.json['date']
+    event = Event(title=title, date=date, user_id=current_user.id)
+    db.session.add(event)
+    db.session.commit()
+    return jsonify({'message': 'Event added successfully'})
+
+@app.route('/delete-event', methods=['POST'])
+def delete_event():
+    event_id = request.json['eventId']
+    event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
+    if event:
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify({'message': 'Event deleted successfully'})
+    return jsonify({'error': 'Event not found'})
+
+@app.route('/edit-event/<int:event_id>', methods=['PUT'])
+def edit_event(event_id):
+    event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
+    if event:
+        event.title = request.json['title']
+        event.date = request.json['date']
+        db.session.commit()
+        return jsonify({'message': 'Event updated successfully'})
+    return jsonify({'error': 'Event not found'})
 
 # discussion and answers page route
 @app.route('/discussion', methods=["GET","POST"])
 def discussion():
     form = questionForm()
     allquestions = Question.query.all()
-    
+
     if form.validate_on_submit():
         unit_code = form.unit_code.data
         question = form.question.data
@@ -165,9 +212,8 @@ def answer(question_id):
         db.session.add(new_answer)
         db.session.commit()
         return redirect(url_for('answer',question_id = question_id))
-        
-    return render_template('answering.html', question= question, answers = answers, form = form)
 
+    return render_template('answering.html', question= question, answers = answers, form = form)
 
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
