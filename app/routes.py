@@ -98,9 +98,9 @@ def study_groups():
     time = form.time.data
     description = form.description.data
 
-    if dateof < datetime.today().date():
-            flash('Date cannot be before the current date.', 'error')
-            return redirect(url_for('study_groups'))
+    if not dateof or dateof < datetime.today().date():
+            flash('Invalid date. Please select a valid date.', 'error')
+            return render_template('study-groups.html', form=form, allgroups=allgroups)
 
     #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
     max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
