@@ -183,97 +183,6 @@ button[type="submit"]:hover {
     color: red;
 }
 
-/* Flashcard-related styles */
-#flashcards {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.flashcard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 300px;
-    height: 200px;
-    margin: 20px auto;
-    perspective: 1000px;
-    cursor: pointer;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.flashcard-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
-
-.flashcard.flipped .flashcard-inner {
-    transform: rotateY(180deg);
-}
-
-.flashcard-front,
-.flashcard-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.flashcard-back {
-    transform: rotateY(180deg);
-}
-
-#flashcard-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-#create-flashcard {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#flashcard-form div {
-    margin-bottom: 10px;
-}
-
-#flashcard-form label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-#flashcard-form input[type="text"] {
-    width: 100%;
-    padding: 5px;
-    font-size: 16px;
-}
-
-#flashcard-form button[type="submit"] {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
 #prev-btn,
 #next-btn {
     padding: 10px 20px;
@@ -482,4 +391,23 @@ button[type="submit"]:hover {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.event-tooltip {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.event-tooltip h3 {
+    margin-top: 0;
 }
