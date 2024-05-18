@@ -1,12 +1,13 @@
 # routes.py
 from flask_login import UserMixin, current_user, login_required
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from app import app, db, login_manager, login_user
-from app.models import User, Post, StudyGroup, UserGroupRelation
+from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
 from app.forms import ProfileUpdateForm
 import os
-from app.forms import LoginForm, SignupForm, groupForm
+from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm
 from sqlalchemy import func
+
 
 
 class Question:
@@ -32,8 +33,10 @@ def calendar():
             study_group_events.append({
                 'title': f"{study_group.unit_code} - {study_group.description}",
                 'start': study_group.date.isoformat(),
-                'location': study_group.location,
-                'time': study_group.time.strftime("%H:%M")
+                'extendedProps': {
+                    'location': study_group.location,
+                    'time': study_group.time.strftime("%H:%M")
+                }
             })
     return render_template('calendar.html', study_group_events=study_group_events)
 
@@ -67,9 +70,22 @@ def edit_event(event_id):
     return jsonify({'error': 'Event not found'})
 
 # discussion and answers page route
-@app.route('/discussion')
+@app.route('/discussion', methods=["GET","POST"])
 def discussion():
-    return render_template('discussion.html')
+    form = questionForm()
+    allquestions = Question.query.all()
+
+    if form.validate_on_submit():
+        unit_code = form.unit_code.data
+        question = form.question.data
+        user_id = current_user.id
+
+        new_question = Question(unit_code = unit_code, question= question, user_id = user_id, posterUsername = current_user.username)
+        db.session.add(new_question)
+        db.session.commit()
+        return redirect(url_for('discussion'))
+
+    return render_template('discussion.html', form=form, allquestions=allquestions)
 
 # Study groups page route
 @app.route('/study-groups', methods=["GET",'POST'])
@@ -177,11 +193,19 @@ def logout():
 
 # User Answering route
 @app.route('/answer/<question_id>', methods=['GET','POST'])
+@login_required
 def answer(question_id):
-    if request.method == 'GET':
-        for question in allquestions:
-            if question.question_id == question_id:
-                return render_template('answering.html', c_question = question)
+    form = answerForm()
+    answers = Answer.query.filter_by(question_id=question_id).all()
+    question = Question.query.filter_by(id=question_id).first()
+    if form.validate_on_submit():
+        answer = form.answer.data
+        new_answer = Answer(answer = answer, user_id = current_user.id, question_id = question_id, answerUsername = current_user.username)
+        db.session.add(new_answer)
+        db.session.commit()
+        return redirect(url_for('answer',question_id = question_id))
+
+    return render_template('answering.html', question= question, answers = answers, form = form)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
