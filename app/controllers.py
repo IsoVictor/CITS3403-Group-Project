@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from app import db
-from app.models import StudyGroup, UserGroupRelation, User, Question, UserGroupRelation
+from app.models import StudyGroup, UserGroupRelation, User, Question, Answer
 from sqlalchemy import func
 from werkzeug.security import check_password_hash
 
@@ -20,6 +20,10 @@ def create_user(email, studentnumber, username, password, confirmpassword):
     existing_student = User.query.filter_by(studentnumber=studentnumber).first()
     if existing_student:
         raise UserCreationError('Student number is already registered!')
+
+    existing_student = User.query.filter_by(username = username).first()
+    if existing_student:
+        raise UserCreationError('Username already registered!')
 
     new_user = User(email=email, studentnumber=studentnumber, username=username)
     new_user.set_password(password)
@@ -53,6 +57,9 @@ def create_study_group(unit_code, location, dateof, time, description, user_id):
     if not dateof or dateof < datetime.today().date():
         raise StudyGroupCreationError('Invalid date. Please select a valid date.')
 
+    if len(unit_code) != 8:
+        raise StudyGroupCreationError('Invalid Unit Code.')
+
     # Handles the group_id assignment
     max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
     new_group_id = (max_group_id or 0) + 1
@@ -68,6 +75,9 @@ class DiscussionCreationError(Exception):
     pass
 
 def create_discussion(unit_code, question, user_id, poster_username):
+    if len(unit_code) != 8:
+        raise StudyGroupCreationError('Invalid Unit Code.')
+
     new_question = Question(unit_code=unit_code, question=question, user_id=user_id, poster_username=poster_username)
     db.session.add(new_question)
     db.session.commit()
@@ -82,3 +92,18 @@ def leave_group(user_id, group_id):
 
     db.session.delete(relation)
     db.session.commit()
+
+class AnswerCreationError(Exception):
+    pass
+
+def create_answer(answer_text, user_id, question_id, username):
+    if not answer_text:
+        raise AnswerCreationError('Answer cannot be empty')
+    new_answer = Answer(answer=answer_text, user_id=user_id, question_id=question_id, answerUsername=username)
+    db.session.add(new_answer)
+    db.session.commit()
+
+def get_question_and_answers(question_id):
+    question = Question.query.filter_by(id=question_id).first()
+    answers = Answer.query.filter_by(question_id=question_id).all()
+    return question, answers

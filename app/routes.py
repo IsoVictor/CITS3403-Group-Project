@@ -6,7 +6,7 @@ import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 from sqlalchemy import func
 from app.blueprints import main
-from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError
+from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, AnswerCreationError, create_answer, get_question_and_answers
 from datetime import datetime
 
 
@@ -167,20 +167,26 @@ def logout():
 
 
 # User Answering route
-@main.route('/answer/<question_id>', methods=['GET','POST'])
+@main.route('/answer/<question_id>', methods=['GET', 'POST'])
 @login_required
 def answer(question_id):
     form = answerForm()
-    answers = Answer.query.filter_by(question_id=question_id).all()
-    question = Question.query.filter_by(id=question_id).first()
-    if form.validate_on_submit():
-        answer = form.answer.data
-        new_answer = Answer(answer = answer, user_id = current_user.id, question_id = question_id, answerUsername = current_user.username)
-        db.session.add(new_answer)
-        db.session.commit()
-        return redirect(url_for('main.answer',question_id = question_id))
+    question, answers = get_question_and_answers(question_id)
+    
+    if not form.validate_on_submit():
+        if form.errors:
+            for error_field, error_messages in form.errors.items():
+                for error in error_messages:
+                    flash(f"{error_field}: {error}", 'error')
+    else:
+        answer_text = form.answer.data
+        try:
+            create_answer(answer_text, current_user.id, question_id, current_user.username)
+            return redirect(url_for('main.answer', question_id=question_id))
+        except AnswerCreationError as e:
+            flash(str(e), 'error')
         
-    return render_template('answering.html', question= question, answers = answers, form = form)
+    return render_template('answering.html', question=question, answers=answers, form=form)
 
 
 @main.route('/profile', methods=['GET', 'POST'])
