@@ -231,3 +231,15 @@ def joingroup(group_id):
         flash('You have successfully joined the group!', 'success')
         return redirect(url_for('study_groups'))
                 
+# Leave Group route
+@app.route('/leavegroup/<group_id>', methods=['POST'])
+@login_required
+def leavegroup(group_id):
+    relation = UserGroupRelation.query.filter_by(group_id=group_id, user_id=current_user.id).first()
+    if relation:
+        db.session.delete(relation)
+        db.session.commit()
+        flash('You have successfully left the group!', 'success')
+    else:
+        flash('You are not a member of this group!', 'error')
+    return redirect(url_for('study_groups'))
