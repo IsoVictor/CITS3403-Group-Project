@@ -104,6 +104,7 @@ footer {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    margin-bottom: 5px;
 }
 
 .signupForm div, .loginForm div, .groupForm div, .questionForm div{
@@ -155,6 +156,19 @@ footer {
     
     
 }
+.returnBtn{
+    margin: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    width: 95%;
+    margin-left: 15px;
+}
+
 .signupForm input[type='submit']:hover,
 .loginForm input[type='submit']:hover,
 .groupForm input[type='submit']:hover {
@@ -197,6 +211,18 @@ button[type="submit"]:hover {
 .study_groups,
 .questions{
     list-style-type: none;
+    padding: 0; /* Remove default padding */
+    justify-content: center; /* Center items horizontally */
+
+}
+
+.studentMembers {
+    justify-content: center  !important;
+    border: 1px solid black !important; /* Set border thickness */
+    padding: 5px !important; /* Adjust padding to your preference */
+    margin: 5px 0 !important; /* Add some margin between each student member */
+    
+    align-items: center !important;
 }
 
 .study_groups li,
@@ -216,7 +242,9 @@ button[type="submit"]:hover {
 }
 
 .filter input[type="text"] {
-    height: 20px; 
+    height: 30px;
+    border-radius: 5px;
+ 
 }
 
 .filter button{
@@ -247,6 +275,11 @@ button[type="submit"]:hover {
     align-items: center;
     justify-content: space-between;
     display: flex;
+}
+
+.group-info span {
+    display: block; /* Make each span element appear on a new line */
+    margin-bottom: 5px; /* Add some space between each span element */
 }
 
 .answers li div {
@@ -352,6 +385,12 @@ button[type="submit"]:hover {
     height:min-content;
 }
 
+.error {
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 /* CSS For Calendar*/
 
 #calendar {
@@ -411,3 +450,4 @@ button[type="submit"]:hover {
 .event-tooltip h3 {
     margin-top: 0;
 }
+

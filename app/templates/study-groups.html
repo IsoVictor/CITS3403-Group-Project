@@ -1,61 +1,75 @@
 {% extends "base.html" %}
 
 {% block title %}Discussion Forum - Study Forum{% endblock %}
-{% block extra_head %} <script src="../static/studygroup.js"></script> {% endblock %}
+{% block extra_head %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/styles.css">
+<script src="../static/studygroup.js" defer></script> {% endblock %}
 
 {% block content %}
-<div style='text-align: center;'>
-    <h2> Make a Study Group!</h2>
-</div>
-<main>
-    <form action='{{url_for("study_groups")}}' method="POST" class="groupForm">
-        {{form.hidden_tag()}}
+    {% if 'username' in session %}
+    <div  style = 'text-align: center;'>
+        <h2 style ='font-weight: bold; text-decoration: underline;'> Make a Study Group!</h2>
+    </div>
+    <div class= 'container'>
+        <ul id="errorList" style="color: red; list-style-type: none;"></ul>
+    </div>
+    <form action="{{url_for('study_groups')}}" method="POST" class="groupForm">
+        {{ form.hidden_tag() }}
         <div>
             {{ form.unit_code.label }}
-            {{ form.unit_code }}
+            {{ form.unit_code}}
+            <br>
         </div>
         <div>
             {{ form.location.label }}
-            {{ form.location }}
+            {{ form.location}}
+            <br>
         </div>
         <div>
             {{ form.dateof.label }}
-            {{ form.dateof }}
+            {{ form.dateof}}
+            <br>
         </div>
         <div>
             {{ form.time.label }}
-            {{ form.time }}
+            {{ form.time}}
+            <br>
         </div>
         <div>
             {{ form.description.label }}
-            {{ form.description }}
+            {{ form.description}}
+            <br>
         </div>
-        <br>
-        <input type='submit' value="Create Study Group">
+        {{ form.submit(class="btn btn-primary", id="submitBtn") }}
     </form>
-</main>
-<div style='text-align: center;'>
-    <h2> Look for a Group!</h2>
-</div>
-<main>
-    <section id="study-groups" class='filter'>
-        <label for="unit_code">Enter Unit Code:</label>
-        <input type="text" id="filter_code">
-        <button id="filterButton">Filter</button>
-    </section>
-    <p id='warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
+    <br>
+    {% endif %}
+    <div  style = 'text-align: center;'>
+        <h2 style ='font-weight: bold; text-decoration: underline;'> Look for a Group!</h2>
+    </div>
 
+    <div id="study-groups" class="filter">
+        <label for="filter_code">Enter Unit Code:</label>
+        <input type="text" id="filter_code">
+        <br>
+        <label for="keywords">Enter Keywords:</label>
+        <input type="text" id="keywords">
+        <br>
+        <button id="filterButton">Filter</button>
+    </div>
+    <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
+    
     <ul class="study_groups" id="study_groups">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-        {% for message in messages %}
-        <div class="flash-message"
-            style="font-size: larger; font-weight: bold; text-decoration: underline; color: red;">{{ message }}</div>
-        {% endfor %}
+            {% for message in messages %}
+                <div class="flash-message"  style="font-size: larger; font-weight: bold; text-decoration: underline; color: red;">{{ message }}</div>
+            {% endfor %}
         {% endif %}
-        {% endwith %}
+    {% endwith %}
         {% for group in allgroups %}
-        <li class="group-item" data-unit-code='{{ group.unit_code }}' group-id='{{ group.group_id }}'>
+        <li class="group-item" data-unit-code='{{ group.unit_code }}' data-group-id='{{ group.group_id }}' data-description="{{group.description}}">
             <div class="group-details">
                 <div class="group-info">
                     <span>{{ group.group_id }}</span>
@@ -67,25 +81,19 @@
                 <div class="group-description">
                     <p>Description: {{ group.description }}</p>
                     <p>Members:</p>
-                    <ul>
-                        {% for relation in group.user_relations %}
-                            <li>{{ relation.user.username }}</li>
-                        {% endfor %}
+                    <ul style="align-items: center;">
+                    {% for relation in group.user_relations %}
+                        <li class="studentMembers">{{ relation.user.username }}</li>
+                    {% endfor %}
                     </ul>
-                    <a href="{{ url_for('joingroup', group_id=group.group_id) }}">
-                        <button class='join-button'>Join Group</button>
-                    </a>
+                    <a href="{{ url_for('joingroup', group_id=group.group_id) }}" class='btn btn-primary join-button'>Join Group</a>
+                    <br>
                     <form action="{{ url_for('leavegroup', group_id=group.group_id) }}" method="POST" style="display: inline;">
                         <button type="submit" class="leave-button">Leave Group</button>
                     </form>
-                </div>                
+                </div>
             </div>
         </li>
         {% endfor %}
     </ul>
-
-</main>
-
-
-</body>
 {% endblock %}
