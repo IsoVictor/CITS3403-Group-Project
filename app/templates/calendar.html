@@ -1,15 +1,8 @@
 {% extends "base.html" %}
 
 {% block title %}Discussion Forum - Study Forum{% endblock %}
-{% block extra_head %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="../static/styles.css">
-<script> var studyGroupEvents = {{ study_group_events|safe }}; </script>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
-<script src="../static/calendar.js"></script>{% endblock %}
 
 {% block content %}
-    
 <div id="calendar"></div>
 <div id="event-modal" class="modal">
     <div class="modal-content">
@@ -18,5 +11,12 @@
         <div id="event-details"></div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_scripts %}
+<script> var studyGroupEvents = {{ study_group_events|safe }}; </script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+<script src="../static/calendar.js"></script>
 {% endblock %}
