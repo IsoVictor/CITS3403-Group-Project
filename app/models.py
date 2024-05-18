@@ -27,7 +27,6 @@ class User(db.Model, UserMixin):
     studentnumber = db.Column(db.String(10), index=True, unique=True) 
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    flashcard_sets = db.relationship('FlashcardSet', backref='user', lazy='dynamic')
     profilepic = db.Column(db.String(128), nullable=True)
     group_relations = db.relationship('UserGroupRelation', back_populates='user')
 
