@@ -38,7 +38,7 @@ To launch this Flask application, follow these steps:
 - **Specify the environment and debug mode:**
   ```bash
   export FLASK_APP=run.py      # On Windows use `set FLASK_APP=run.py`
-  export SECRET_KEY='3403'
+  export SECRET_KEY='your_secret_key'
 
 ### 4. Initialise Database with Test data
 - **Optional but you can import test data in the shell**
