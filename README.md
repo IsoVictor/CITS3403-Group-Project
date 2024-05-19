@@ -7,12 +7,12 @@ Welcome to the Study Forum App! This Flask application helps users organize and 
 
 # Group Information
 
-| UWA ID       | Name              | GitHub Username |
-|--------------|-------------------|-----------------|
-| 23380426     | Victor Iso        | IsoVictor       |
-| 23358213     | Rohnan Klifunis   | RohnanK         |
-| 23374296     | Jason Nguyen      | Jasonnguyxn     |
-| 23043141     | Nguyen Le Cam Anh | ann250902       |
+| UWA ID       | Name              | GitHub Username         |
+|--------------|-------------------|-------------------------|
+| 23380426     | Victor Iso        | IsoVictor               |
+| 23358213     | Rohnan Klifunis   | RohnanK/Rohnan Klifunis |
+| 23374296     | Jason Nguyen      | Jasonnguyxn             |
+| 23043141     | Nguyen Le Cam Anh | ann250902               |
 
 ## Launch Guide
 
