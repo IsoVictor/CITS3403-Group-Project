@@ -58,7 +58,7 @@ To launch this Flask application, follow these steps:
   ```bash
   python -m unittest Tests/unit.py
 
-### 2. Selinium Tests
+### 2. Selenium Tests
 - **To run the selinium tests for our code:**
   ```bash
-  python -m unittest Tests/selinium.py
+  python -m unittest Tests/selenium.py
