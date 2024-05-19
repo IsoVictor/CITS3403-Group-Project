@@ -1,13 +1,14 @@
-
-from flask_login import UserMixin, current_user, login_required, logout_user
+# routes.py
+from flask_login import UserMixin, current_user, login_required
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from werkzeug.utils import secure_filename
 from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
-from app.forms import ProfileUpdateForm
+from app.flashcard_routes import flashcard_bp
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
-from sqlalchemy import func
-from datetime import datetime
+import secrets
+from PIL import Image
 
 
 # Home page route
@@ -207,35 +208,58 @@ def answer(question_id):
         db.session.commit()
         return redirect(url_for('answer',question_id = question_id))
 
-    return render_template('answering.html', question= question, answers = answers, form = form)
-
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/profile', methods=['GET'])
 @login_required
 def profile():
     form = ProfileUpdateForm()
-
-    if form.validate_on_submit():
-        # Update user data with form data
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        current_user.studentnumber = form.studentnumber.data
-        # Save profile picture if uploaded
-        if profile_pic:
-            filename = secure_filename(profile_pic.filename)
-            photos.save(profile_pic, name=filename)
-            user.profile_pic = filename
-        # Commit changes to the database
-        db.session.commit()
-        flash('Profile updated successfully!', 'success')
-        return redirect(url_for('profile'))
-
-    # Pre-populate form fields with current user data
-    form.username.data = current_user.username
-    form.email.data = current_user.email
-    form.studentnumber.data = current_user.studentnumber
-
-    return render_template('user-profile.html', form=form, user=current_user)
+    profilepic = url_for('static', filename='profile_pics/' + current_user.profilepic)
     
+    return render_template('user-profile.html', form=form, profilepic=profilepic, user=current_user)
+
+@app.route('/update_profile', methods=['POST'])
+@login_required
+def update_profile():
+    form = ProfileUpdateForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.firstname = form.firstname.data
+        current_user.lastname = form.lastname.data
+        current_user.email = form.email.data
+        if form.picture.data:
+            picture_file = upload_profile_picture(form.picture.data)
+            current_user.profilepic = picture_file
+
+        db.session.commit()
+                # Return JSON indicating success
+        return jsonify({'success': True,
+                        'firstname': current_user.firstname,
+                        'lastname': current_user.lastname,
+                        'email': current_user.email,
+                        'username': current_user.username})
+    else:
+        # Return JSON indicating failure and errors
+        errors = form.errors
+        return jsonify({'success': False,
+                        'errors': errors})
+
+@app.route('/upload_profile_picture', methods=['POST'])
+@login_required
+def upload_profile_picture():
+    picture_file = request.files['profile_picture']
+    if picture_file:
+        random_hex = secrets.token_hex(8)
+        _, f_ext = os.path.splitext(picture_file.filename)
+        picture_fn = random_hex + f_ext
+        picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+
+        output_size = (125, 125)
+        i = Image.open(picture_file)
+        i.thumbnail(output_size)
+        i.save(picture_path)
+        current_user.profilepic = picture_fn
+        db.session.commit()
+        return redirect(url_for('profile'))
+    return 'No file provided', 400
 #Joining Group route
 @app.route('/joingroup/<group_id>', methods=['GET'])
 @login_required
