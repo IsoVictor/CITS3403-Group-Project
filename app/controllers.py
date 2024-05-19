@@ -21,6 +21,10 @@ def create_user(email, studentnumber, username, password, confirmpassword):
     if existing_student:
         raise UserCreationError('Student number is already registered!')
 
+    existing_student = User.query.filter_by(username = username).first()
+    if existing_student:
+        raise UserCreationError('Username already registered!')
+
     new_user = User(email=email, studentnumber=studentnumber, username=username)
     new_user.set_password(password)
     db.session.add(new_user)
@@ -53,6 +57,9 @@ def create_study_group(unit_code, location, dateof, time, description, user_id):
     if not dateof or dateof < datetime.today().date():
         raise StudyGroupCreationError('Invalid date. Please select a valid date.')
 
+    if len(unit_code) != 8:
+        raise StudyGroupCreationError('Invalid Unit Code.')
+
     # Handles the group_id assignment
     max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
     new_group_id = (max_group_id or 0) + 1
@@ -68,6 +75,9 @@ class DiscussionCreationError(Exception):
     pass
 
 def create_discussion(unit_code, question, user_id, poster_username):
+    if len(unit_code) != 8:
+        raise StudyGroupCreationError('Invalid Unit Code.')
+
     new_question = Question(unit_code=unit_code, question=question, user_id=user_id, poster_username=poster_username)
     db.session.add(new_question)
     db.session.commit()
