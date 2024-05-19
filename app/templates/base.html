@@ -16,17 +16,22 @@
         <h1>Study Forum</h1>
         <nav>
             <ul class="navList">
-                <li><a href="{{ url_for('index') }}">Home page</a></li>
-                <li><a href="{{ url_for('discussion') }}">Discussion Forum</a></li>
-                <li><a href="{{url_for('calendar')}}">Calendar</a></li>
-                <li><a href="{{ url_for('study_groups') }}">Study Groups</a></li>
+                <li><a href="{{ url_for('main.index') }}">Home page</a></li>
+                <li><a href="{{ url_for('main.discussion') }}">Discussion Forum</a></li>
+                <li><a href="{{url_for('main.calendar')}}">Calendar</a></li>
+                <li><a href="{{ url_for('main.study_groups') }}">Study Groups</a></li>
                 <li>
                     {% if 'username' in session %}
+<<<<<<< HEAD
                         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                         <li><a href="{{ url_for ('profile')}}" id="greeting"> Hello, {{ session['username']}}</a></li>
+=======
+                        <li><a href="{{ url_for('main.logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for ('main.profile')}}" id="greeting"> Hello, {{ session['username']}}</a></li>
+>>>>>>> d9c036fa24a373590e41a01b2e56f700a97145fd
                     {% else %}
-                        <li><a href="{{ url_for('login') }}">Log In</a></li>
-                        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                        <li><a href="{{ url_for('main.login') }}">Log In</a></li>
+                        <li><a href="{{ url_for('main.signup') }}">Sign Up</a></li>
                     {% endif %}
             </ul>
         </nav>

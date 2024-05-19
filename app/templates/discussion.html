@@ -16,7 +16,7 @@
         <div class= 'container'>
             <ul id="errorList"></ul>
         </div>
-        <form action="{{url_for('discussion')}}" method="POST" class = "questionForm">
+        <form action="{{url_for('main.discussion')}}" method="POST" class = "questionForm">
             {{ form.hidden_tag() }}
             <div>
                 {{ form.unit_code.label }}
@@ -55,7 +55,7 @@
                     </div>
                     <div class="question-description">
                         <p>Question: {{ question.question }}</p>
-                        <a href="{{ url_for('answer', question_id=question.id) }}" class='btn btn-primary ansButton'>Answer Question</a>
+                        <a href="{{ url_for('main.answer', question_id=question.id) }}" class='btn btn-primary ansButton'>Answer Question</a>
                     </div>
                 </div>
             </li>

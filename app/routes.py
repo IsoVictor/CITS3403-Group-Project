@@ -1,23 +1,24 @@
 # routes.py
-from flask_login import UserMixin, current_user, login_required, logout_user
+from flask_login import UserMixin, current_user, login_required, login_user, logout_user
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from werkzeug.utils import secure_filename
-from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
-import secrets
+from sqlalchemy import func
 from PIL import Image
+from app.blueprints import main
+from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, AnswerCreationError, create_answer, get_question_and_answers
+import secrets
 from datetime import datetime
 from sqlalchemy import func
 
 # Home page route
-@app.route("/")
+@main.route("/")
 def index():
     return render_template('index.html')
 
 # Calendar page route
-@app.route('/calendar')
+@main.route('/calendar')
 @login_required
 def calendar():
     user_id = current_user.id
@@ -36,7 +37,7 @@ def calendar():
             })
     return render_template('calendar.html', study_group_events=study_group_events)
 
-@app.route('/add-event', methods=['POST'])
+@main.route('/add-event', methods=['POST'])
 def add_event():
     title = request.json['title']
     date = request.json['date']
@@ -45,7 +46,7 @@ def add_event():
     db.session.commit()
     return jsonify({'message': 'Event added successfully'})
 
-@app.route('/delete-event', methods=['POST'])
+@main.route('/delete-event', methods=['POST'])
 def delete_event():
     event_id = request.json['eventId']
     event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
@@ -55,7 +56,7 @@ def delete_event():
         return jsonify({'message': 'Event deleted successfully'})
     return jsonify({'error': 'Event not found'})
 
-@app.route('/edit-event/<int:event_id>', methods=['PUT'])
+@main.route('/edit-event/<int:event_id>', methods=['PUT'])
 def edit_event(event_id):
     event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
     if event:
@@ -65,151 +66,132 @@ def edit_event(event_id):
         return jsonify({'message': 'Event updated successfully'})
     return jsonify({'error': 'Event not found'})
 
-# discussion and answers page route
-@app.route('/discussion', methods=["GET","POST"])
+@main.route('/discussion', methods=["GET", "POST"])
 def discussion():
     form = questionForm()
     allquestions = Question.query.all()
-
-    if form.validate_on_submit():
+    
+    if request.method == "POST" and form.validate_on_submit():
         unit_code = form.unit_code.data
         question = form.question.data
         user_id = current_user.id
 
-        new_question = Question(unit_code = unit_code, question= question, user_id = user_id, posterUsername = current_user.username)
-        db.session.add(new_question)
-        db.session.commit()
-        return redirect(url_for('discussion'))
+        try:
+            create_discussion(unit_code, question, user_id, current_user.username)
+            flash('Discussion created successfully!', 'success')
+            return redirect(url_for('main.discussion'))
+        except DiscussionCreationError as e:
+            flash(str(e), 'error')
 
     return render_template('discussion.html', form=form, allquestions=allquestions)
 
-# Study groups page route
-@app.route('/study-groups', methods=["GET",'POST'])
+
+
+@main.route('/study-groups', methods=["GET", 'POST'])
 def study_groups():
     form = groupForm()
     allgroups = StudyGroup.query.all()
 
-    if form.validate_on_submit():
+    if request.method == 'POST':
+        if not form.validate_on_submit():
+            flash('Please fill out the form correctly.', 'error')
+            return render_template('study-groups.html', form=form, allgroups=allgroups)
+
         unit_code = form.unit_code.data
         location = form.location.data
         dateof = form.dateof.data
         time = form.time.data
         description = form.description.data
 
-        # Check if dateof is before the current date
-        if dateof < datetime.today().date():
-            flash('Date cannot be before the current date.', 'error')
-            return redirect(url_for('study_groups'))
+        try:
+            create_study_group(unit_code, location, dateof, time, description, current_user.id)
+            flash('Group created successfully!', 'success')
+            return redirect(url_for('main.study_groups'))
+        except StudyGroupCreationError as e:
+            flash(str(e), 'error')
 
-        #handles the group_id assignment since automatic handling via SQL_Alchemy wasn't working returning not NULL error
-        max_group_id = db.session.query(func.max(StudyGroup.group_id)).scalar()
-        new_group_id = (max_group_id or 0) + 1
-        
-        new_group = StudyGroup(group_id=new_group_id, unit_code=unit_code, location=location, date=dateof, time=time, description=description)
-        new_relation = UserGroupRelation(user_id=current_user.id, group_id=new_group_id)
-        
-        db.session.add(new_relation)
-        db.session.add(new_group)
-        db.session.commit()
-        
-        flash('Group created successfully!', 'success')
-        return redirect(url_for('study_groups'))
-    
-    return render_template('study-groups.html', form = form, allgroups = allgroups)
+    return render_template('study-groups.html', form=form, allgroups=allgroups)
 
-# User registration route
-@app.route('/signup', methods=['GET', 'POST'])
+
+@main.route('/signup', methods=['GET', 'POST'])
 def signup():
-    form = SignupForm()  # Create an instance of the SignupForm
+    form = SignupForm()
 
-    if form.validate_on_submit():  # Check if the form is submitted and valid
-        email = form.email.data
-        studentnumber = form.studentnumber.data
-        username = form.username.data
-        password = form.password.data
-        confirmpassword = form.confirmpassword.data
-        
-        # Check if passwords match
-        if password != confirmpassword:
-            flash('Passwords do not match!', 'error')
-            return redirect(url_for('signup'))
-        
-        # Check if email is already registered
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            flash('Email is already registered!', 'error')
-            return redirect(url_for('signup'))
-        
-        # Check if student number is already registered
-        existing_student = User.query.filter_by(studentnumber=studentnumber).first()
-        if existing_student:
-            flash('Student number is already registered!', 'error')
-            return redirect(url_for('signup'))
-        
-        # Create new user
-        new_user = User(email=email, studentnumber=studentnumber, username=username)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
-        
-        flash('Account created successfully!', 'success')
-        return redirect(url_for('login'))
-    
-    return render_template('signup.html', form=form)  # Pass the form to the template
+    if not form.validate_on_submit():
+        return render_template('signup.html', form=form)
+
+    email = form.email.data
+    studentnumber = form.studentnumber.data
+    username = form.username.data
+    password = form.password.data
+    confirmpassword = form.confirmpassword.data
+    #testing blueprint
+    try:
+        create_user(email, studentnumber, username, password, confirmpassword)
+    except UserCreationError as e:
+        flash(str(e), 'error')
+        return redirect(url_for('main.signup'))
+
+    flash('Account created successfully!', 'success')
+    return redirect(url_for('main.login'))
+      # Pass the form to the template
 
 
-# User login route
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        user = User.query.filter_by(username=username).first()
-        if not user:
-            flash(f'No account found with username {username}', 'error')
-            return redirect(url_for('login'))
-        
-        password = form.password.data
-        if not user.check_password(password):
-            flash(f'Invalid password. Please try again.', 'error')
-            return redirect(url_for('login'))
-        
-        session['username'] = user.username
-        
-        login_user(user)
-        return redirect(url_for('index'))
+    if not form.validate_on_submit():
+        return  render_template('login.html', form=form)
     
-    return render_template('login.html', form=form)
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+    username = form.username.data
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash(f'No account found with username {username}', 'error')
+        return redirect(url_for('main.login'))
+        
+    password = form.password.data
+    if not user.check_password(password):
+        flash(f'Invalid password. Please try again.', 'error')
+        return redirect(url_for('main.login'))
+        
+    session['username'] = user.username
+        
+    login_user(user)
+    return redirect(url_for('main.index'))
 
 # User logout route
-@app.route('/logout')
+@main.route('/logout')
 def logout():
     logout_user()
     session.clear()
     flash('You have been logged out.')
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
 # User Answering route
-@app.route('/answer/<question_id>', methods=['GET','POST'])
+@main.route('/answer/<question_id>', methods=['GET', 'POST'])
 @login_required
 def answer(question_id):
     form = answerForm()
-    answers = Answer.query.filter_by(question_id=question_id).all()
-    question = Question.query.filter_by(id=question_id).first()
-    if form.validate_on_submit():
-        answer = form.answer.data
-        new_answer = Answer(answer = answer, user_id = current_user.id, question_id = question_id, answerUsername = current_user.username)
-        db.session.add(new_answer)
-        db.session.commit()
-        return redirect(url_for('answer',question_id = question_id))
-    return render_template('answering.html', question= question, answers = answers, form = form)
+    question, answers = get_question_and_answers(question_id)
+    
+    if not form.validate_on_submit():
+        if form.errors:
+            for error_field, error_messages in form.errors.items():
+                for error in error_messages:
+                    flash(f"{error_field}: {error}", 'error')
+    else:
+        answer_text = form.answer.data
+        try:
+            create_answer(answer_text, current_user.id, question_id, current_user.username)
+            return redirect(url_for('main.answer', question_id=question_id))
+        except AnswerCreationError as e:
+            flash(str(e), 'error')
+        
+    return render_template('answering.html', question=question, answers=answers, form=form)
 
-@app.route('/profile', methods=['GET'])
+
+@main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     form = ProfileUpdateForm()
@@ -244,7 +226,7 @@ def update_profile():
         return jsonify({'success': False,
                         'errors': errors})
 
-@app.route('/upload_profile_picture', methods=['POST'])
+@main.route('/upload_profile_picture', methods=['POST'])
 @login_required
 def upload_profile_picture():
     picture_file = request.files['profile_picture']
@@ -260,36 +242,29 @@ def upload_profile_picture():
         i.save(picture_path)
         current_user.profilepic = picture_fn
         db.session.commit()
-        return redirect(url_for('profile'))
+        return redirect(url_for('main.profile'))
     return 'No file provided', 400
 
 #Joining Group route
-@app.route('/joingroup/<group_id>', methods=['GET'])
+@main.route('/joingroup/<group_id>', methods=['GET'])
 @login_required
 def joingroup(group_id):
-    existing_relation = UserGroupRelation.query.filter_by(group_id=group_id, user_id=current_user.id).first()
-    if request.method == 'GET':
-        if existing_relation:
-            flash('You are already in this group', 'error')
-            return redirect(url_for('study_groups'))
-            
-        new_relation = UserGroupRelation()
-        new_relation.user_id = current_user.id
-        new_relation.group_id = group_id
-        db.session.add(new_relation)
-        db.session.commit()
+    try:
+        join_group(current_user.id, group_id)
         flash('You have successfully joined the group!', 'success')
-        return redirect(url_for('study_groups'))
+    except GroupJoiningError as e:
+        flash(str(e), 'error')
+
+    return redirect(url_for('main.study_groups'))
                 
-# Leave Group route
-@app.route('/leavegroup/<group_id>', methods=['POST'])
+
+@main.route('/leavegroup/<group_id>', methods=['POST'])
 @login_required
 def leavegroup(group_id):
-    relation = UserGroupRelation.query.filter_by(group_id=group_id, user_id=current_user.id).first()
-    if relation:
-        db.session.delete(relation)
-        db.session.commit()
+    try:
+        leave_group(current_user.id, group_id)
         flash('You have successfully left the group!', 'success')
-    else:
-        flash('You are not a member of this group!', 'error')
-    return redirect(url_for('study_groups'))
+    except GroupLeavingError as e:
+        flash(str(e), 'error')
+
+    return redirect(url_for('main.study_groups'))
