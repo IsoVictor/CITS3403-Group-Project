@@ -1,4 +1,5 @@
 # models.py
+
 from datetime import datetime
 from app import db
 from flask_login import UserMixin
@@ -6,30 +7,33 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from app import login_manager
 
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 class UserGroupRelation(db.Model):
-     __tablename__ = 'user_group_relation'
-     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True) 
-     group_id = db.Column(db.Integer, db.ForeignKey('study_group.group_id'), primary_key=True)
-     user = db.relationship("User", back_populates="group_relations", foreign_keys=[user_id]) 
-     group = db.relationship("StudyGroup", back_populates="user_relations", foreign_keys=[group_id])
-
+    """
+    Represents the relationship between a user and a study group.
+    """
+    __tablename__ = 'user_group_relation'
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey('study_group.group_id'), primary_key=True)
+    user = db.relationship("User", back_populates="group_relations", foreign_keys=[user_id])
+    group = db.relationship("StudyGroup", back_populates="user_relations", foreign_keys=[group_id])
 
 class User(db.Model, UserMixin):
+    """
+    Represents a user in the system.
+    """
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     firstname = db.Column(db.String(64), nullable=True)
     lastname = db.Column(db.String(64), nullable=True)
     email = db.Column(db.String(120), index=True, unique=True)
-    studentnumber = db.Column(db.String(10), index=True, unique=True) 
+    studentnumber = db.Column(db.String(10), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    profilepic = db.Column(db.String(128), default = 'default_profile.png')
+    profilepic = db.Column(db.String(128), default='default_profile.png')
     group_relations = db.relationship('UserGroupRelation', back_populates='user')
 
     def __repr__(self):
@@ -40,11 +44,14 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def is_active(self):
         return self.active
 
 class Post(db.Model):
+    """
+    Represents a post made by a user.
+    """
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -55,6 +62,9 @@ class Post(db.Model):
         return '<Post {}>'.format(self.body)
 
 class StudyGroup(db.Model):
+    """
+    Represents a study group.
+    """
     group_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200))
@@ -63,11 +73,13 @@ class StudyGroup(db.Model):
     user_relations = db.relationship("UserGroupRelation", back_populates='group')
     unit_code = db.Column(db.String(8), nullable=False)
 
-
     def __repr__(self):
         return '<StudyGroup {}>'.format(self.group_id)
 
 class Question(db.Model):
+    """
+    Represents a question posted by a user.
+    """
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(200), nullable=False)
     unit_code = db.Column(db.String(8), nullable=False)
@@ -79,8 +91,11 @@ class Question(db.Model):
         return '<Question {}>'.format(self.id)
 
 class Answer(db.Model):
+    """
+    Represents an answer to a question.
+    """
     id = db.Column(db.Integer, primary_key=True)
-    answer = db.Column(db.Text, nullable=False)  # No limit
+    answer = db.Column(db.Text, nullable=False) # No limit
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
     answerUsername = db.Column(db.String(100), nullable=False)
