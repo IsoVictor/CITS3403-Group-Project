@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, TimeField, TextAreaField
-from wtforms.validators import DataRequired, Length
-from flask_wtf.file import FileField
+from wtforms import StringField, PasswordField, SubmitField, DateField, TimeField, TextAreaField, FileField
+from wtforms.validators import DataRequired, Length, Email
+from flask_wtf.file import FileField, FileAllowed
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), Length(min=3, max=50)])
@@ -17,13 +17,18 @@ class SignupForm(FlaskForm):
     confirmpassword = PasswordField("Confirm Password", validators=[DataRequired()])
     submit = SubmitField("Create Account")
 
+
+
 class ProfileUpdateForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=50)])
-    email = StringField('Email', validators=[DataRequired()])
-    studentnumber = StringField('Student Number', validators=[DataRequired()])
-    bio = TextAreaField('Bio')
-    profile_picture = FileField('Profile Picture')
-    submit = SubmitField("Update Profile")
+    username = StringField('Username', validators=[ Length(min=2, max=64)])
+    firstname = StringField('First Name', validators=[ Length(min=2, max=64)])
+    lastname = StringField('Last Name', validators=[ Length(min=2, max=64)])
+    username = StringField('Username', validators=[ Length(min=2, max=64)])
+    email = StringField('Email', validators=[ Email()])
+    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    submit = SubmitField('Update')
+    
+
 
 class groupForm(FlaskForm):
     unit_code = StringField("Unit Code", validators=[DataRequired(), Length(min = 8, max = 8)])
