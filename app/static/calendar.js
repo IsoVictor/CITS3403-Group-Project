@@ -2,9 +2,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        events: studyGroupEvents,
+        events: function (fetchInfo, successCallback, failureCallback) {
+            fetch('/api/study-group-events')
+                .then(response => response.json())
+                .then(data => {
+                    successCallback(data);
+                })
+                .catch(error => {
+                    failureCallback(error);
+                });
+        },
         dateClick: function (info) {
-            // Redirect to the study groups page when a date is clicked
             window.location.href = "/study-groups";
         },
         eventClick: function (info) {
