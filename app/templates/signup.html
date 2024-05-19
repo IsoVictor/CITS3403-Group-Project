@@ -16,7 +16,7 @@
 
 <h2>Sign up</h2>
 <p>Create an account to find your study group!</p>
-<form action="{{ url_for('signup') }}" method="POST" class="signupForm">
+<form action="{{ url_for('main.signup') }}" method="POST" class="signupForm">
     {{ form.hidden_tag() }}
     <div>
         {{ form.email.label }}
@@ -56,6 +56,6 @@
     <input type="submit" value="Create Account">
 </form>
 <br>
-<a href="{{ url_for('login') }}">Already have an account?</a>
+<a href="{{ url_for('main.login') }}">Already have an account?</a>
 
 {% endblock %}

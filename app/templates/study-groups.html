@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Discussion Forum - Study Forum{% endblock %}
+{% block title %}Study Groups{% endblock %}
 {% block extra_head %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="../static/styles.css">
@@ -14,7 +14,7 @@
     <div class= 'container'>
         <ul id="errorList"></ul>
     </div>
-    <form action="{{url_for('study_groups')}}" method="POST" class="groupForm">
+    <form action="{{url_for('main.study_groups')}}" method="POST" class="groupForm">
         {{ form.hidden_tag() }}
         <div>
             {{ form.unit_code.label }}
@@ -86,9 +86,9 @@
                         <li class="studentMembers">{{ relation.user.username }}</li>
                     {% endfor %}
                     </ul>
-                    <a href="{{ url_for('joingroup', group_id=group.group_id) }}" class='btn btn-primary join-button'>Join Group</a>
+                    <a href="{{ url_for('main.joingroup', group_id=group.group_id) }}" class='btn btn-primary join-button'>Join Group</a>
                     <br>
-                    <form action="{{ url_for('leavegroup', group_id=group.group_id) }}" method="POST" style="display: inline;">
+                    <form action="{{ url_for('main.leavegroup', group_id=group.group_id) }}" method="POST" style="display: inline;">
                         <button type="submit" class="leave-button">Leave Group</button>
                     </form>
                 </div>

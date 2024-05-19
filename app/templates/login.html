@@ -16,7 +16,7 @@
 
 <h2>Log In</h2>
 <p>Making study a little less lonely</p>
-<form class="loginForm" method="POST" action="{{ url_for('login') }}">
+<form class="loginForm" method="POST" action="{{ url_for('main.login') }}">
     {{ form.hidden_tag() }} 
     <div>
     {{ form.username.label }} 
@@ -43,5 +43,5 @@
 <br>
  {{ form.submit(class="btn btn-primary") }} 
 </form> 
- <a href="{{ url_for('signup')}}" class="signup-link">Don't have an account? Sign up!</a>
+ <a href="{{ url_for('main.signup')}}" class="signup-link">Don't have an account? Sign up!</a>
 {% endblock %}

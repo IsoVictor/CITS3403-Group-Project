@@ -1,34 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discussion Forum - Study Forum</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/styles.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../static/discussion.js"></script>
-</head>
-<body>
-    <header>
-        <h1>Study Forum - Discussion Forum</h1>
-        <nav>
-            <ul class = 'navList'>
-                <li><a href="{{url_for('index')}}">Home page</a></li>
-                <li><a href="{{url_for('discussion')}}">Discussion Forum</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="flashcards.html">Flashcards</a></li>
-                <li><a href="{{ url_for('study_groups')}}">Study Groups</a></li>
-                {% if 'username' in session %}
-                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('login') }}">Log In</a></li>
-                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
-    <main>
+
+{% extends "base.html" %}
+
+{% block title %}Study Groups{% endblock %}
+{% block extra_head %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/styles.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="../static/discussion.js"></script> {% endblock %}
+
+{% block content %}
+
         {% if 'username' in session %}
         <div>
             <h2 class = 'sectionHeader'> Post Your Questions!</h2>
@@ -36,7 +16,7 @@
         <div class= 'container'>
             <ul id="errorList"></ul>
         </div>
-        <form action="{{url_for('discussion')}}" method="POST" class = "questionForm">
+        <form action="{{url_for('main.discussion')}}" method="POST" class = "questionForm">
             {{ form.hidden_tag() }}
             <div>
                 {{ form.unit_code.label }}
@@ -75,11 +55,12 @@
                     </div>
                     <div class="question-description">
                         <p>Question: {{ question.question }}</p>
-                        <a href="{{ url_for('answer', question_id=question.id) }}" class='btn btn-primary ansButton'>Answer Question</a>
+                        <a href="{{ url_for('main.answer', question_id=question.id) }}" class='btn btn-primary ansButton'>Answer Question</a>
                     </div>
                 </div>
             </li>
             {% endfor %}
         </ul>
     
-    </main>
+
+{% endblock %}

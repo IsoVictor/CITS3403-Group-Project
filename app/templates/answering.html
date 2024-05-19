@@ -24,7 +24,7 @@
     {% endfor %}
 </ul>
 <h2>Your Answer:</h2>
-<form action="{{ url_for('answer', question_id=question.id) }}" method="POST" class="answerForm">
+<form action="{{ url_for('main.answer', question_id=question.id) }}" method="POST" class="answerForm">
     {{ form.hidden_tag() }}
     <div>
         {{ form.answer(rows=20, cols=70, required=True) }}
@@ -32,5 +32,5 @@
     <br>
     {{ form.submit() }}
 </form>
-<a href="{{url_for('discussion')}}" class='btn btn-primary returnBtn'>Back To Discussion</a>
+<a href="{{url_for('main.discussion')}}" class='btn btn-primary returnBtn'>Back To Discussion</a>
 {% endblock %}
