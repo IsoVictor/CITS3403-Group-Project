@@ -4,4 +4,4 @@ env/
 *.db
 db
 3403/
-instance/:memory
+instance/
