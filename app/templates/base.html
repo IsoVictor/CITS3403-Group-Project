@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
 
+
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -22,7 +23,7 @@
                 <li>
                     {% if 'username' in session %}
                         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-                        <li>Hello, {{ session['username']}}</a></li>
+                        <li><a href="{{ url_for ('profile')}}" id="greeting"> Hello, {{ session['username']}}</a></li>
                     {% else %}
                         <li><a href="{{ url_for('login') }}">Log In</a></li>
                         <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
@@ -42,6 +43,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/user-profile.js') }}"></script>
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>
