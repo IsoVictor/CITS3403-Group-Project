@@ -28,18 +28,12 @@ To launch this Flask application, follow these steps:
 
 ### 3. Set environment variables
 - **Specify the environment and debug mode:**
-  
-  ```bash
+```bash
 export FLASK_APP=app.py      # On Windows use `set FLASK_APP=app.py`
 export FLASK_ENV=development # On Windows use `set FLASK_ENV=development`
 export FLASK_DEBUG=1         # On Windows use `set FLASK_DEBUG=1`
 
 ### 4. Run the application
 - **Start the Flask server:**
-
 ```bash
 flask run
-
-
-
-
