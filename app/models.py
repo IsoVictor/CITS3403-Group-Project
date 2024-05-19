@@ -25,11 +25,13 @@ class UserGroupRelation(db.Model):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
+    firstname = db.Column(db.String(64), nullable=True)
+    lastname = db.Column(db.String(64), nullable=True)
     email = db.Column(db.String(120), index=True, unique=True)
     studentnumber = db.Column(db.String(10), index=True, unique=True) 
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    profilepic = db.Column(db.String(128), nullable=True)
+    profilepic = db.Column(db.String(128), default = 'default_profile.png')
     group_relations = db.relationship('UserGroupRelation', back_populates='user')
 
     def __repr__(self):

@@ -4,6 +4,7 @@
 
 {% block head %}
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="{{ url_for('main.static', filename='user-profile.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -14,26 +15,29 @@
                 <div class="card-body text-center">
                     <div class="card-header">User Profile</div>
                     <br>
-                    {% if user.profile_picture %}
-                    <img src="{{ url_for('static', filename='profile_pictures/' + user.profile_picture) }}"
-                        class="card-img-top rounded-circle mx-auto d-block" alt="Profile Picture"
+                    
+                    <img src="{{ profilepic }}"
+                        class="rounded-circle account-img" 
                         style="width: 150px; height: 150px;">
-                    {% else %}
-                    <div class="default-profile-img rounded-circle mx-auto d-block"
-                        style="width: 150px; height: 150px;"></div>
-                    {% endif %}
-                    <div>
-                        <button type="submit" class="btn btn-primary">Update Profile Picture</button>
-                    </div>
-                    <h5 class="card-title">{{ user.username }}</h5>
-                    <p class="card-text">{{ user.email }}</p>
-                    <p class="card-text">{{ user.bio }}</p>
+
+                        <form id="profile-pic-form" method="POST" action="{{ url_for('main.upload_profile_picture') }}" enctype="multipart/form-data">
+                            <input type="file" id="profile-pic-input" name="profile_picture" style="display: none;" onchange="document.getElementById('profile-pic-form').submit();">
+                            <button type="button" class="btn btn-primary mt-2 btn-sm mt-2" onclick="document.getElementById('profile-pic-input').click();">Update Profile Picture</button>
+                        </form>
+                        
+                    
+                    <h3 id="profile-username">{{ user.username }}</h3>
+                
+                    <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
+                    <p id="profile-email">{{ user.email }}</p>
+                    
+                
                 </div>
             </div>
         </div>
         <div class="col-md-8">
             <h2 class="mb-4">Update Profile</h2>
-            <form action='{{url_for("main.profile")}}' method="POST" enctype="multipart/form-data">
+            <form id="profile-form" action='{{url_for("main.update_profile")}}' method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <div class="mb-3">
                     <label class="small mb-1" for="username">
@@ -46,12 +50,22 @@
                 </div>
                 <div class="row gx-3 mb-3">
                     <div class="col-md-6">
-                        <label class="small mb-1" for="inputFirstName">First name</label>
-                        <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name">
+                        <label class="small mb-1" for="inputFirstName">
+                            {{ form.firstname.label }}
+                        </label>
+                        {{ form.firstname(class="form-control", placeholder="Enter first name", value=user.firstname) }}
+                        {% for error in form.firstname.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
                     </div>
                     <div class="col-md-6">
-                        <label class="small mb-1" for="inputLastName">Last name</label>
-                        <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name">
+                        <label class="small mb-1" for="inputLastName">
+                            {{ form.lastname.label }}
+                        </label>
+                        {{ form.lastname(class="form-control", placeholder="Enter last name", value=user.lastname) }}
+                        {% for error in form.lastname.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="mb-3">
@@ -63,20 +77,11 @@
                     <span class="text-danger">{{ error }}</span>
                     {% endfor %}
                 </div>
-                <div class="ml-3">
-                    <label class="small mb-1" for="inputBio">
-                        Bio
-                    </label>
-                    <textarea class="form-control" id="inputBio" name="bio" placeholder="Enter bio">{{ user.bio }}</textarea>
-                </div>
-                <div class="form-group">
-                    {% for error in form.profile_picture.errors %}
-                    <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {{ form.submit(class="btn btn-primary") }}
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
         </div>
     </div>
 </div>
+
 {% endblock %}

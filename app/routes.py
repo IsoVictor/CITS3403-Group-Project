@@ -5,10 +5,12 @@ from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answ
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 from sqlalchemy import func
+from PIL import Image
 from app.blueprints import main
 from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, AnswerCreationError, create_answer, get_question_and_answers
+import secrets
 from datetime import datetime
-
+from sqlalchemy import func
 
 # Home page route
 @main.route("/")
@@ -193,29 +195,58 @@ def answer(question_id):
 @login_required
 def profile():
     form = ProfileUpdateForm()
+    profilepic = url_for('static', filename='profile_pics/' + (current_user.profilepic if current_user.profilepic else 'default.jpg'))
 
+    return render_template('user-profile.html', form=form, profilepic=profilepic, user=current_user)
+
+@app.route('/update_profile', methods=['POST'])
+@login_required
+def update_profile():
+    form = ProfileUpdateForm()
+    allusers = User.query.all()
     if form.validate_on_submit():
-        # Update user data with form data
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        current_user.studentnumber = form.studentnumber.data
-        # Save profile picture if uploaded
-        if profile_pic:
-            filename = secure_filename(profile_pic.filename)
-            photos.save(profile_pic, name=filename)
-            user.profile_pic = filename
-        # Commit changes to the database
-        db.session.commit()
-        flash('Profile updated successfully!', 'success')
-        return redirect(url_for('main.profile'))
-
-    # Pre-populate form fields with current user data
-    form.username.data = current_user.username
-    form.email.data = current_user.email
-    form.studentnumber.data = current_user.studentnumber
-
-    return render_template('user-profile.html', form=form, user=current_user)
     
+        current_user.username = form.username.data
+        current_user.firstname = form.firstname.data
+        current_user.lastname = form.lastname.data
+        current_user.email = form.email.data
+        if form.picture.data:
+            picture_file = upload_profile_picture(form.picture.data)
+            current_user.profilepic = picture_file
+
+        db.session.commit()
+                # Return JSON indicating success
+        return jsonify({'success': True,
+                        'firstname': current_user.firstname,
+                        'lastname': current_user.lastname,
+                        'email': current_user.email,
+                        'username': current_user.username})
+    else:
+        # Return JSON indicating failure and errors
+        errors = form.errors
+        return jsonify({'success': False,
+                        'errors': errors})
+
+@main.route('/upload_profile_picture', methods=['POST'])
+@login_required
+def upload_profile_picture():
+    picture_file = request.files['profile_picture']
+    if picture_file:
+        random_hex = secrets.token_hex(8)
+        _, f_ext = os.path.splitext(picture_file.filename)
+        picture_fn = random_hex + f_ext
+        picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+
+        output_size = (125, 125)
+        i = Image.open(picture_file)
+        i.thumbnail(output_size)
+        i.save(picture_path)
+        current_user.profilepic = picture_fn
+        db.session.commit()
+        return redirect(url_for('main.profile'))
+    return 'No file provided', 400
+
+#Joining Group route
 @main.route('/joingroup/<group_id>', methods=['GET'])
 @login_required
 def joingroup(group_id):
