@@ -1,15 +1,15 @@
 # routes.py
-from flask_login import UserMixin, current_user, login_required
+from flask_login import UserMixin, current_user, login_required, logout_user
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from werkzeug.utils import secure_filename
 from app import app, db, login_manager, login_user
 from app.models import User, Post, StudyGroup, UserGroupRelation, Question, Answer
-from app.flashcard_routes import flashcard_bp
 import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 import secrets
 from PIL import Image
-
+from datetime import datetime
+from sqlalchemy import func
 
 # Home page route
 @app.route("/")
@@ -207,20 +207,23 @@ def answer(question_id):
         db.session.add(new_answer)
         db.session.commit()
         return redirect(url_for('answer',question_id = question_id))
+    return render_template('answering.html', question= question, answers = answers, form = form)
 
 @app.route('/profile', methods=['GET'])
 @login_required
 def profile():
     form = ProfileUpdateForm()
-    profilepic = url_for('static', filename='profile_pics/' + current_user.profilepic)
-    
+    profilepic = url_for('static', filename='profile_pics/' + (current_user.profilepic if current_user.profilepic else 'default.jpg'))
+
     return render_template('user-profile.html', form=form, profilepic=profilepic, user=current_user)
 
 @app.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
     form = ProfileUpdateForm()
+    allusers = User.query.all()
     if form.validate_on_submit():
+    
         current_user.username = form.username.data
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
@@ -260,6 +263,7 @@ def upload_profile_picture():
         db.session.commit()
         return redirect(url_for('profile'))
     return 'No file provided', 400
+
 #Joining Group route
 @app.route('/joingroup/<group_id>', methods=['GET'])
 @login_required
