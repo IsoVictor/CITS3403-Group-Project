@@ -52,14 +52,13 @@ To launch this Flask application, follow these steps:
   ```bash
   flask run
 
-##Test Guide
-###1. Unit Tests
+## Test Guide
+### 1. Unit Tests
 - **To run the unit tests for our code:**
   ```bash
   python -m unittest Tests/unit.py
 
-##Test Guide
-###1. Unit Tests
+### 2. Selinium Tests
 - **To run the selinium tests for our code:**
   ```bash
   python -m unittest Tests/selinium.py
