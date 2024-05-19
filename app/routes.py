@@ -6,7 +6,7 @@ import os
 from app.forms import LoginForm, SignupForm, groupForm, answerForm, questionForm, ProfileUpdateForm
 from sqlalchemy import func
 from app.blueprints import main
-from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, create_answer, get_answers, get_question, AnswerCreationError
+from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, create_answer, get_question_and_answers, AnswerCreationError
 from datetime import datetime
 
 
@@ -166,27 +166,25 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-# User Answering route
-@main.route('/answer/<question_id>', methods=['GET','POST'])
+@main.route('/answer/<question_id>', methods=['GET', 'POST'])
 @login_required
 def answer(question_id):
     form = answerForm()
-    answers = get_answers(question_id)
-    question = get_question(question_id)
-
-    if not question:
-        flash('Question not found', 'error')
-        return redirect(url_for('main.discussion'))
-
-    if form.validate_on_submit():
+    question, answers = get_question_and_answers(question_id)
+    
+    if not form.validate_on_submit():
+        if form.errors:
+            for error_field, error_messages in form.errors.items():
+                for error in error_messages:
+                    flash(f"{error_field}: {error}", 'error')
+    else:
         answer_text = form.answer.data
         try:
-            create_answer(question_id, answer_text)
+            create_answer(answer_text, current_user.id, question_id, current_user.username)
             return redirect(url_for('main.answer', question_id=question_id))
         except AnswerCreationError as e:
             flash(str(e), 'error')
-            return redirect(url_for('main.discussion'))
-
+        
     return render_template('answering.html', question=question, answers=answers, form=form)
 
 

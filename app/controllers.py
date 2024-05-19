@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from app import db
-from app.models import StudyGroup, UserGroupRelation, User, Question, UserGroupRelation
+from app.models import StudyGroup, UserGroupRelation, User, Question, UserGroupRelation, Answer
 from sqlalchemy import func
 from werkzeug.security import check_password_hash
 
@@ -82,3 +82,18 @@ def leave_group(user_id, group_id):
 
     db.session.delete(relation)
     db.session.commit()
+
+class AnswerCreationError(Exception):
+    pass
+
+def create_answer(answer_text, user_id, question_id, username):
+    if not answer_text:
+        raise AnswerCreationError('Answer cannot be empty')
+    new_answer = Answer(answer=answer_text, user_id=user_id, question_id=question_id, answerUsername=username)
+    db.session.add(new_answer)
+    db.session.commit()
+
+def get_question_and_answers(question_id):
+    question = Question.query.filter_by(id=question_id).first()
+    answers = Answer.query.filter_by(question_id=question_id).all()
+    return question, answers
