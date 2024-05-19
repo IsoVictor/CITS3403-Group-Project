@@ -15,6 +15,8 @@ def create_app(config):
     app.register_blueprint(main)
     db.init_app(app)
     login_manager.init_app(app)
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
 
     return app
 

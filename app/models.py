@@ -20,8 +20,6 @@ class UserGroupRelation(db.Model):
      group = db.relationship("StudyGroup", back_populates="user_relations", foreign_keys=[group_id])
 
 
-
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -89,10 +87,3 @@ class Answer(db.Model):
 
     def __repr__(self):
         return '<Answer {}>'.format(self.id)
-
-class Event(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-
-
