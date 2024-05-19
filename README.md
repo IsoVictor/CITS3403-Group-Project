@@ -25,7 +25,6 @@ To launch this Flask application, follow these steps:
   ```bash
   pip install -r requirements.txt
 
-
 ### 3. Set environment variables
 - **Specify the environment and debug mode:**
   ```bash
