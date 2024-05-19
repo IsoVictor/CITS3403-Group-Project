@@ -15,13 +15,13 @@ post2 = Post(body='This is the second post by user1.', user_id=1, unit_code='CIT
 post3 = Post(body='A post by user2.', user_id=2, unit_code='CITS3403')
 
 # Sample data for StudyGroup
-study_group1 = StudyGroup(location='Library', description='Study session for exam', 
+study_group1 = StudyGroup(group_id = 1, location='Library', description='Study session for exam', 
                           time=datetime.strptime('13:00', '%H:%M').time(), 
                           date=datetime.strptime('2024-05-15', '%Y-%m-%d').date(), unit_code='CITS3403')
-study_group2 = StudyGroup(location='Coffee shop', description='Group project meeting', 
+study_group2 = StudyGroup(group_id = 2, location='Coffee shop', description='Group project meeting', 
                           time=datetime.strptime('10:30', '%H:%M').time(), 
                           date=datetime.strptime('2024-05-16', '%Y-%m-%d').date(), unit_code='CITS2401')
-study_group3 = StudyGroup(location='EZONE', description='Project help', 
+study_group3 = StudyGroup(group_id = 3, location='EZONE', description='Project help', 
                           time=datetime.strptime('13:00', '%H:%M').time(), 
                           date=datetime.strptime('2024-05-15', '%Y-%m-%d').date(), unit_code='CITS3403')
 
@@ -38,10 +38,10 @@ answer2 = Answer(answer='Start early and make sure to divide tasks among team me
                  user_id=1, question_id=2, answerUsername='user1')
 
 # Add user group relations after study groups are added to session
-user_group_relation1 = UserGroupRelation(user_id=user1.id, group_id=study_group1.group_id)
-user_group_relation2 = UserGroupRelation(user_id=user2.id, group_id=study_group1.group_id)
-user_group_relation3 = UserGroupRelation(user_id=user1.id, group_id=study_group2.group_id)
-user_group_relation4 = UserGroupRelation(user_id=user2.id, group_id=study_group3.group_id)
+user_group_relation1 = UserGroupRelation(user_id= 1, group_id= 1)
+user_group_relation2 = UserGroupRelation(user_id= 2, group_id= 1)
+user_group_relation3 = UserGroupRelation(user_id= 2, group_id= 2)
+user_group_relation4 = UserGroupRelation(user_id= 2, group_id= 3)
 
 
 def add_test_users_to_db():
