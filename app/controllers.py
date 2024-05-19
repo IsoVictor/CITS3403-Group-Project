@@ -5,6 +5,8 @@ from app import db
 from app.models import StudyGroup, UserGroupRelation, User, Question, UserGroupRelation, Answer
 from sqlalchemy import func
 from werkzeug.security import check_password_hash
+from flask import jsonify, session
+from flask_login import current_user
 
 class UserCreationError(Exception):
     pass
@@ -78,7 +80,7 @@ def create_discussion(unit_code, question, user_id, poster_username):
     if len(unit_code) != 8:
         raise StudyGroupCreationError('Invalid Unit Code.')
 
-    new_question = Question(unit_code=unit_code, question=question, user_id=user_id, poster_username=poster_username)
+    new_question = Question(unit_code=unit_code, question=question, user_id=user_id, posterUsername=poster_username)
     db.session.add(new_question)
     db.session.commit()
 
@@ -107,3 +109,12 @@ def get_question_and_answers(question_id):
     question = Question.query.filter_by(id=question_id).first()
     answers = Answer.query.filter_by(question_id=question_id).all()
     return question, answers
+
+
+def update_profile_controller(form):
+    current_user.username = form.username.data
+    current_user.firstname = form.firstname.data
+    current_user.lastname = form.lastname.data
+    current_user.email = form.email.data
+    db.session.commit()
+    session['username'] = current_user.username

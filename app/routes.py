@@ -8,7 +8,7 @@ from sqlalchemy import func
 from PIL import Image
 from app.blueprints import main
 import secrets
-from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, create_answer, get_question_and_answers, AnswerCreationError
+from app.controllers import UserCreationError, create_user, authenticate_user, create_study_group, StudyGroupCreationError, create_discussion, DiscussionCreationError, join_group, GroupJoiningError, leave_group, GroupLeavingError, create_answer, get_question_and_answers, AnswerCreationError, update_profile_controller
 from datetime import datetime
 from sqlalchemy import func
 
@@ -166,55 +166,24 @@ def answer(question_id):
 @login_required
 def profile():
     form = ProfileUpdateForm()
-    profilepic = url_for('static', filename='profile_pics/' + (current_user.profilepic if current_user.profilepic else 'default.jpg'))
-    return render_template('user-profile.html', form=form, profilepic=profilepic, user=current_user)
+    return render_template('user-profile.html', form=form, user=current_user)
 
-@app.route('/update_profile', methods=['POST'])
+@main.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
     form = ProfileUpdateForm()
-    allusers = User.query.all()
     if form.validate_on_submit():
-    
-        current_user.username = form.username.data
-        current_user.firstname = form.firstname.data
-        current_user.lastname = form.lastname.data
-        current_user.email = form.email.data
-        if form.picture.data:
-            picture_file = upload_profile_picture(form.picture.data)
-            current_user.profilepic = picture_file
-
-        db.session.commit()
-                # Return JSON indicating success
+        update_profile_controller(form)  # Pass the form to the function
         return jsonify({'success': True,
                         'firstname': current_user.firstname,
                         'lastname': current_user.lastname,
                         'email': current_user.email,
                         'username': current_user.username})
     else:
-        # Return JSON indicating failure and errors
         errors = form.errors
         return jsonify({'success': False,
                         'errors': errors})
 
-@main.route('/upload_profile_picture', methods=['POST'])
-@login_required
-def upload_profile_picture():
-    picture_file = request.files['profile_picture']
-    if picture_file:
-        random_hex = secrets.token_hex(8)
-        _, f_ext = os.path.splitext(picture_file.filename)
-        picture_fn = random_hex + f_ext
-        picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-
-        output_size = (125, 125)
-        i = Image.open(picture_file)
-        i.thumbnail(output_size)
-        i.save(picture_path)
-        current_user.profilepic = picture_fn
-        db.session.commit()
-        return redirect(url_for('main.profile'))
-    return 'No file provided', 400
 
 #Joining Group route
 @main.route('/joingroup/<group_id>', methods=['GET'])

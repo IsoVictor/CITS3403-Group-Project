@@ -15,17 +15,7 @@
                 <div class="card-body text-center">
                     <div class="card-header">User Profile</div>
                     <br>
-                    
-                    <img src="{{ profilepic }}"
-                        class="rounded-circle account-img" 
-                        style="width: 150px; height: 150px;">
-
-                        <form id="profile-pic-form" method="POST" action="{{ url_for('main.upload_profile_picture') }}" enctype="multipart/form-data">
-                            <input type="file" id="profile-pic-input" name="profile_picture" style="display: none;" onchange="document.getElementById('profile-pic-form').submit();">
-                            <button type="button" class="btn btn-primary mt-2 btn-sm mt-2" onclick="document.getElementById('profile-pic-input').click();">Update Profile Picture</button>
-                        </form>
-                        
-                    
+    
                     <h3 id="profile-username">{{ user.username }}</h3>
                 
                     <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>

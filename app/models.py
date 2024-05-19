@@ -20,8 +20,6 @@ class UserGroupRelation(db.Model):
      group = db.relationship("StudyGroup", back_populates="user_relations", foreign_keys=[group_id])
 
 
-
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
