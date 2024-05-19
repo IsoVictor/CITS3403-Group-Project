@@ -1,9 +1,18 @@
 # CITS3403-Group-Project
 Group Project for Agile Web Development 
 
-# Study Session App
+# Study Forums App
 
-Welcome to the Study Session App! This Flask application helps users organize and manage their study sessions effectively.
+Welcome to the Study Forum App! This Flask application helps users organize and manage their study sessions effectively, allowing students to create study groups and post questions which can then be joined or answered by other students. 
+
+# Group Information
+
+| UWA ID       | Name              | GitHub Username |
+|--------------|-------------------|-----------------|
+| 23380426     | Victor Iso        | IsoVictor       |
+| 23358213     | Rohnan Klifunis   | RohnanK         |
+| 23374296     | Jason Nguyen      | Jasonnguyxn     |
+| 23043141     | Nguyen Le Cam Anh | ann250902       |
 
 ## Launch Guide
 
@@ -25,16 +34,30 @@ To launch this Flask application, follow these steps:
   ```bash
   pip install -r requirements.txt
 
-
 ### 3. Set environment variables
 - **Specify the environment and debug mode:**
   ```bash
-  export FLASK_APP=app.py      # On Windows use `set FLASK_APP=app.py`
-  export FLASK_ENV=development # On Windows use `set FLASK_ENV=development`
-  export FLASK_DEBUG=1         # On Windows use `set FLASK_DEBUG=1`
-
+  export FLASK_APP=run.py      # On Windows use `set FLASK_APP=run.py`
+  export SECRET_KEY=''
 
 ### 4. Run the application
+- **Optional but you can import test data in the shell**
+  ```bash
+  flask shell
+  >>> import app.test_data
+
+### 5. Run the application
 - **Start the Flask server:**
   ```bash
   flask run
+
+## Test Guide
+### 1. Unit Tests
+- **To run the unit tests for our code:**
+  ```bash
+  python -m unittest Tests/unit.py
+
+### 2. Selenium Tests
+- **To run the selinium tests for our code:**
+  ```bash
+  python -m unittest Tests/selenium.py

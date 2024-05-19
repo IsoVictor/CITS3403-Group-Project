@@ -1,15 +1,3 @@
-var studyGroupEvents = [];
-
-fetch('/api/study-group-events')
-    .then(response => response.json())
-    .then(data => {
-        studyGroupEvents = data;
-        initializeCalendar();
-    })
-    .catch(error => {
-        console.error('Error fetching study group events:', error);
-    });
-
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {

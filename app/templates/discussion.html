@@ -10,11 +10,11 @@
 {% block content %}
 
         {% if 'username' in session %}
-        <div  style = 'text-align: center;'>
-            <h2 style ='font-weight: bold; text-decoration: underline;'> Post Your Questions!</h2>
+        <div>
+            <h2 class = 'sectionHeader'> Post Your Questions!</h2>
         </div>
         <div class= 'container'>
-            <ul id="errorList" style="color: red; list-style-type: none;"></ul>
+            <ul id="errorList"></ul>
         </div>
         <form action="{{url_for('discussion')}}" method="POST" class = "questionForm">
             {{ form.hidden_tag() }}
@@ -29,8 +29,8 @@
             {{ form.submit(class_='btn btn-primary', id="submitBtn") }}
         </form>
         {% endif %}
-    <div  style = 'text-align: center;'>
-        <h2 style ='font-weight: bold; text-decoration: underline;' > Answer Some Questions!</h2>
+    <div>
+        <h2 class = 'sectionHeader' > Answer Some Questions!</h2>
         <br>
     </div>
         <div id="study-groups" class = 'filter'>
@@ -41,8 +41,9 @@
             <input type="text" id="keywords">
             <br>
             <button id="filterButton">Filter</button>
+            <br>
         </div>
-        <p id = 'warning' style="font-size: 20px;color:red;display:none;"> No Questions For Searched Unit!</p>
+        <p id = 'warning'> No Questions For Searched Unit!</p>
 
         <ul class = "questions" id="questions">
             {% for question in allquestions %}

@@ -9,10 +9,10 @@
 {% block content %}
     {% if 'username' in session %}
     <div  style = 'text-align: center;'>
-        <h2 style ='font-weight: bold; text-decoration: underline;'> Make a Study Group!</h2>
+        <h2 class = 'sectionHeader'> Make a Study Group!</h2>
     </div>
     <div class= 'container'>
-        <ul id="errorList" style="color: red; list-style-type: none;"></ul>
+        <ul id="errorList"></ul>
     </div>
     <form action="{{url_for('study_groups')}}" method="POST" class="groupForm">
         {{ form.hidden_tag() }}
@@ -45,8 +45,8 @@
     </form>
     <br>
     {% endif %}
-    <div  style = 'text-align: center;'>
-        <h2 style ='font-weight: bold; text-decoration: underline;'> Look for a Group!</h2>
+    <div>
+        <h2 class = 'sectionHeader'> Look for a Group!</h2>
     </div>
 
     <div id="study-groups" class="filter">
@@ -58,13 +58,13 @@
         <br>
         <button id="filterButton">Filter</button>
     </div>
-    <p id = 'warning' style="font-size: 20px;color:red;display:none;"> Study Group with Unit Code not Found!</p>
+    <p id = 'warning'> Study Group with Unit Code not Found!</p>
     
     <ul class="study_groups" id="study_groups">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-                <div class="flash-message"  style="font-size: larger; font-weight: bold; text-decoration: underline; color: red;">{{ message }}</div>
+                <div class="flash-message-error">{{ message }}</div>
             {% endfor %}
         {% endif %}
     {% endwith %}

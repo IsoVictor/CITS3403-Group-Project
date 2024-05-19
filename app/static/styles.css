@@ -466,3 +466,24 @@ button[type="submit"]:hover {
     margin-top: 0;
 }
 
+.sectionHeader{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#errorList{
+    color: red; 
+    list-style-type: none;
+}
+#warning{
+    color: red; 
+    font-size: 20px;
+    display: none;
+}
+
+.flash-message-error{
+    font-size: larger; 
+    font-weight: bold; 
+    text-decoration: underline; 
+    color: red;
+}

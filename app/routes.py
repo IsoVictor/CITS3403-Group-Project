@@ -1,5 +1,5 @@
 # routes.py
-from flask_login import UserMixin, current_user, login_required
+from flask_login import UserMixin, current_user, login_required, logout_user
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from werkzeug.utils import secure_filename
 from app import app, db, login_manager, login_user
@@ -214,14 +214,15 @@ def answer(question_id):
 def profile():
     form = ProfileUpdateForm()
     profilepic = url_for('static', filename='profile_pics/' + (current_user.profilepic if current_user.profilepic else 'default.jpg'))
-    
     return render_template('user-profile.html', form=form, profilepic=profilepic, user=current_user)
 
 @app.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
     form = ProfileUpdateForm()
+    allusers = User.query.all()
     if form.validate_on_submit():
+    
         current_user.username = form.username.data
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
@@ -261,6 +262,7 @@ def upload_profile_picture():
         db.session.commit()
         return redirect(url_for('profile'))
     return 'No file provided', 400
+
 #Joining Group route
 @app.route('/joingroup/<group_id>', methods=['GET'])
 @login_required
