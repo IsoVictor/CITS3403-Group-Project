@@ -35,34 +35,6 @@ def calendar():
             })
     return render_template('calendar.html', study_group_events=study_group_events)
 
-@main.route('/add-event', methods=['POST'])
-def add_event():
-    title = request.json['title']
-    date = request.json['date']
-    event = Event(title=title, date=date, user_id=current_user.id)
-    db.session.add(event)
-    db.session.commit()
-    return jsonify({'message': 'Event added successfully'})
-
-@main.route('/delete-event', methods=['POST'])
-def delete_event():
-    event_id = request.json['eventId']
-    event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
-    if event:
-        db.session.delete(event)
-        db.session.commit()
-        return jsonify({'message': 'Event deleted successfully'})
-    return jsonify({'error': 'Event not found'})
-
-@main.route('/edit-event/<int:event_id>', methods=['PUT'])
-def edit_event(event_id):
-    event = Event.query.filter_by(id=event_id, user_id=current_user.id).first()
-    if event:
-        event.title = request.json['title']
-        event.date = request.json['date']
-        db.session.commit()
-        return jsonify({'message': 'Event updated successfully'})
-    return jsonify({'error': 'Event not found'})
 
 @main.route('/discussion', methods=["GET", "POST"])
 def discussion():

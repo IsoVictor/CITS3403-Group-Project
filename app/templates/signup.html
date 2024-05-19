@@ -53,7 +53,7 @@
             <span class="error">{{ error }}</span>
         {% endfor %}
     </div>
-    <input type="submit" value="Create Account">
+    {{ form.submit }}
 </form>
 <br>
 <a href="{{ url_for('main.login') }}">Already have an account?</a>
